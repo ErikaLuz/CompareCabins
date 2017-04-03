@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-// import boundary.TemplateProcessor;
+import boundary.TemplateProcessor;
 
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapperBuilder;
@@ -24,7 +24,7 @@ public class Servlet extends HttpServlet
 	//VARIABLES
 		private static final long serialVersionUID = 1L;	
 		private String templateDir = "/WEB-INF/templates";
-//		private TemplateProcessor processor;
+		private TemplateProcessor processor;
 		
 	    //@see HttpServlet#HttpServlet() 
 			public Servlet() 
@@ -36,7 +36,7 @@ public class Servlet extends HttpServlet
 			public void init(ServletConfig config) throws ServletException 
 			{
 				super.init(config);
-//				processor = new TemplateProcessor(templateDir, getServletContext());
+				processor = new TemplateProcessor(templateDir, getServletContext());
 			} //end of init
 			
 		//@see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response) 
