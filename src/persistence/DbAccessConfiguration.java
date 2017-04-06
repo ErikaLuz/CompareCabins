@@ -6,8 +6,8 @@ public abstract class DbAccessConfiguration {
 	
 	static final String CONNECTION_URL = "jdbc:mysql://localhost:3306/compare_cabins";
 	
-	static final String DB_CONNECTION_USERNAME = "username";
+	static final String DB_CONNECTION_USERNAME = "root";
 	
-	static final String DB_CONNECTION_PASSWORD = "password"; 
+	static final String DB_CONNECTION_PASSWORD = "tennis123"; 
 
 }
