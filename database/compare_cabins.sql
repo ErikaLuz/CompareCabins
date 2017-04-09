@@ -19,12 +19,13 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `compare_cabins` DEFAULT CHARACTER SET latin1 ;
 USE `compare_cabins` ;
+DROP TABLE IF EXISTS amenities, cabin, user, availability, cabin_picture, feature, rent_record, review;
 
 -- -----------------------------------------------------
 -- Table `compare_cabins`.`amenities`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `compare_cabins`.`amenities` (
-  `id` INT(11) NOT NULL,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `has_lake` TINYINT(4) NULL DEFAULT NULL,
   `has_river` TINYINT(4) NULL DEFAULT NULL,
   `has_pool` TINYINT(4) NULL DEFAULT NULL,
@@ -43,7 +44,7 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `compare_cabins`.`user`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `compare_cabins`.`user` (
-  `id` INT(11) NOT NULL,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(45) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
   `first_name` VARCHAR(45) NULL DEFAULT NULL,
@@ -89,7 +90,7 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `compare_cabins`.`availability`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `compare_cabins`.`availability` (
-  `id` INT(11) NOT NULL,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `price` FLOAT NULL DEFAULT NULL,
   `date` DATE NULL DEFAULT NULL,
   `cabin_id` INT(11) NULL DEFAULT NULL,
@@ -108,7 +109,7 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `compare_cabins`.`cabin_picture`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `compare_cabins`.`cabin_picture` (
-  `id` INT(11) NOT NULL,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `file_path` VARCHAR(255) NULL DEFAULT NULL,
   `cabin_id` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -126,7 +127,7 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `compare_cabins`.`feature`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `compare_cabins`.`feature` (
-  `id` INT(11) NOT NULL,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `feature_string` VARCHAR(255) NULL DEFAULT NULL,
   `cabin_id` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -144,7 +145,7 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `compare_cabins`.`rent_record`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `compare_cabins`.`rent_record` (
-  `id` INT(11) NOT NULL,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `total_price` FLOAT NULL DEFAULT NULL,
   `start_date` DATE NULL DEFAULT NULL,
   `end_date` DATE NULL DEFAULT NULL,
@@ -171,7 +172,7 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `compare_cabins`.`review`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `compare_cabins`.`review` (
-  `id` INT(11) NOT NULL,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `num_stars` INT(11) NULL DEFAULT NULL,
   `title` VARCHAR(255) NULL DEFAULT NULL,
   `description` VARCHAR(255) NULL DEFAULT NULL,
