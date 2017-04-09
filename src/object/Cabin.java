@@ -2,33 +2,33 @@ package object;
 
 public class Cabin {
 
-	private int 	id;
-	private String 	address;
-	private String 	city;
-	private String 	state;
-	private String 	description;
-	private int		bedroomCount;
-	private float	bathCount;
-	private int		maxOccupancy;
-	private int		userId;
-	private int		amenitiesId;
+	private int 		id;
+	private String 		address;
+	private String 		city;
+	private String 		state;
+	private String 		description;
+	private int			bedroomCount;
+	private float		bathCount;
+	private int			maxOccupancy;
+	private User		user;
+	private Amenities	amenities;
 	
 	public Cabin() 
 	{
-		id = 0;
-		address = "";
-		city = "";
-		state ="";
-		description = "";
-		bedroomCount = 0;
-		bathCount = 0;
-		maxOccupancy = 0;
-		userId = 0;
-		amenitiesId = 0;
+		id = -1;
+		address = null;
+		city = null;
+		state = null;
+		description = null;
+		bedroomCount = -1;
+		bathCount = -1;
+		maxOccupancy = -1;
+		user = null;
+		amenities = null;
 	}
 
 	public Cabin(int id, String address, String city, String state, String description, int bedroomCount,
-			float bathCount, int maxOccupancy, int userId, int amenitiesId) 
+			float bathCount, int maxOccupancy, User user, Amenities amenities) 
 	{
 		this.id = id;
 		this.address = address;
@@ -38,8 +38,8 @@ public class Cabin {
 		this.bedroomCount = bedroomCount;
 		this.bathCount = bathCount;
 		this.maxOccupancy = maxOccupancy;
-		this.userId = userId;
-		this.amenitiesId = amenitiesId;
+		this.user = user;
+		this.amenities = amenities;
 	}
 
 	/**
@@ -157,29 +157,29 @@ public class Cabin {
 	/**
 	 * @return the userId
 	 */
-	public int getUserId() {
-		return userId;
+	public User getUser() {
+		return user;
 	}
 
 	/**
 	 * @param userId the userId to set
 	 */
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setUser( User user) {
+		this.user = user;
 	}
 
 	/**
 	 * @return the amenitiesId
 	 */
-	public int getAmenitiesId() {
-		return amenitiesId;
+	public Amenities getAmenities() {
+		return amenities;
 	}
 
 	/**
 	 * @param amenitiesId the amenitiesId to set
 	 */
-	public void setAmenitiesId(int amenitiesId) {
-		this.amenitiesId = amenitiesId;
+	public void setAmenities( Amenities amenities ) {
+		this.amenities = amenities;
 	}
 	
 	

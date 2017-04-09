@@ -7,14 +7,14 @@ public class Availability {
 	private int			id;
 	private float		price;
 	private Calendar	date;
-	private int			cabinId;
+	private Cabin		cabin;
 	
 	public Availability()
 	{
-		id = 0;
-		price = 0;
+		id = -1;
+		price = -1;
 		date = null;
-		cabinId = 0;
+		cabin = null;
 	}
 
 	/**
@@ -23,11 +23,11 @@ public class Availability {
 	 * @param date
 	 * @param cabinId
 	 */
-	public Availability(int id, float price, Calendar date, int cabinId) {
+	public Availability(int id, float price, Calendar date, Cabin cabin) {
 		this.id = id;
 		this.price = price;
 		this.date = date;
-		this.cabinId = cabinId;
+		this.cabin = cabin;
 	}
 
 	/**
@@ -75,15 +75,15 @@ public class Availability {
 	/**
 	 * @return the cabinId
 	 */
-	public int getCabinId() {
-		return cabinId;
+	public Cabin getCabin() {
+		return cabin;
 	}
 
 	/**
 	 * @param cabinId the cabinId to set
 	 */
-	public void setCabinId(int cabinId) {
-		this.cabinId = cabinId;
+	public void setCabin( Cabin cabin) {
+		this.cabin = cabin;
 	}
 	
 	

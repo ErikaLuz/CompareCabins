@@ -11,12 +11,12 @@ public class User {
 	
 	public User()
 	{
-		id = 0;
-		username = "";
-		password = "";
-		firstName = "";
-		lastName = "";
-		email = "";
+		id = -1;
+		username = null;
+		password = null;
+		firstName = null;
+		lastName = null;
+		email = null;
 	}
 
 	/**

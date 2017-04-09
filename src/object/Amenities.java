@@ -1,6 +1,6 @@
 package object;
 
-public class Ammenities {
+public class Amenities {
 
 	private int id;
 	private boolean hasLake;
@@ -17,9 +17,9 @@ public class Ammenities {
 	/**
 	 * 
 	 */
-	public Ammenities() 
+	public Amenities() 
 	{
-		id = 0;
+		id = -1;
 		hasLake = false;
 		hasRiver = false;
 		hasPool = false;
@@ -43,7 +43,7 @@ public class Ammenities {
 	 * @param allowsPets
 	 * @param allowsSmoking
 	 */
-	public Ammenities(int id, boolean hasLake, boolean hasRiver, boolean hasPool, boolean hasHotTub, boolean hasWifi,
+	public Amenities(int id, boolean hasLake, boolean hasRiver, boolean hasPool, boolean hasHotTub, boolean hasWifi,
 			boolean hasAirConditioning, boolean hasWasherDryer, boolean allowsPets, boolean allowsSmoking) 
 	{
 		this.id = id;

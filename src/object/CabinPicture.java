@@ -4,13 +4,13 @@ public class CabinPicture {
 
 	private int		id;
 	private String	filePath;
-	private int		cabinId;
+	private Cabin	cabin;
 	
 	public CabinPicture()
 	{
-		id = 0;
-		filePath = "";
-		cabinId = 0;
+		id = -1;
+		filePath = null;
+		cabin = null;
 	}
 	
 	/**
@@ -18,10 +18,10 @@ public class CabinPicture {
 	 * @param filePath
 	 * @param cabinId
 	 */
-	public CabinPicture(int id, String filePath, int cabinId) {
+	public CabinPicture(int id, String filePath, Cabin cabin) {
 		this.id = id;
 		this.filePath = filePath;
-		this.cabinId = cabinId;
+		this.cabin = cabin;
 	}
 
 	/**
@@ -55,15 +55,15 @@ public class CabinPicture {
 	/**
 	 * @return the cabinId
 	 */
-	public int getCabinId() {
-		return cabinId;
+	public Cabin getCabin() {
+		return cabin;
 	}
 
 	/**
 	 * @param cabinId the cabinId to set
 	 */
-	public void setCabinId(int cabinId) {
-		this.cabinId = cabinId;
+	public void setCabin(Cabin cabin) {
+		this.cabin = cabin;
 	}
 	
 }

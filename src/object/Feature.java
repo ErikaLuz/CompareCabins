@@ -8,23 +8,23 @@ public class Feature {
 
 	private int 	id;
 	private String 	featureString;
-	private int		cabinId;
+	private Cabin	cabin;
 	
 	public Feature()
 	{
-		id = 0;
-		featureString = "";
-		cabinId = 0;
+		id = -1;
+		featureString = null;
+		cabin = null;
 	}
 	/**
 	 * @param id
 	 * @param featureString
 	 * @param cabinID
 	 */
-	public Feature(int id, String featureString, int cabinId) {
+	public Feature(int id, String featureString, Cabin cabin) {
 		this.id = id;
 		this.featureString = featureString;
-		this.cabinId = cabinId;
+		this.cabin = cabin;
 	}
 	/**
 	 * @return the id
@@ -53,14 +53,14 @@ public class Feature {
 	/**
 	 * @return the cabinId
 	 */
-	public int getCabinId() {
-		return cabinId;
+	public Cabin getCabin() {
+		return cabin;
 	}
 	/**
 	 * @param cabinId the cabinId to set
 	 */
-	public void setCabinId(int cabinId) {
-		this.cabinId = cabinId;
+	public void setCabin( Cabin cabin) {
+		this.cabin = cabin;
 	}
 	
 	

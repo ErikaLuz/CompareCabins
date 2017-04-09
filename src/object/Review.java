@@ -2,19 +2,19 @@ package object;
 
 public class Review {
 
-	private int		id;
-	private int		numStars;
-	private String	title;
-	private String	description;
-	private int		rentRecordId;
+	private int			id;
+	private int			numStars;
+	private String		title;
+	private String		description;
+	private RentRecord	rentRecord;
 	
 	public Review()
 	{
-		id = 0;
-		numStars = 0;
-		title = "";
-		description = "";
-		rentRecordId = 0;
+		id = -1;
+		numStars = -1;
+		title = null;
+		description = null;
+		rentRecord = null;
 	}
 
 	/**
@@ -24,12 +24,12 @@ public class Review {
 	 * @param description
 	 * @param rentRecordId
 	 */
-	public Review(int id, int numStars, String title, String description, int rentRecordId) {
+	public Review(int id, int numStars, String title, String description, RentRecord rentRecord) {
 		this.id = id;
 		this.numStars = numStars;
 		this.title = title;
 		this.description = description;
-		this.rentRecordId = rentRecordId;
+		this.rentRecord = rentRecord;
 	}
 
 	/**
@@ -89,17 +89,17 @@ public class Review {
 	}
 
 	/**
-	 * @return the rentRecordId
+	 * @return the rentRecord
 	 */
-	public int getRentRecordId() {
-		return rentRecordId;
+	public RentRecord getRentRecord() {
+		return rentRecord;
 	}
 
 	/**
 	 * @param rentRecordId the rentRecordId to set
 	 */
-	public void setRentRecordId(int rentRecordId) {
-		this.rentRecordId = rentRecordId;
+	public void setRentRecord( RentRecord rentRecord) {
+		this.rentRecord = rentRecord;
 	}
 	
 	

@@ -8,17 +8,17 @@ public class RentRecord {
 	private float		totalPrice;
 	private Calendar	startDate;
 	private Calendar	endDate;
-	private int			cabinId;
-	private int			userId;
+	private Cabin		cabin;
+	private User		user;
 
 	public RentRecord()
 	{
-		id = 0;
-		totalPrice = 0;
+		id = -1;
+		totalPrice = -1;
 		startDate = null;
 		endDate = null;
-		cabinId = 0;
-		userId = 0;
+		cabin = null;
+		user = null;
 	}
 
 	/**
@@ -26,16 +26,16 @@ public class RentRecord {
 	 * @param totalPrice
 	 * @param startDate
 	 * @param endDate
-	 * @param cabinId
-	 * @param userId
+	 * @param cabin
+	 * @param user
 	 */
-	public RentRecord(int id, float totalPrice, Calendar startDate, Calendar endDate, int cabinId, int userId) {
+	public RentRecord(int id, float totalPrice, Calendar startDate, Calendar endDate, Cabin cabin, User user) {
 		this.id = id;
 		this.totalPrice = totalPrice;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.cabinId = cabinId;
-		this.userId = userId;
+		this.cabin = cabin;
+		this.user = user;
 	}
 
 	/**
@@ -95,31 +95,31 @@ public class RentRecord {
 	}
 
 	/**
-	 * @return the cabinId
+	 * @return the cabin
 	 */
-	public int getCabinId() {
-		return cabinId;
+	public Cabin getCabin() {
+		return cabin;
 	}
 
 	/**
-	 * @param cabinId the cabinId to set
+	 * @param cabin the cabin to set
 	 */
-	public void setCabinId(int cabinId) {
-		this.cabinId = cabinId;
+	public void setCabinId(Cabin cabin) {
+		this.cabin = cabin;
 	}
 
 	/**
-	 * @return the userId
+	 * @return the user
 	 */
-	public int getUserId() {
-		return userId;
+	public User getUser() {
+		return user;
 	}
 
 	/**
-	 * @param userId the userId to set
+	 * @param user the user to set
 	 */
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setUser( User user) {
+		this.user = user;
 	}
 	
 	
