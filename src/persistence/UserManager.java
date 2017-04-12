@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import exception.CCException;
+import object.user;
 import object.User;
 
 public class UserManager 
@@ -75,14 +77,30 @@ public class UserManager
 		
 	}
 	
-	public static void delete(User user)
-	{	
-		int rowsModified = 0;
-		
+	public static void delete(User user) throws CCException
+	{
+		String query = "DELETE FROM user WHERE id = ?";
+		PreparedStatement ps;
 		Connection con = DbAccessImpl.connect();
+		int rowsModified;
+		
+		if(user.getId() < 0) //object no in database
+			return;
+		
+		try {
+			ps = con.prepareStatement(query);
+			ps.setInt(1,  user.getId());
+			rowsModified = ps.executeUpdate();
+			
+			if(rowsModified != 1)
+				throw new CCException("UserManager.delete: failed to delete user");
+		}catch(SQLException e) {
+			throw new CCException("UserManager.delte: failed to delete user: " + e);
+		}
 		
 		DbAccessImpl.disconnect(con);
-	}
+		
+	} //end of delete
 	
 	//TODO
 	public static void restore(User user)

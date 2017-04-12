@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import exception.CCException;
+import object.review;
 import object.Review;
 
 
@@ -61,5 +63,30 @@ public class ReviewManager {
 		{
 			e.printStackTrace();
 		}
-	}
+	} //end of store
+	
+	public static void delete(Review review) throws CCException
+	{
+		String query = "DELETE FROM review WHERE id = ?";
+		PreparedStatement ps;
+		Connection con = DbAccessImpl.connect();
+		int rowsModified;
+		
+		if(review.getId() < 0) //object no in database
+			return;
+		
+		try {
+			ps = con.prepareStatement(query);
+			ps.setInt(1,  review.getId());
+			rowsModified = ps.executeUpdate();
+			
+			if(rowsModified != 1)
+				throw new CCException("ReviewManager.delete: failed to delete review");
+		}catch(SQLException e) {
+			throw new CCException("ReviewManager.delte: failed to delete review: " + e);
+		}
+		
+		DbAccessImpl.disconnect(con);
+		
+	} //end of delete
 }

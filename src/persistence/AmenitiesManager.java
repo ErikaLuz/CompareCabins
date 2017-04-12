@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import exception.CCException;
 import object.Amenities;
+import object.Cabin;
 
 public class AmenitiesManager {
 
@@ -57,7 +59,33 @@ public class AmenitiesManager {
 			// throw CompareCabinsException
 	    	e.printStackTrace();
 		}
+		
+		DbAccessImpl.disconnect(con);
 
 	} //end of store
+	
+	public static void delete(Amenities amenities) throws CCException
+	{
+		String query = "DELETE FROM amenities WHERE id = ?";
+		PreparedStatement ps;
+		Connection con = DbAccessImpl.connect();
+		int rowsModified;
+		
+		if(amenities.getId() < 0) //object no in database
+			return;
+		
+		try {
+			ps = con.prepareStatement(query);
+			ps.setInt(1,  amenities.getId());
+			rowsModified = ps.executeUpdate();
+			
+			if(rowsModified != 1)
+				throw new CCException("AmenitiesManager.delete: failed to delete amenities");
+		}catch(SQLException e) {
+			throw new CCException("AmenitiesManager.delte: failed to delete amenities: " + e);
+		}
+		
+		DbAccessImpl.disconnect(con);
+	} //end of delete
 	
 }

@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import exception.CCException;
+import object.feature;
 import object.Feature;
 
 public class FeatureManager {
@@ -57,5 +59,30 @@ public class FeatureManager {
 		
 		DbAccessImpl.disconnect(con);
 	} //end of store
+	
+	public static void delete(Feature feature) throws CCException
+	{
+		String query = "DELETE FROM feature WHERE id = ?";
+		PreparedStatement ps;
+		Connection con = DbAccessImpl.connect();
+		int rowsModified;
+		
+		if(feature.getId() < 0) //object no in database
+			return;
+		
+		try {
+			ps = con.prepareStatement(query);
+			ps.setInt(1,  feature.getId());
+			rowsModified = ps.executeUpdate();
+			
+			if(rowsModified != 1)
+				throw new CCException("FeatureManager.delete: failed to delete feature");
+		}catch(SQLException e) {
+			throw new CCException("FeatureManager.delte: failed to delete feature: " + e);
+		}
+		
+		DbAccessImpl.disconnect(con);
+		
+	} //end of delete
 	
 }

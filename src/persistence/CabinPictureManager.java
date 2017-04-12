@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import exception.CCException;
+import object.Availability;
 import object.CabinPicture;
 
 public class CabinPictureManager {
@@ -56,4 +58,29 @@ public class CabinPictureManager {
 		
 		DbAccessImpl.disconnect(con);
 	} //end of store
+	
+	public static void delete(CabinPicture cabinPicture) throws CCException
+	{
+		String query = "DELETE FROM cabin_picture WHERE id = ?";
+		PreparedStatement ps;
+		Connection con = DbAccessImpl.connect();
+		int rowsModified;
+		
+		if(cabinPicture.getId() < 0) //object no in database
+			return;
+		
+		try {
+			ps = con.prepareStatement(query);
+			ps.setInt(1,  cabinPicture.getId());
+			rowsModified = ps.executeUpdate();
+			
+			if(rowsModified != 1)
+				throw new CCException("CabinPictureManager.delete: failed to delete cabin picture");
+		}catch(SQLException e) {
+			throw new CCException("CabinPictureManager.delte: failed to delete cabin picture: " + e);
+		}
+		
+		DbAccessImpl.disconnect(con);
+		
+	} //end of delete
 }

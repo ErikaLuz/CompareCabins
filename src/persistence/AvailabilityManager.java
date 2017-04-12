@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import exception.CCException;
+import object.Amenities;
 import object.Availability;
 
 public class AvailabilityManager {
@@ -59,5 +61,29 @@ public class AvailabilityManager {
 		
 		DbAccessImpl.disconnect(con);	
 	} //end of store
+	
+	public static void delete(Availability availability) throws CCException
+	{
+		String query = "DELETE FROM availability WHERE id = ?";
+		PreparedStatement ps;
+		Connection con = DbAccessImpl.connect();
+		int rowsModified;
+		
+		if(availability.getId() < 0) //object no in database
+			return;
+		
+		try {
+			ps = con.prepareStatement(query);
+			ps.setInt(1,  availability.getId());
+			rowsModified = ps.executeUpdate();
+			
+			if(rowsModified != 1)
+				throw new CCException("AvailabilityManager.delete: failed to delete availability");
+		}catch(SQLException e) {
+			throw new CCException("AvailabilityManager.delte: failed to delete availability: " + e);
+		}
+		
+		DbAccessImpl.disconnect(con);
+	}
 
 }

@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import exception.CCException;
+import object.rentRecord;
 import object.RentRecord;
 
 public class RentRecordManager {
@@ -64,5 +66,30 @@ public class RentRecordManager {
 			e.printStackTrace();	
 		}
 	} //end of store
+
+	public static void delete(RentRecord rentRecord) throws CCException
+	{
+		String query = "DELETE FROM rent_record WHERE id = ?";
+		PreparedStatement ps;
+		Connection con = DbAccessImpl.connect();
+		int rowsModified;
+		
+		if(rentRecord.getId() < 0) //object no in database
+			return;
+		
+		try {
+			ps = con.prepareStatement(query);
+			ps.setInt(1,  rentRecord.getId());
+			rowsModified = ps.executeUpdate();
+			
+			if(rowsModified != 1)
+				throw new CCException("RentRecordManager.delete: failed to delete rent record");
+		}catch(SQLException e) {
+			throw new CCException("RentRecordManager.delte: failed to delete rent record: " + e);
+		}
+		
+		DbAccessImpl.disconnect(con);
+		
+	} //end of delete
 	
 }
