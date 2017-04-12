@@ -96,11 +96,10 @@ public class CabinManager {
 	            }
 	        }
 	        else { 
-	            // throw new CompareCabinsException( "CabinManager.store: failed to save a Cabin to the database" );
+	            throw new CCException("CabinManager.store: failed to save a cabin");
 	        }
 	    } catch( SQLException e) {
-			// throw CompareCabinsException
-	    	e.printStackTrace();
+			throw new CCException("CAbinManager.store: failed to save a cabin: " + e );
 		}
 	}
 	
