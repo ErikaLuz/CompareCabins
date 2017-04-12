@@ -32,7 +32,6 @@ public class Amenities {
 	}
 
 	/**
-	 * @param id
 	 * @param hasLake
 	 * @param hasRiver
 	 * @param hasPool
@@ -43,10 +42,10 @@ public class Amenities {
 	 * @param allowsPets
 	 * @param allowsSmoking
 	 */
-	public Amenities(int id, boolean hasLake, boolean hasRiver, boolean hasPool, boolean hasHotTub, boolean hasWifi,
-			boolean hasAirConditioning, boolean hasWasherDryer, boolean allowsPets, boolean allowsSmoking) 
+	public Amenities( boolean hasLake, boolean hasRiver, boolean hasPool, boolean hasHotTub, boolean hasWifi,
+			boolean hasAirConditioning, boolean hasWasherDryer, boolean allowsPets, boolean allowsSmoking ) 
 	{
-		this.id = id;
+		this.id = -1;
 		this.hasLake = hasLake;
 		this.hasRiver = hasRiver;
 		this.hasPool = hasPool;

@@ -20,16 +20,15 @@ public class User {
 	}
 
 	/**
-	 * @param id
 	 * @param username
 	 * @param password
 	 * @param firstName
 	 * @param lastName
 	 * @param email
 	 */
-	public User(int id, String username, String password, String firstName, String lastName, String email) 
+	public User( String username, String password, String firstName, String lastName, String email) 
 	{
-		this.id = id;
+		this.id = -1;
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;

@@ -27,10 +27,10 @@ public class Cabin {
 		amenities = null;
 	}
 
-	public Cabin(int id, String address, String city, String state, String description, int bedroomCount,
-			float bathCount, int maxOccupancy, User user, Amenities amenities) 
+	public Cabin( String address, String city, String state, String description, int bedroomCount,
+			float bathCount, int maxOccupancy ) 
 	{
-		this.id = id;
+		this.id = -1;
 		this.address = address;
 		this.city = city;
 		this.state = state;
@@ -38,8 +38,8 @@ public class Cabin {
 		this.bedroomCount = bedroomCount;
 		this.bathCount = bathCount;
 		this.maxOccupancy = maxOccupancy;
-		this.user = user;
-		this.amenities = amenities;
+		this.user = null;
+		this.amenities = null;
 	}
 
 	/**
