@@ -15,23 +15,30 @@ import object.User;
 
 public class CabinManager {
 
-	public static void store( Cabin cabin )
+	public static void store( Cabin cabin ) throws CCException
 	{
 		int insertionCount;
-		String query = "INSERT INTO cabin ( address, city, state, description, bedroom_count, bath_count, max_occupancy, user_id, amenities_id)"
-						+	" VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ? )";		
+		String insertSQL 	= "INSERT INTO cabin ( address, city, state, description, bedroom_count, bath_count, max_occupancy, user_id, amenities_id)"
+							+ "		VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+		String updateSQL 	= "UPDATE cabin SET address = ?, city = ?, description = ?, bedroom_count = ?, max_occupancy = ?, user_id = ?,"
+							+ "		amenities_id = ? WHERE id = ?";
 		Connection conn = DbAccessImpl.connect();
+		PreparedStatement ps;
 		
-		try {
+		try { // prepare and execute SQL query
 			
-			PreparedStatement ps = conn.prepareStatement( query );
+			// test is object is already in database to determine insert or update
+			if( cabin.getId() >= 0 )
+				ps = conn.prepareStatement( updateSQL );
+			else
+				ps = conn.prepareStatement( insertSQL );
 			
 			// set the PreparedStatement parameters to values given from Cabin or to sql null values if nullable
-			if( cabin.getAddress() != null ) {
+			if( cabin.getAddress() != null ) 
 				ps.setString( 1, cabin.getAddress() );
-			} else {
+			else 
 				ps.setNull(1, java.sql.Types.VARCHAR);
-			}
+			
 			if( cabin.getCity() != null )
 				ps.setString( 2, cabin.getCity() );
 			else
@@ -59,11 +66,15 @@ public class CabinManager {
 			if( cabin.getUser() != null )
 				ps.setInt( 8, cabin.getUser().getId() );
 			else
-				ps.setInt( 8, java.sql.Types.INTEGER);
+				ps.setNull( 8, java.sql.Types.INTEGER);
 			if( cabin.getAmenities() != null )
 				ps.setInt( 9, cabin.getAmenities().getId() );
 			else
-				ps.setInt( 9, java.sql.Types.INTEGER);
+				ps.setNull( 9, java.sql.Types.INTEGER);
+			
+			// set id if query is an update
+			if( cabin.getId() >= 0 )
+				ps.setInt( 10, cabin.getId() );
 			
 			// execute the query
 			insertionCount = DbAccessImpl.update( conn, ps );
@@ -93,6 +104,10 @@ public class CabinManager {
 		}
 	}
 	
+	public static void update( Cabin cabin )
+	{
+		
+	}
 	public static List<Cabin> restore( Cabin modelCabin ) throws CCException
 	{
 		String  selectCabinSql = "select id, address, city, state, description, bedroom_count, bath_count, max_occupancy from cabin"; 
@@ -195,7 +210,7 @@ public class CabinManager {
 			}
 		}
 		catch( SQLException e ) {      
-			throw new CCException("CabinManager.restore: Could not restore persistent Cabin objects; Root cause: " + e );
+			throw new CCException("CabinManager.restore: Could not restore persistent Cabin objects: " + e );
 		}		
 	}
 	
@@ -234,7 +249,7 @@ public class CabinManager {
 				return null;
 			}
 		} catch( SQLException e ) {
-			throw new CCException("CabinManager.restoreUserFromCabin: could not restore persistent User object; Root casue: " + e );
+			throw new CCException("CabinManager.restoreUserFromCabin: could not restore persistent User object: " + e );
 		}
 		
 	}
@@ -279,9 +294,32 @@ public class CabinManager {
 				return null;
 			}
 		} catch( SQLException e ) {
-			throw new CCException("CabinManager.restoreAmenitiesFromCabin: could not restore persistent Amenities object; Root casue: " + e );
+			throw new CCException("CabinManager.restoreAmenitiesFromCabin: could not restore persistent Amenities object: " + e );
 		}		
 	}
+	
+	public static void delete( Cabin cabin ) throws CCException
+    {
+        String query = "DELETE FROM cabin WHERE id = ?";              
+        PreparedStatement ps;
+        Connection conn = DbAccessImpl.connect();
+        int rowsModified;
+             
+        if( cabin.getId() < 0 ) // object not in database
+            return;
+        
+        try {
+            ps = conn.prepareStatement( query );         
+            ps.setInt( 1, cabin.getId() );
+            rowsModified = ps.executeUpdate();          
+            
+            if( rowsModified != 1 ) 
+                throw new CCException("CabinManager.delete: failed to delete a cabin" );
+        }
+        catch( SQLException e ) {
+            throw new CCException( "CabinManager.delete: failed to delete a Club: " + e );        
+        }
+    }
 }
 
 
