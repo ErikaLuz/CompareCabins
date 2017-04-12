@@ -17,13 +17,13 @@ public class CabinManager {
 
 	public static void store( Cabin cabin ) throws CCException
 	{
-		int insertionCount;
 		String insertSQL 	= "INSERT INTO cabin ( address, city, state, description, bedroom_count, bath_count, max_occupancy, user_id, amenities_id)"
 							+ "		VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 		String updateSQL 	= "UPDATE cabin SET address = ?, city = ?, description = ?, bedroom_count = ?, max_occupancy = ?, user_id = ?,"
 							+ "		amenities_id = ? WHERE id = ?";
 		Connection conn = DbAccessImpl.connect();
 		PreparedStatement ps;
+		int rowsModified;
 		
 		try { // prepare and execute SQL query
 			
@@ -77,23 +77,28 @@ public class CabinManager {
 				ps.setInt( 10, cabin.getId() );
 			
 			// execute the query
-			insertionCount = DbAccessImpl.update( conn, ps );
+			rowsModified = DbAccessImpl.update( conn, ps );
 			
 			// set the id value assigned by the database to the cabin object
-			if( insertionCount >= 1 ) {
-	            String sql = "select last_insert_id()";
-	            if( ps.execute( sql ) ) { // statement returned a result
-	
-	                // retrieve the result
-	                ResultSet r = ps.getResultSet();
-	
-	                while( r.next() ) {
-	                    // retrieve the last insert auto_increment value
-	                    int cabinId = r.getInt( 1 );
-	                    if( cabinId > 0 )
-	                        cabin.setId( cabinId ); // set the cabin Id for this object 
-	                }
-	            }
+			if( rowsModified >= 1 ) 
+			{
+				if( cabin.getId() < 0 ) 
+				{
+		            String sql = "select last_insert_id()";
+		            if( ps.execute( sql ) ) // statement returned a result
+		            { 		
+		                // retrieve the result
+		                ResultSet r = ps.getResultSet();
+		
+		                while( r.next() ) 
+		                {
+		                    // retrieve the last insert auto_increment value
+		                    int cabinId = r.getInt( 1 );
+		                    if( cabinId > 0 )
+		                        cabin.setId( cabinId ); // set the cabin Id for this object 
+		                }
+		            }
+				}
 	        }
 	        else { 
 	            throw new CCException("CabinManager.store: failed to save a cabin");
@@ -103,10 +108,6 @@ public class CabinManager {
 		}
 	}
 	
-	public static void update( Cabin cabin )
-	{
-		
-	}
 	public static List<Cabin> restore( Cabin modelCabin ) throws CCException
 	{
 		String  selectCabinSql = "select id, address, city, state, description, bedroom_count, bath_count, max_occupancy from cabin"; 

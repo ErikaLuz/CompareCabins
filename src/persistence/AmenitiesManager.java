@@ -13,14 +13,20 @@ public class AmenitiesManager {
 
 	public static void store(Amenities amenities)
 	{
+		String insertSql	= "INSERT INTO amenities (has_lake, has_river, has_pool, has_hot_tub, has_wifi, has_air_conditioning,"
+							+ "	has_washer_dryer, allows_pets, allows_smoking) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String updateSql	= "UPDATE amenities SET has_lake = ?, has_river = ?, has_pool = ?, has_hot_tub = ?, has_wifi = ?, has_air_conditioning = ?,"
+							+ "		has_washer_dryer = ?, allows_pets = ?, allows_smoking = ? WHERE id = ?";
+		Connection conn = DbAccessImpl.connect();
+		PreparedStatement ps;
 		int rowsModified;
-		String query = "INSERT INTO amenities (has_lake, has_river, has_pool, has_hot_tub, has_wifi, has_air_conditioning,"
-					   +" has_washer_dryer, allows_pets, allows_smoking) VALUES(?,?,?,?,?,?,?,?,?)";
-		
-		Connection con = DbAccessImpl.connect();
 		try {
 			
-			PreparedStatement ps = con.prepareStatement( query );
+			// test is object is already in database to determine insert or update
+			if( amenities.getId() >= 0 )
+				ps = conn.prepareStatement( updateSql );
+			else
+				ps = conn.prepareStatement( insertSql );
 			
 			// set the PreparedStatement parameters to values given from User or to sql null values if nullable
 		    ps.setBoolean(1, amenities.isHasLake()); 
@@ -33,11 +39,15 @@ public class AmenitiesManager {
 		    ps.setBoolean(8, amenities.isAllowsPets());
 		    ps.setBoolean(9, amenities.isAllowsSmoking());
 		    
-			//execute the query
-			rowsModified = DbAccessImpl.update(con, ps);
+			// set id if query is an update
+			if( amenities.getId() >= 0 )
+				ps.setInt( 10, amenities.getId() );
 			
-			// set the id value assigned by the database to the cabin object
-			if( rowsModified >= 1 ) {
+			//execute the query
+			rowsModified = DbAccessImpl.update( conn, ps );
+			
+			// set the id value assigned by the database to the amenities object if inserted
+			if( amenities.getId() >= 0 && rowsModified >= 1 ) {
 			    String sql = "select last_insert_id()";
 			    if( ps.execute( sql ) ) { // statement returned a result
 				
@@ -51,14 +61,12 @@ public class AmenitiesManager {
 				   amenities.setId( amenitiesId ); // set the cabin Id for this object
 				   }
 		     	 }
-		     }else { 
-		    	 // throw new CompareCabinsException( "AmenitiesManager.store: failed to save a Amenities to the database" );
-			 }
-		    
-		}  catch( SQLException e) {
-			// throw CompareCabinsException
-	    	e.printStackTrace();
-		}
+			    else { 
+		            throw new CCException("CabinManager.store: failed to save a cabin");
+		        }
+		    } catch( SQLException e) {
+				throw new CCException("CAbinManager.store: failed to save a cabin: " + e );
+			}
 		
 		DbAccessImpl.disconnect(con);
 
