@@ -4,24 +4,31 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.LinkedList;
+import java.util.List;
 
 import exception.CCException;
-import object.user;
 import object.User;
 
 public class UserManager 
 {
-	public static void store(User user)
+	public static void store(User user) throws CCException
 	{	
-		int rowsModified;
-		String query = "INSERT INTO user (username, password, first_name, last_name, email) VALUES"
-				+" (?,?,?,?,?)";
-		
+		String insertSQL 	= "INSERT INTO user (username, password, first_name, last_name, email) VALUES"
+							+" (?,?,?,?,?)";
+		String updateSQL	= "UPDATE user SET username = ?, password = ?, first_name = ?, last_name = ?, email = ? WHERE id = ?";
 		Connection con = DbAccessImpl.connect();
+		PreparedStatement ps;
+		int rowsModified;
 		
-		try 
+		try //prepare and execute the sql query
 		{
-			PreparedStatement ps = con.prepareStatement(query);
+			// test is object is already in database to determine insert or update
+			if(user.getId() >= 0)
+				ps = con.prepareStatement(updateSQL);
+			else
+				ps = con.prepareStatement(insertSQL);
 			
 			// set the PreparedStatement parameters to values given from User or to sql null values if nullable	
 			ps.setString(1, user.getUsername());
@@ -36,46 +43,131 @@ public class UserManager
 			if(user.getEmail() != null) ps.setString(5, user.getEmail());
 			else ps.setNull(5, java.sql.Types.VARCHAR);
 			
+			// set id if query is an update
+			if( user.getId() >= 0 )
+				ps.setInt( 10, user.getId() );
+			
 			//execute the query
 			rowsModified = DbAccessImpl.update(con, ps);
 			
 			// set the id value assigned by the database to the user object
-			if( rowsModified >= 1 ) {
-			    String sql = "select last_insert_id()";
-			    if( ps.execute( sql ) ) { // statement returned a result
-				
-				   // retrieve the result
-				   ResultSet r = ps.getResultSet();
-				
-				   while( r.next() ) {
-				   // retrieve the last insert auto_increment value
-				   int userId = r.getInt( 1 );
-				   if( userId > 0 )
-				   user.setId( userId ); // set the user Id for this object 
-				   }
-		     	 }
+			if( rowsModified >= 1) 
+			{
+				if(user.getId() < 0)
+				{
+				    String sql = "select last_insert_id()";
+				    if( ps.execute( sql ) ) // statement returned a result
+				    { 
+					    // retrieve the result
+					    ResultSet r = ps.getResultSet();
+					 
+					    while( r.next() )
+					    {
+						    // retrieve the last insert auto_increment value
+						    int userId = r.getInt( 1 );
+						    if( userId > 0 )
+							   user.setId( userId ); // set the user Id for this object 
+					    }
+			     	 }
+				}
 		     }else { 
-		    	 // throw new CompareCabinsException( "UserManager.store: failed to save a User to the database" );
+		    	 throw new CCException("UserManager.store: failed to save a user");
 			 }
 		}
-		catch (SQLException e) 
-		{
-			e.printStackTrace();
+		catch (SQLException e) {
+			throw new CCException("UserManager.store: failed to save a cabin: " + e );
 		}
 		
 		DbAccessImpl.disconnect(con);
 	} //end of store
 	
-	//TODO
-	public static void update(User user, String column, String newValue)
-	{	
-		int rowsModified = 0;
-		
+	public static List<User> restore(User modelUser) throws CCException
+	{
+		String  selectUserSql = "select username, password, first_name, last_name, email from user"; 
+		Statement    statement = null;
+		StringBuffer query = new StringBuffer( 250 );
+		StringBuffer condition = new StringBuffer( 250 );
+		List<User> users = new LinkedList<User>();
 		Connection con = DbAccessImpl.connect();
+
+		condition.setLength( 0 );
+		query.append( selectUserSql );
 		
-		DbAccessImpl.disconnect(con);
+		// append where clauses to query for each specified field of the modelUser
+		if( modelUser != null ) 
+		{
+			if( modelUser.getId() >= 0 ) // id is unique, so it is sufficient to get a User
+				query.append( " where id = " + modelUser.getId() );
+			else {	// no id is given		
+				if( modelUser.getUsername() != null )
+					condition.append( " username = '" + modelUser.getUsername() + "'");
+				if( modelUser.getPassword() != null ) {
+					if ( condition.length() > 0 )
+						condition.append( " and");
+					condition.append(" password = '" + modelUser.getPassword() + "'");
+				}
+				if( modelUser.getFirstName() != null ) {
+					if ( condition.length() > 0 )
+						condition.append( " and");
+					condition.append(" first_name = '" + modelUser.getFirstName() + "'");
+				}
+				if( modelUser.getLastName() != null ) {
+					if ( condition.length() > 0 )
+						condition.append( " and");
+					condition.append(" last_name = '" + modelUser.getLastName() + "'");
+				}
+				if( modelUser.getEmail() != null ) {
+					if ( condition.length() > 0 )
+						condition.append( " and");
+					condition.append(" email = " + modelUser.getEmail() );
+				}
+			}
+		} //end of if
 		
-	}
+		try {			
+			statement = con.createStatement();
+			
+			if( statement.execute( query.toString() ) ) { // statement returned a result
+				
+				// fields of a user object
+			    int 	id;
+			    String	username;
+			    String	password;
+				String	firstName;
+				String	lastName;
+				String	email;
+				
+				// retrieve the ResultSet generated by the execution of the query
+				ResultSet rs = statement.getResultSet();
+
+				while( rs.next() ) { // process the result set
+
+					// retrieve the values from an entry in the result set
+					id = rs.getInt(1);
+					username = rs.getString(2);
+					password = rs.getString(3);
+					firstName = rs.getString(4);
+					lastName = rs.getString(5);
+					email = rs.getString(6);
+
+					// create a proxy object
+					User user = new User( username, password, firstName, lastName, email);
+					user.setId( id );
+					
+					users.add( user );
+				}
+				
+				return users;
+				
+			} else {
+				return null;
+			}
+		}
+		catch( SQLException e ) {      
+			throw new CCException("UserManager.restore: Could not restore persistent User objects: " + e );
+		}		
+
+	} //end of restore
 	
 	public static void delete(User user) throws CCException
 	{
@@ -102,19 +194,9 @@ public class UserManager
 		
 	} //end of delete
 	
-	//TODO
-	public static void restore(User user)
-	{	
-		int rowsModified = 0;
-		
-		Connection con = DbAccessImpl.connect();
-		
-		DbAccessImpl.disconnect(con);
-	}
-	
 	//SIGN-UP & LOGIN METHODS -------------------------
 	
-	public boolean signup(User user)
+	public boolean signup(User user) throws CCException
 	{
 		//check to see if username is taken
 		
