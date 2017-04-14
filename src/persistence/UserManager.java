@@ -5,10 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
 import exception.CCException;
+import object.Availability;
+import object.Cabin;
+import object.RentRecord;
 import object.User;
 
 public class UserManager 
@@ -168,6 +172,95 @@ public class UserManager
 		}		
 
 	} //end of restore
+	
+	public static List<Cabin> restoreCabinsFromUser( User user ) throws CCException
+	{
+		String sqlQuery = "SELECT c.id, c.address, c.city, c.state, c.description, c.bedroom_count, c.bath_count, c.max_occupancy FROM cabin c"
+						+ "	WHERE user_id = ?";
+		
+		Connection conn = DbAccessImpl.connect();
+		ResultSet rs;
+		List<Cabin> cabins = new LinkedList<Cabin>();
+		
+		try {
+			// prepare and execute the query
+			PreparedStatement ps = conn.prepareStatement( sqlQuery );
+			ps.setInt( 1, user.getId() );
+			rs = ps.executeQuery();
+			
+			while( rs.next() ) { // there is a next entry in the result set
+				
+				// retrieve the values from the result set
+				int id = rs.getInt(1);
+				String address = rs.getString(2);
+				String city = rs.getString(3);
+				String state = rs.getString(4);
+				String description = rs.getString(5);
+				int bedroomCount = rs.getInt(6);
+				float bathCount = rs.getFloat(7);
+				int maxOccupancy = rs.getInt(8);
+				
+				// create the proxy object
+				Cabin cabin = new Cabin( address, city, state, description, bedroomCount, bathCount, maxOccupancy );
+				cabin.setId(id);
+				cabin.setUser(null);
+				cabin.setAmenities(null);
+				
+				cabins.add( cabin );
+			}
+			
+			return cabins;
+			
+		} catch( SQLException e ) {
+			throw new CCException("UserManager.restoreCabinsFromUser: could not restore persistent Cabin objects: " + e );
+		}
+		
+	}
+	
+	public static List<RentRecord> restoreRentRecordsFromUser( User user ) throws CCException
+	{
+		String sqlQuery = "SELECT id, total_price, start_date, end_date FROM rent_record"
+						+ "	WHERE user_id = ?";
+		
+		Connection conn = DbAccessImpl.connect();
+		ResultSet rs;
+		List<RentRecord> rentRecords = new LinkedList<RentRecord>();
+		
+		try {
+			// prepare and execute the query
+			PreparedStatement ps = conn.prepareStatement( sqlQuery );
+			ps.setInt( 1, user.getId() );
+			rs = ps.executeQuery();
+			
+			while( rs.next() ) { // there is a next entry in the result set
+				
+				// retrieve the values from the result set
+				int id = rs.getInt(1);
+				float totalPrice = rs.getFloat(2);
+				java.sql.Date startDate = rs.getDate(3);
+				java.sql.Date endDate = rs.getDate(4);
+				
+				// convert the sql Dates to Calendar objects
+				Calendar startCal = Calendar.getInstance();
+				Calendar endCal = Calendar.getInstance();
+				startCal.setTime( startDate );
+				endCal.setTime( endDate );
+				
+				// create the proxy object
+				RentRecord rentRecord = new RentRecord( totalPrice, startCal, endCal );
+				rentRecord.setId(id);
+				rentRecord.setCabin( null );
+				rentRecord.setUser( null );
+				rentRecords.add( rentRecord );
+			}
+			
+			return rentRecords;
+			
+		} catch( SQLException e ) {
+			throw new CCException("UserManager.restoreRentRecordsFromUser: could not restore persistent RentRecord objects: " + e );
+		}
+		
+	}
 	
 	public static void delete(User user) throws CCException
 	{

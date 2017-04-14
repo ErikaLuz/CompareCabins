@@ -18,10 +18,10 @@ public class CabinPicture {
 	 * @param filePath
 	 * @param cabinId
 	 */
-	public CabinPicture(int id, String filePath, Cabin cabin) {
-		this.id = id;
+	public CabinPicture( String filePath ) {
+		this.id = -1;
 		this.filePath = filePath;
-		this.cabin = cabin;
+		this.cabin = null;
 	}
 
 	/**

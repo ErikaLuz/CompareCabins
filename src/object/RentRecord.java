@@ -104,7 +104,7 @@ public class RentRecord {
 	/**
 	 * @param cabin the cabin to set
 	 */
-	public void setCabinId(Cabin cabin) {
+	public void setCabin(Cabin cabin) {
 		this.cabin = cabin;
 	}
 

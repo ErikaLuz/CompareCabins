@@ -10,8 +10,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import exception.CCException;
+import object.Amenities;
 import object.Cabin;
 import object.RentRecord;
+import object.Review;
 import object.User;
 
 public class RentRecordManager {
@@ -108,12 +110,22 @@ public class RentRecordManager {
 				if( modelRentRecord.getStartDate() != null ) {
 					if ( condition.length() > 0 )
 						condition.append( " and");
-					condition.append(" start_date = '" + modelRentRecord.getStartDate() + "'");
+					Calendar cal = modelRentRecord.getStartDate();
+					int day = cal.get( Calendar.DAY_OF_MONTH );
+					int month = cal.get( Calendar.MONTH );
+					int year = cal.get( Calendar.YEAR );
+					String dateString = year + "-" + month + "-" + day;
+					condition.append(" start_date = '" + dateString + "'");
 				}
 				if( modelRentRecord.getEndDate() != null ) {
 					if ( condition.length() > 0 )
 						condition.append( " and");
-					condition.append(" end_date = '" + modelRentRecord.getEndDate() + "'");
+					Calendar cal = modelRentRecord.getEndDate();
+					int day = cal.get( Calendar.DAY_OF_MONTH );
+					int month = cal.get( Calendar.MONTH );
+					int year = cal.get( Calendar.YEAR );
+					String dateString = year + "-" + month + "-" + day;
+					condition.append(" date = '" + dateString + "'");
 				}
 			}
 		}
@@ -146,7 +158,7 @@ public class RentRecordManager {
 					// create a proxy object
 					RentRecord rentRecord = new RentRecord(totalPrice, start, end);
 					rentRecord.setId( id );
-					rentRecord.setCabinId( null );	
+					rentRecord.setCabin( null );	
 					rentRecord.setUser( null );
 					
 					rentRecords.add( rentRecord );
@@ -244,6 +256,44 @@ public class RentRecordManager {
 			throw new CCException("RentRecordManager.restoreUserFromRentRecord: could not restore persistent User object: " + e );
 		}
 	} //end of restoreUserFromRentRecord
+	
+	public static Review restoreReviewFromRentRecord( RentRecord rentRecord ) throws CCException
+	{
+		String sqlQuery = "SELECT id, num_stars, title, description FROM review"
+						+ "	WHERE rent_record_id = ?";
+
+		Connection conn = DbAccessImpl.connect();
+		ResultSet rs;
+		Review review;
+		
+		try {
+			// prepare and execute query
+			PreparedStatement ps = conn.prepareStatement( sqlQuery );
+			ps.setInt(1, rentRecord.getId() );
+			rs = ps.executeQuery();
+			
+			if( rs.next() ) { // There is an entry in the result set
+				
+				// retrieve the values from the result set
+				int id = rs.getInt(1);
+				int numStars = rs.getInt(2);
+				String title = rs.getString(3);
+				String description = rs.getString(4);
+				
+				// create the proxy object
+				review = new Review( numStars, title, description );
+				review.setId(id);
+				review.setRentRecord( null );
+				
+				return review;
+				
+			} else { // no matches found for the query
+				return null;
+			}
+		} catch( SQLException e ) {
+			throw new CCException("RentRecordManager.restoreReviewFromRentRecord: could not restore persistent Reveiw object: " + e );
+		}
+	}
 	
 	public static void delete(RentRecord rentRecord) throws CCException
 	{

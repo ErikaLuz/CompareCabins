@@ -164,40 +164,44 @@ public class AvailabilityManager {
 	
 	public static Cabin restoreCabinFromAvailability( Availability availability ) throws CCException
 	{
-		String sqlQuery = "SELECT c.id, c.address, c.city, c.state, c.description, c.bedroom_count, c.bath_count, c.max_occupancy FROM cabin"
-						+ "	JOIN cabin ON user.id = cabin.user_id"
-						+ "	WHERE cabin.id = ?";
+		String sqlQuery = "SELECT c.id, c.address, c.city, c.state, c.description, c.bedroom_count, c.bath_count, c.max_occupancy FROM cabin c"
+						+ "	JOIN availability ON cabin.id = availability.cabin_id"
+						+ "	WHERE availability.id = ?";
 		
 		Connection conn = DbAccessImpl.connect();
 		ResultSet rs;
-		User user;
+		Cabin cabin;
 		
 		try {
 			// prepare and execute the query
 			PreparedStatement ps = conn.prepareStatement( sqlQuery );
-			ps.setInt( 1, cabin.getId() );
+			ps.setInt( 1, availability.getId() );
 			rs = ps.executeQuery();
 			
 			if( rs.next() ) { // there is an entry in the result set
 				
 				// retrieve the values from the result set
 				int id = rs.getInt(1);
-				String username = rs.getString(2);
-				String password = rs.getString(3);
-				String firstName = rs.getString(4);
-				String lastName = rs.getString(5);
-				String email = rs.getString(6);
+				String address = rs.getString(2);
+				String city = rs.getString(3);
+				String state = rs.getString(4);
+				String description = rs.getString(5);
+				int bedroomCount = rs.getInt(6);
+				float bathCount = rs.getFloat(7);
+				int maxOccupancy = rs.getInt(8);
 				
 				// create the proxy object
-				user = new User( username, password, firstName, lastName, email );
-				user.setId(id);
+				cabin = new Cabin( address, city, state, description, bedroomCount, bathCount, maxOccupancy );
+				cabin.setId(id);
+				cabin.setUser(null);
+				cabin.setAmenities(null);
 				
-				return user;
+				return cabin;
 			} else { // no matches found for the query
 				return null;
 			}
 		} catch( SQLException e ) {
-			throw new CCException("CabinManager.restoreUserFromCabin: could not restore persistent User object: " + e );
+			throw new CCException("AvailabilityManager.restoreCabinFromAvailabilty: could not restore persistent Cabin object: " + e );
 		}
 		
 	}

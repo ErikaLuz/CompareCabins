@@ -5,12 +5,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
 import exception.CCException;
 import object.Amenities;
+import object.Availability;
 import object.Cabin;
+import object.CabinPicture;
+import object.Feature;
+import object.RentRecord;
 import object.User;
 
 public class CabinManager {
@@ -296,6 +301,167 @@ public class CabinManager {
 		} catch( SQLException e ) {
 			throw new CCException("CabinManager.restoreAmenitiesFromCabin: could not restore persistent Amenities object: " + e );
 		}		
+	}
+	
+	public static List<CabinPicture> restoreCabinPicturesFromCabin( Cabin cabin ) throws CCException
+	{
+		String sqlQuery = "SELECT id, file_path FROM cabin_picture"
+						+ "	WHERE cabin_id = ?";
+		
+		Connection conn = DbAccessImpl.connect();
+		ResultSet rs;
+		List<CabinPicture> cabinPictures = new LinkedList<CabinPicture>();
+		
+		try {
+			// prepare and execute the query
+			PreparedStatement ps = conn.prepareStatement( sqlQuery );
+			ps.setInt( 1, cabin.getId() );
+			rs = ps.executeQuery();
+			
+			while( rs.next() ) { // there is a next entry in the result set
+				
+				// retrieve the values from the result set
+				int id = rs.getInt(1);
+				String filePath = rs.getString(2);
+				
+				// create the proxy object
+				CabinPicture cabinPicture = new CabinPicture( filePath );
+				cabinPicture.setId(id);
+				cabinPicture.setCabin(null);
+				
+				cabinPictures.add( cabinPicture );
+			}
+			
+			return cabinPictures;
+			
+		} catch( SQLException e ) {
+			throw new CCException("CabinManager.restoreCabinPicturesFromCabin: could not restore persistent CabinPicture objects: " + e );
+		}
+		
+	}
+	
+	public static List<Feature> restoreFeaturesFromCabin( Cabin cabin ) throws CCException
+	{
+		String sqlQuery = "SELECT id, feature_string FROM feature"
+						+ "	WHERE cabin_id = ?";
+		
+		Connection conn = DbAccessImpl.connect();
+		ResultSet rs;
+		List<Feature> features = new LinkedList<Feature>();
+		
+		try {
+			// prepare and execute the query
+			PreparedStatement ps = conn.prepareStatement( sqlQuery );
+			ps.setInt( 1, cabin.getId() );
+			rs = ps.executeQuery();
+			
+			while( rs.next() ) { // there is a next entry in the result set
+				
+				// retrieve the values from the result set
+				int id = rs.getInt(1);
+				String featureString = rs.getString(2);
+				
+				// create the proxy object
+				Feature feature = new Feature( featureString );
+				feature.setId(id);
+				feature.setCabin(null);
+				
+				features.add( feature );
+			}
+			
+			return features;
+			
+		} catch( SQLException e ) {
+			throw new CCException("CabinManager.restoreFeaturesFromCabin: could not restore persistent Feature objects: " + e );
+		}
+		
+	}
+	
+	public static List<Availability> restoreAvailabilitiesFromCabin( Cabin cabin ) throws CCException
+	{
+		String sqlQuery = "SELECT id, price, date FROM availability"
+						+ "	WHERE cabin_id = ?";
+		
+		Connection conn = DbAccessImpl.connect();
+		ResultSet rs;
+		List<Availability> availabilities = new LinkedList<Availability>();
+		
+		try {
+			// prepare and execute the query
+			PreparedStatement ps = conn.prepareStatement( sqlQuery );
+			ps.setInt( 1, cabin.getId() );
+			rs = ps.executeQuery();
+			
+			while( rs.next() ) { // there is a next entry in the result set
+				
+				// retrieve the values from the result set
+				int id = rs.getInt(1);
+				float price = rs.getFloat(2);
+				java.sql.Date date = rs.getDate(3);
+				
+				// convert Date to Calendar
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(date);
+				
+				// create the proxy object
+				Availability availability = new Availability( price, cal );
+				availability.setId(id);
+				availability.setCabin(null);
+				
+				availabilities.add( availability );
+			}
+			
+			return availabilities;
+			
+		} catch( SQLException e ) {
+			throw new CCException("CabinManager.restoreAvailabilitiesFromCabin: could not restore persistent Availabilities objects: " + e );
+		}
+		
+	}
+	
+	public static List<RentRecord> restoreRentRecordsFromCabin( Cabin cabin ) throws CCException
+	{
+		String sqlQuery = "SELECT id, total_price, start_date, end_date FROM rent_record"
+						+ "	WHERE cabin_id = ?";
+		
+		Connection conn = DbAccessImpl.connect();
+		ResultSet rs;
+		List<RentRecord> rentRecords = new LinkedList<RentRecord>();
+		
+		try {
+			// prepare and execute the query
+			PreparedStatement ps = conn.prepareStatement( sqlQuery );
+			ps.setInt( 1, cabin.getId() );
+			rs = ps.executeQuery();
+			
+			while( rs.next() ) { // there is a next entry in the result set
+				
+				// retrieve the values from the result set
+				int id = rs.getInt(1);
+				float totalPrice = rs.getFloat(2);
+				java.sql.Date startDate = rs.getDate(3);
+				java.sql.Date endDate = rs.getDate(4);
+				
+				// convert the sql Dates to Calendar objects
+				Calendar startCal = Calendar.getInstance();
+				Calendar endCal = Calendar.getInstance();
+				startCal.setTime( startDate );
+				endCal.setTime( endDate );
+				
+				// create the proxy object
+				RentRecord rentRecord = new RentRecord( totalPrice, startCal, endCal );
+				rentRecord.setId(id);
+				rentRecord.setCabin( null );
+				rentRecord.setUser( null );
+				rentRecords.add( rentRecord );
+			}
+			
+			return rentRecords;
+			
+		} catch( SQLException e ) {
+			throw new CCException("CabinManager.restoreRentRecordsFromCabin: could not restore persistent RentRecord objects: " + e );
+		}
+		
 	}
 	
 	public static void delete( Cabin cabin ) throws CCException

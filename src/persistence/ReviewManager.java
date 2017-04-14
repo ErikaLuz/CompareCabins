@@ -160,8 +160,8 @@ public class ReviewManager {
 	public static RentRecord restoreRentRecordFromReview(Review review) throws CCException 
 	{
 		String sqlQuery = "SELECT rent_record.id, total_price, start_date, end_date, cabin_id, user_id FROM rent_record"
-				+ "	JOIN review ON rent_record.id = review.rent_record_id"
-				+ "	WHERE review.id = ?";
+						+ "	JOIN review ON rent_record.id = review.rent_record_id"
+						+ "	WHERE review.id = ?";
 
 		Connection con = DbAccessImpl.connect();
 		ResultSet rs;
@@ -190,6 +190,8 @@ public class ReviewManager {
 				// create the proxy object
 				rentRecord = new RentRecord( total_price, start, end );
 				rentRecord.setId(id);
+				rentRecord.setCabin( null );
+				rentRecord.setUser( null );
 				
 				return rentRecord;
 			} else { // no matches found for the query
