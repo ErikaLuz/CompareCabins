@@ -18,16 +18,14 @@ public class Availability {
 	}
 
 	/**
-	 * @param id
 	 * @param price
 	 * @param date
-	 * @param cabinId
 	 */
-	public Availability(int id, float price, Calendar date, Cabin cabin) {
-		this.id = id;
+	public Availability( float price, Calendar date ) {
+		this.id = -1;
 		this.price = price;
 		this.date = date;
-		this.cabin = cabin;
+		this.cabin = null;
 	}
 
 	/**

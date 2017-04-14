@@ -110,7 +110,7 @@ public class CabinManager {
 	
 	public static List<Cabin> restore( Cabin modelCabin ) throws CCException
 	{
-		String  selectCabinSql = "select id, address, city, state, description, bedroom_count, bath_count, max_occupancy from cabin"; 
+		String  selectCabinSql = "SELECT id, address, city, state, description, bedroom_count, bath_count, max_occupancy from cabin"; 
 		Statement    statement = null;
 		StringBuffer query = new StringBuffer( 250 );
 		StringBuffer condition = new StringBuffer( 250 );
