@@ -29,13 +29,13 @@ public class RentRecord {
 	 * @param cabin
 	 * @param user
 	 */
-	public RentRecord(int id, float totalPrice, Calendar startDate, Calendar endDate, Cabin cabin, User user) {
-		this.id = id;
+	public RentRecord(float totalPrice, Calendar startDate, Calendar endDate) {
+		this.id = -1;
 		this.totalPrice = totalPrice;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.cabin = cabin;
-		this.user = user;
+		this.cabin = null;
+		this.user = null;
 	}
 
 	/**

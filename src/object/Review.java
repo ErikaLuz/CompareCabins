@@ -24,12 +24,12 @@ public class Review {
 	 * @param description
 	 * @param rentRecordId
 	 */
-	public Review(int id, int numStars, String title, String description, RentRecord rentRecord) {
-		this.id = id;
+	public Review( int numStars, String title, String description ) {
+		this.id = -1;
 		this.numStars = numStars;
 		this.title = title;
 		this.description = description;
-		this.rentRecord = rentRecord;
+		this.rentRecord = null;
 	}
 
 	/**

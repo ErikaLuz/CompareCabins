@@ -4,27 +4,38 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.LinkedList;
+import java.util.List;
 
 import exception.CCException;
-import object.review;
+import java.util.Calendar;
+import object.Cabin;
+import object.RentRecord;
 import object.Review;
+import object.User;
 
 
 public class ReviewManager {
 
-	public static void store(Review review)
+	public static void store(Review review) throws CCException
 	{
-		int rowsModified;
-		String query = "INSERT INTO review (num_stars, title, description, rent_record_id) VALUES"
+		String insertSQL = "INSERT INTO review (num_stars, title, description, rent_record_id) VALUES"
 				+" (?,?,?,?)";
-		
+		String updateSQL = "UPDATE review SET num_stars = ?, title = ?, description = ?, rent_record_id = ? WHERE id = ?";
 		Connection con = DbAccessImpl.connect();
+		PreparedStatement ps;
+		int rowsModified;
 		
-		try 
+		try //prepare and execute the SQL query
 		{
-			PreparedStatement ps = con.prepareStatement(query);
+			// test is object is already in database to determine insert or update
+			if( review.getId() >= 0 )
+				ps = con.prepareStatement( updateSQL );
+			else
+				ps = con.prepareStatement( insertSQL );
 			
-			// set the PreparedStatement parameters to values given from User or to sql null values if nullable
+			// set the PreparedStatement parameters to values given from Review or to sql null values if nullable
 			if(review.getNumStars() != -1) ps.setInt(1, review.getNumStars());
 			else ps.setNull(1, java.sql.Types.INTEGER);
 			
@@ -37,33 +48,158 @@ public class ReviewManager {
 			if(review.getRentRecord() != null) ps.setInt(4, review.getRentRecord().getId());
 			else ps.setNull(4, java.sql.Types.INTEGER);
 			
+			// set id if query is an update
+			if( review.getId() >= 0 )
+				ps.setInt( 10, review.getId() );
+			
 			//execute the query
 			rowsModified = DbAccessImpl.update(con, ps);
 			
 			// set the id value assigned by the database to the user object
-			if( rowsModified >= 1 ) {
-			    String sql = "select last_insert_id()";
-			    if( ps.execute( sql ) ) { // statement returned a result
-				
-				   // retrieve the result
-				   ResultSet r = ps.getResultSet();
-				
-				   while( r.next() ) {
-				   // retrieve the last insert auto_increment value
-				   int reviewId = r.getInt( 1 );
-				   if( reviewId > 0 )
-				   review.setId( reviewId ); // set the user Id for this object 
-				   }
-		     	 }
+			if( rowsModified >= 1 ) 
+			{
+				if(review.getId() < 0)
+				{
+				    String sql = "select last_insert_id()";
+				    if( ps.execute( sql ) ) // statement returned a result
+				    { 
+					   // retrieve the result
+					   ResultSet r = ps.getResultSet();
+					
+					   while( r.next() ) 
+					   {
+						   // retrieve the last insert auto_increment value
+						   int reviewId = r.getInt( 1 );
+						   if( reviewId > 0 )
+							   review.setId( reviewId ); // set the user Id for this object 
+					   }
+			     	 }
+				}				
 		     }else { 
-		    	 // throw new CompareCabinsException( "ReviewManager.store: failed to save a Review to the database" );
+		    	 throw new CCException("ReviewManager.store: failed to save a review");
 			 }
-			
-		}catch(SQLException e)
-		{
-			e.printStackTrace();
+		}catch(SQLException e){
+			throw new CCException("ReviewManager.store: failed to save a review: " + e );
 		}
 	} //end of store
+	
+	public static List<Review> restore (Review modelReview) throws CCException
+	{
+		String  selectReviewSql = "select id, numStars, title, description from review"; 
+		Statement    statement = null;
+		StringBuffer query = new StringBuffer( 250 );
+		StringBuffer condition = new StringBuffer( 250 );
+		List<Review> reviews = new LinkedList<Review>();
+		Connection con = DbAccessImpl.connect();
+
+		condition.setLength( 0 );
+		query.append( selectReviewSql );
+		
+		// append where clauses to query for each specified field of the modelReview
+		if( modelReview != null ) 
+		{
+			if( modelReview.getId() >= 0 ) // id is unique, so it is sufficient to get a Cabin
+				query.append( " where id = " + modelReview.getId() );
+			else {	// no id is given		
+				if( modelReview.getNumStars() >= 0 )
+					condition.append( " num_stars = '" + modelReview.getNumStars() + "'");
+				if( modelReview.getTitle() != null ) {
+					if ( condition.length() > 0 )
+						condition.append( " and");
+					condition.append(" title = '" + modelReview.getTitle() + "'");
+				}
+				if( modelReview.getDescription() != null ) {
+					if ( condition.length() > 0 )
+						condition.append( " and");
+					condition.append(" description = '" + modelReview.getDescription() + "'");
+				}
+			}
+		}
+		
+		try {			
+			statement = con.createStatement();
+			
+			if( statement.execute( query.toString() ) ) { // statement returned a result
+				
+				// fields of a review object
+				int			id;
+				int			numStars;
+				String		title;
+				String		description;
+				
+				// retrieve the ResultSet generated by the execution of the query
+				ResultSet rs = statement.getResultSet();
+
+				while( rs.next() ) { // process the result set
+
+					// retrieve the values from an entry in the result set
+					id = rs.getInt(1);
+					numStars = rs.getInt(2);
+					title = rs.getString(3);
+					description = rs.getString(4);
+
+					// create a proxy object
+					Review review = new Review( numStars, title, description);
+					review.setId( id );
+					review.setRentRecord( null );	
+					
+					reviews.add( review );
+				}
+				
+				return reviews;
+				
+			} else {
+				return null;
+			}
+		}
+		catch( SQLException e ) {      
+			throw new CCException("ReviewManager.restore: Could not restore persistent Review objects: " + e );
+		}		
+	} //end of restore
+	
+	public static RentRecord restoreRentRecordFromReview(Review review) throws CCException 
+	{
+		String sqlQuery = "SELECT rent_record.id, total_price, start_date, end_date, cabin_id, user_id FROM rent_record"
+				+ "	JOIN review ON rent_record.id = review.rent_record_id"
+				+ "	WHERE review.id = ?";
+
+		Connection con = DbAccessImpl.connect();
+		ResultSet rs;
+		RentRecord rentRecord;
+		
+		try {
+			// prepare and execute the query
+			PreparedStatement ps = con.prepareStatement( sqlQuery );
+			ps.setInt( 1, review.getId() );
+			rs = ps.executeQuery();
+			
+			if( rs.next() ) { // there is an entry in the result set
+				
+				// retrieve the values from the result set
+				int id = rs.getInt(1);
+				float total_price = rs.getFloat(2);
+				java.sql.Date start_date = rs.getDate(3);
+				java.sql.Date end_date = rs.getDate(4);
+				
+				Calendar start = Calendar.getInstance();
+				start.setTime(start_date);
+				
+				Calendar end = Calendar.getInstance();
+				end.setTime(end_date);
+				
+				// create the proxy object
+				rentRecord = new RentRecord( total_price, start, end );
+				rentRecord.setId(id);
+				
+				return rentRecord;
+			} else { // no matches found for the query
+				return null;
+			}
+		} catch( SQLException e ) {
+			throw new CCException("ReviewManager.restoreRentRecordFromReview: could not restore persistent RentRecord object: " + e );
+		}
+		
+	} //end of restoreRentRecordfromReview
 	
 	public static void delete(Review review) throws CCException
 	{

@@ -21,10 +21,10 @@ public class Feature {
 	 * @param featureString
 	 * @param cabinID
 	 */
-	public Feature(int id, String featureString, Cabin cabin) {
-		this.id = id;
+	public Feature( String featureString ) {
+		this.id = -1;
 		this.featureString = featureString;
-		this.cabin = cabin;
+		this.cabin = null;
 	}
 	/**
 	 * @return the id

@@ -4,26 +4,37 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 
 import exception.CCException;
-import object.rentRecord;
+import object.Cabin;
 import object.RentRecord;
+import object.User;
 
 public class RentRecordManager {
 
-	public static void store(RentRecord rentRecord)
+	public static void store(RentRecord rentRecord) throws CCException
 	{
-		int rowsModified;
-		String query = "INSERT INTO rent_record (total_price, start_date, end_date, cabin_id, user_id) VALUES"
+		
+		String insertSQL = "INSERT INTO rent_record (total_price, start_date, end_date, rentRecord_id, user_id) VALUES"
 				+" (?,?,?,?,?)";
-		
+		String updateSQL = "UDATE rent_record SET total_price = ?, start_date = ?, end_date = ?, rentRecord_id = ?, user_id = ? WHERE id = ?";
 		Connection con = DbAccessImpl.connect();
+		PreparedStatement ps;
+		int rowsModified;
 		
-		try 
+		try //prepare and execute SQL query
 		{
-			PreparedStatement ps = con.prepareStatement(query);
+			// test is object is already in database to determine insert or update
+			if( rentRecord.getId() >= 0 )
+				ps = con.prepareStatement( updateSQL );
+			else
+				ps = con.prepareStatement( insertSQL );
 			
-			// set the PreparedStatement parameters to values given from User or to sql null values if nullable	
+			// set the PreparedStatement parameters to values given from RentRecord or to sql null values if nullable	
 			if(rentRecord.getTotalPrice() != -1) ps.setFloat(1, rentRecord.getTotalPrice());
 			else ps.setNull(1, java.sql.Types.FLOAT);
 			
@@ -39,34 +50,201 @@ public class RentRecordManager {
 			if(rentRecord.getUser() != null) ps.setInt(5, rentRecord.getUser().getId());
 			else ps.setNull(5, java.sql.Types.INTEGER);
 			
+			// set id if query is an update
+			if( rentRecord.getId() >= 0 )
+				ps.setInt( 10, rentRecord.getId() );
+			
 			//execute the query
 			rowsModified = DbAccessImpl.update(con, ps);
 			
 			// set the id value assigned by the database to the user object
-			if( rowsModified >= 1 ) {
-			    String sql = "select last_insert_id()";
-			    if( ps.execute( sql ) ) { // statement returned a result
-				
-				   // retrieve the result
-				   ResultSet r = ps.getResultSet();
-				
-				   while( r.next() ) {
-				   // retrieve the last insert auto_increment value
-				   int rentRecordId = r.getInt( 1 );
-				   if( rentRecordId > 0 )
-				   rentRecord.setId( rentRecordId ); // set the user Id for this object 
-				   }
-		     	 }
-		     }else { 
-		    	 // throw new CompareCabinsException( "RentRecordManager.store: failed to save a rentRecord to the database" );
+			if( rowsModified >= 1 ) 
+			{
+				if( rentRecord.getId() < 0)
+				{
+				    String sql = "select last_insert_id()";
+				    if( ps.execute( sql ) ) // statement returned a result
+					{ 
+					    // retrieve the result
+					    ResultSet r = ps.getResultSet();
+					
+					    while( r.next() ) 
+					    {
+					 	   // retrieve the last insert auto_increment value
+					 	   int rentRecordId = r.getInt( 1 );
+						   if( rentRecordId > 0 )
+							   rentRecord.setId( rentRecordId ); // set the user Id for this object 
+					    }
+			     	 }
+				}
+		     }
+			 else { 
+				 throw new CCException("RentRecordManager.store: failed to save a Rent Record");
 			 }
-		
-		}catch(SQLException e)
-		{
-			e.printStackTrace();	
+		}catch(SQLException e){
+			throw new CCException("RentRecordManager.store: failed to save a cabin: " + e );	
 		}
 	} //end of store
 
+	public static List<RentRecord> restore( RentRecord modelRentRecord ) throws CCException
+	{
+		String  selectRentRecordSql = "select id, total_price, start_date, end_date from rent_record"; 
+		Statement    statement = null;
+		StringBuffer query = new StringBuffer( 250 );
+		StringBuffer condition = new StringBuffer( 250 );
+		List<RentRecord> rentRecords = new LinkedList<RentRecord>();
+		Connection con = DbAccessImpl.connect();
+
+		condition.setLength( 0 );
+		query.append( selectRentRecordSql );
+
+		// append where clauses to query for each specified field of the modelRentRecord
+		if( modelRentRecord != null ) {
+			if( modelRentRecord.getId() >= 0 ) // id is unique, so it is sufficient to get a Cabin
+				query.append( " where id = " + modelRentRecord.getId() );
+			else {	// no id is given		
+				if( modelRentRecord.getTotalPrice() >= 0)
+					condition.append( " total_price = '" + modelRentRecord.getTotalPrice() + "'");
+				if( modelRentRecord.getStartDate() != null ) {
+					if ( condition.length() > 0 )
+						condition.append( " and");
+					condition.append(" start_date = '" + modelRentRecord.getStartDate() + "'");
+				}
+				if( modelRentRecord.getEndDate() != null ) {
+					if ( condition.length() > 0 )
+						condition.append( " and");
+					condition.append(" end_date = '" + modelRentRecord.getEndDate() + "'");
+				}
+			}
+		}
+		
+		try {			
+			statement = con.createStatement();
+			
+			if( statement.execute( query.toString() ) ) { // statement returned a result
+				
+				// fields of a rent record object
+				int   		id;
+				float		totalPrice;
+				Calendar	start = Calendar.getInstance();
+				Calendar	end = Calendar.getInstance();
+				
+				// retrieve the ResultSet generated by the execution of the query
+				ResultSet rs = statement.getResultSet();
+
+				while( rs.next() ) { // process the result set
+
+					// retrieve the values from an entry in the result set
+					id = rs.getInt(1);
+					totalPrice = rs.getFloat(2); 
+					java.sql.Date start_date = rs.getDate(3);
+					java.sql.Date end_date = rs.getDate(4);
+					
+					start.setTime(start_date);
+					end.setTime(end_date);
+					
+					// create a proxy object
+					RentRecord rentRecord = new RentRecord(totalPrice, start, end);
+					rentRecord.setId( id );
+					rentRecord.setCabinId( null );	
+					rentRecord.setUser( null );
+					
+					rentRecords.add( rentRecord );
+				}
+				
+				return rentRecords;
+				
+			} else {
+				return null;
+			}
+		}
+		catch( SQLException e ) {      
+			throw new CCException("RentRecordManager.restore: Could not restore persistent RentRecord objects: " + e );
+		}		
+	}//end of restore
+	
+	public static Cabin restoreCabinFromRentRecord( RentRecord rentRecord ) throws CCException
+	{
+		String sqlQuery = "SELECT cabin.id, address, city, state, description, bedroom_count, bath_count, maxOccupancy FROM cabin"
+						+ "	JOIN rent_record ON cabin.id = rent_record.cabin_id"
+						+ "	WHERE rent_record.id = ?";
+		
+		Connection con = DbAccessImpl.connect();
+		ResultSet rs;
+		Cabin cabin;
+		
+		try {
+			// prepare and execute the query
+			PreparedStatement ps = con.prepareStatement( sqlQuery );
+			ps.setInt( 1, rentRecord.getId() );
+			rs = ps.executeQuery();
+			
+			if( rs.next() ) { // there is an entry in the result set
+				
+				// retrieve the values from the result set
+				int id = rs.getInt(1);
+				String address = rs.getString(2);
+				String city = rs.getString(3);
+				String state = rs.getString(4);
+				String description = rs.getString(5);
+				int	bedroomCount = rs.getInt(6);
+				float bathCount = rs.getFloat(7);
+				int	maxOccupancy = rs.getInt(8);
+				
+				// create the proxy object
+				cabin = new Cabin( address, city, state, description, bedroomCount, bathCount, maxOccupancy );
+				cabin.setId( id );
+				cabin.setUser( null );
+				cabin.setAmenities( null );
+				
+				return cabin;
+			} else { // no matches found for the query
+				return null;
+			}
+		} catch( SQLException e ) {
+			throw new CCException("RentRecordManager.restoreCabinFromRentRecord: could not restore persistent Cabin object: " + e );
+		}
+	} //end of restoreCabinFromRentRecord
+	
+	public static User restoreUserFromRentRecord( RentRecord rentRecord ) throws CCException
+	{
+		String sqlQuery = "SELECT user.id, username, password, first_name, last_name, email FROM user"
+						+ "	JOIN rent_record ON user.id = rent_record.user_id"
+						+ "	WHERE rent_record.id = ?";
+		
+		Connection con = DbAccessImpl.connect();
+		ResultSet rs;
+		User user;
+		
+		try {
+			// prepare and execute the query
+			PreparedStatement ps = con.prepareStatement( sqlQuery );
+			ps.setInt( 1, rentRecord.getId() );
+			rs = ps.executeQuery();
+			
+			if( rs.next() ) { // there is an entry in the result set
+				
+				// retrieve the values from the result set
+				int id = rs.getInt(1);
+				String username = rs.getString(2);
+				String password = rs.getString(3);
+				String firstName = rs.getString(4);
+				String lastName = rs.getString(5);
+				String email = rs.getString(6);
+				
+				// create the proxy object
+				user = new User( username, password, firstName, lastName, email );
+				user.setId(id);
+				
+				return user;
+			} else { // no matches found for the query
+				return null;
+			}
+		} catch( SQLException e ) {
+			throw new CCException("RentRecordManager.restoreUserFromRentRecord: could not restore persistent User object: " + e );
+		}
+	} //end of restoreUserFromRentRecord
+	
 	public static void delete(RentRecord rentRecord) throws CCException
 	{
 		String query = "DELETE FROM rent_record WHERE id = ?";

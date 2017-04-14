@@ -212,7 +212,7 @@ public class CabinManager {
 		catch( SQLException e ) {      
 			throw new CCException("CabinManager.restore: Could not restore persistent Cabin objects: " + e );
 		}		
-	}
+	}//end of restore
 	
 	public static User restoreUserFromCabin( Cabin cabin ) throws CCException
 	{
