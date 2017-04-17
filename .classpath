@@ -4,5 +4,5 @@
         <classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
         <classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
         <classpathentry kind="lib" path="lib/jboss-servlet-api_3.1_spec-1.0.0.Final.jar"/>
-        <classpathentry kind="output" path="bin"/>
+        <classpathentry kind="output" path="build/classes"/>
 </classpath>

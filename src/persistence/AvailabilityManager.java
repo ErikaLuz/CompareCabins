@@ -10,10 +10,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import exception.CCException;
-import object.Amenities;
 import object.Availability;
 import object.Cabin;
-import object.User;
+
 
 public class AvailabilityManager {
 	

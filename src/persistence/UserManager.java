@@ -87,7 +87,7 @@ public class UserManager
 	
 	public static List<User> restore(User modelUser) throws CCException
 	{
-		String  selectUserSql = "select username, password, first_name, last_name, email from user"; 
+		String  selectUserSql = "select id, username, password, first_name, last_name, email from user"; 
 		Statement    statement = null;
 		StringBuffer query = new StringBuffer( 250 );
 		StringBuffer condition = new StringBuffer( 250 );
