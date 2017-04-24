@@ -24,7 +24,7 @@ public class CabinManager {
 	{
 		String insertSQL 	= "INSERT INTO cabin ( address, city, state, description, bedroom_count, bath_count, max_occupancy, user_id, amenities_id)"
 							+ "		VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ? )";
-		String updateSQL 	= "UPDATE cabin SET address = ?, city = ?, description = ?, bedroom_count = ?, max_occupancy = ?, user_id = ?,"
+		String updateSQL 	= "UPDATE cabin SET address = ?, city = ?, state = ?, description = ?, bedroom_count = ?, bath_count = ?, max_occupancy = ?, user_id = ?,"
 							+ "		amenities_id = ? WHERE id = ?";
 		Connection conn = DbAccessImpl.connect();
 		PreparedStatement ps;
@@ -48,31 +48,38 @@ public class CabinManager {
 				ps.setString( 2, cabin.getCity() );
 			else
 				ps.setNull(2, java.sql.Types.VARCHAR);
+			
 			if( cabin.getState() != null )
 				ps.setString( 3, cabin.getState() );
 			else
 				ps.setNull( 3, java.sql.Types.VARCHAR );
+			
 			if( cabin.getDescription() != null )
 				ps.setString( 4, cabin.getDescription() );
 			else
 				ps.setNull( 4, java.sql.Types.VARCHAR );
+			
 			if( cabin.getBedroomCount() >= 0 )
 				ps.setInt( 5, cabin.getBedroomCount() );
 			else
 				ps.setNull( 5, java.sql.Types.INTEGER );
+			
 			if( cabin.getBathCount() >= 0 )
 				ps.setFloat( 6, cabin.getBathCount() );
 			else
 				ps.setNull( 6, java.sql.Types.INTEGER );
+			
 			if( cabin.getMaxOccupancy() >= 0 )
 				ps.setInt( 7, cabin.getMaxOccupancy() );
 			else
 				ps.setNull( 7, java.sql.Types.INTEGER );
+			
 			if( cabin.getUser() != null )
 				ps.setInt( 8, cabin.getUser().getId() );
 			else
 				ps.setNull( 8, java.sql.Types.INTEGER);
 			if( cabin.getAmenities() != null )
+				
 				ps.setInt( 9, cabin.getAmenities().getId() );
 			else
 				ps.setNull( 9, java.sql.Types.INTEGER);
@@ -109,7 +116,7 @@ public class CabinManager {
 	            throw new CCException("CabinManager.store: failed to save a cabin");
 	        }
 	    } catch( SQLException e) {
-			throw new CCException("CAbinManager.store: failed to save a cabin: " + e );
+			throw new CCException("CabinManager.store: failed to save a cabin: " + e );
 		}
 	}
 	
@@ -160,7 +167,7 @@ public class CabinManager {
 				if( modelCabin.getMaxOccupancy() >= 0 ) {
 					if ( condition.length() > 0 )
 						condition.append( " and");
-					condition.append(" max_Occupancy = " + modelCabin.getMaxOccupancy() );
+					condition.append(" max_occupancy = " + modelCabin.getMaxOccupancy() );
 				}
 				if( condition.length() > 0 ) {
 					query.append(  " where " );
@@ -263,7 +270,7 @@ public class CabinManager {
 	{
 		String sqlQuery = "SELECT amenities.id, has_lake, has_river, has_pool, has_hot_tub, has_wifi, has_air_conditioning, has_washer_dryer,"
 						+ "	allows_pets, allows_smoking FROM amenities"
-						+ "	JOIN cabin ON amenities.id = cabin.id"
+						+ "	JOIN cabin ON amenities.id = cabin.amenities_id"
 						+ "	WHERE cabin.id = ?";
 
 		Connection conn = DbAccessImpl.connect();
@@ -466,16 +473,99 @@ public class CabinManager {
 	
 	public static void delete( Cabin cabin ) throws CCException
     {
-        String query = "DELETE FROM cabin WHERE id = ?";              
+        String deleteCabin = "DELETE FROM cabin WHERE id = ?"; 
+        String deleteAvailabiliy = "DELETE FROM availability WHERE id = ?";
+        String deleteCabinPicture = "DELETE from cabin_picture WHERE id = ?";
+        String deleteFeature = "DELETE FROM feature WHERE id = ?";
+        String deleteRentRecord = "DELETE FROM rent_record WHERE id = ?";
+        
         PreparedStatement ps;
-        Connection conn = DbAccessImpl.connect();
+        Connection con = DbAccessImpl.connect();
         int rowsModified;
+        
+        // Delete cabin availabilities
+        
+        List<Availability> availability = restoreAvailabilitiesFromCabin(cabin);
+        
+        for(int i = 0; i < availability.size(); i++)
+		{
+			try{
+				ps = con.prepareStatement(deleteAvailabiliy);
+				ps.setInt(1, availability.get(i).getId());
+				rowsModified = ps.executeUpdate();
+				
+				if(rowsModified != 1)
+					throw new CCException("CabinManager.delete: failed to delete cabin's availabilities");
+				
+			}catch(SQLException e){
+				throw new CCException("CabinManager.delete: failed to delete cabin's availabilities" + e);
+			}
+		}
+        
+        // Delete cabin pictures
+        
+        List<CabinPicture> cabinPicture = restoreCabinPicturesFromCabin(cabin);
+        
+        for(int i = 0; i < cabinPicture.size(); i++)
+		{
+			try{
+				ps = con.prepareStatement(deleteCabinPicture);
+				ps.setInt(1, cabinPicture.get(i).getId());
+				rowsModified = ps.executeUpdate();
+				
+				if(rowsModified != 1)
+					throw new CCException("CabinManager.delete: failed to delete cabin's cabin pictures");
+				
+			}catch(SQLException e){
+				throw new CCException("CabinManager.delete: failed to delete cabin's cabin pictures" + e);
+			}
+		}
+        
+        // Delete cabin features
+        
+        List<Feature> feature = restoreFeaturesFromCabin(cabin);
+        
+        for(int i = 0; i < feature.size(); i++)
+		{
+			try{
+				ps = con.prepareStatement(deleteFeature);
+				ps.setInt(1, feature.get(i).getId());
+				rowsModified = ps.executeUpdate();
+				
+				if(rowsModified != 1)
+					throw new CCException("CabinManager.delete: failed to delete cabin's features");
+				
+			}catch(SQLException e){
+				throw new CCException("CabinManager.delete: failed to delete cabin's features" + e);
+			}
+		}
+        
+        // Delete cabin rent records
+        
+        List<RentRecord> rentRecords = restoreRentRecordsFromCabin(cabin);
+        
+        for(int i = 0; i < rentRecords.size(); i++)
+		{
+			try{
+				ps = con.prepareStatement(deleteRentRecord);
+				ps.setInt(1, rentRecords.get(i).getId());
+				rowsModified = ps.executeUpdate();
+				
+				if(rowsModified != 1)
+					throw new CCException("CabinManager.delete: failed to delete cabin's rent records");
+				
+			}catch(SQLException e){
+				throw new CCException("CabinManager.delete: failed to delete cabin's rent records" + e);
+			}
+		}
+        
+        // Deleting cabin
              
         if( cabin.getId() < 0 ) // object not in database
             return;
         
         try {
-            ps = conn.prepareStatement( query );         
+            ps = con.prepareStatement( deleteCabin );         
             ps.setInt( 1, cabin.getId() );
             rowsModified = ps.executeUpdate();          
             
@@ -483,20 +573,7 @@ public class CabinManager {
                 throw new CCException("CabinManager.delete: failed to delete a cabin" );
         }
         catch( SQLException e ) {
-            throw new CCException( "CabinManager.delete: failed to delete a Club: " + e );        
+            throw new CCException( "CabinManager.delete: failed to delete a cabin: " + e );        
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

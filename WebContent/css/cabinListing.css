@@ -1,0 +1,35 @@
+body 
+{
+   padding-top: 0;
+}
+
+#left 
+{
+    float: left;
+    width: 60%;
+}
+
+#right
+{
+    float: right;
+    width: 38%; 
+}
+
+.section 
+{
+    border-style: solid;  
+    font-size: 17px;
+    padding: 5px;
+}
+
+#title
+{
+    text-align: center;
+}
+
+#content 
+{
+    border-style: solid;
+    padding: 5px;
+    padding-bottom: 10px;
+}

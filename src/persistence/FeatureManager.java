@@ -36,11 +36,11 @@ public class FeatureManager {
 			else ps.setNull(1, java.sql.Types.VARCHAR);
 			
 			if(feature.getCabin() != null) ps.setInt(2, feature.getCabin().getId());
-			else ps.setNull(1, java.sql.Types.INTEGER);
+			else ps.setNull(2, java.sql.Types.INTEGER);
 			
 			// set id if query is an update
 			if( feature.getId() >= 0 )
-				ps.setInt( 10, feature.getId() );
+				ps.setInt( 3, feature.getId() );
 			
 			//execute the query
 			rowsModified = DbAccessImpl.update(con, ps);
@@ -94,6 +94,10 @@ public class FeatureManager {
 			else {	// no id is given		
 				if( modelFeature.getFeatureString() != null )
 					condition.append( " address = '" + modelFeature.getFeatureString() + "'");
+				if( condition.length() > 0 ) {
+					query.append(  " where " );
+					query.append( condition );
+				}
 			}
 		}
 		

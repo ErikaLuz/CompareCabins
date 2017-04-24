@@ -50,7 +50,7 @@ public class ReviewManager {
 			
 			// set id if query is an update
 			if( review.getId() >= 0 )
-				ps.setInt( 10, review.getId() );
+				ps.setInt( 5, review.getId() );
 			
 			//execute the query
 			rowsModified = DbAccessImpl.update(con, ps);
@@ -112,6 +112,10 @@ public class ReviewManager {
 					if ( condition.length() > 0 )
 						condition.append( " and");
 					condition.append(" description = '" + modelReview.getDescription() + "'");
+				}
+				if( condition.length() > 0 ) {
+					query.append(  " where " );
+					query.append( condition );
 				}
 			}
 		}

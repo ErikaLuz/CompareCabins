@@ -11,15 +11,21 @@ import javax.servlet.http.HttpServletResponse;
 
 import boundary.TemplateProcessor;
 
-import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapperBuilder;
-import freemarker.template.SimpleHash;
+import test.TestUserManager;
+import test.TestAmenitiesManager;
+import test.TestCabinManager;
+import test.TestFeatureManager;
+import exception.CCException;
+
+//import freemarker.template.Configuration;
+//import freemarker.template.DefaultObjectWrapperBuilder;
+//import freemarker.template.SimpleHash;
 
 /**
- * Servlet implementation class Servlet
+ * Servlet implementation class TestServlet
  */
-@WebServlet("/Servlet")
-public class Servlet extends HttpServlet 
+@WebServlet("/TestServlet")
+public class TestServlet extends HttpServlet 
 {
 	//VARIABLES
 		private static final long serialVersionUID = 1L;	
@@ -27,7 +33,7 @@ public class Servlet extends HttpServlet
 		private TemplateProcessor processor;
 		
 	    //@see HttpServlet#HttpServlet() 
-			public Servlet() 
+			public TestServlet() 
 			{
 				super();
 			} //end of constructor
@@ -42,7 +48,19 @@ public class Servlet extends HttpServlet
 		//@see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response) 
 			protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 			{
+				String userTest = request.getParameter("TestUser");
 				
+				if(userTest != null)
+				{
+					try {
+						TestUserManager.main();
+						TestCabinManager.main();
+						TestFeatureManager.main();
+						TestAmenitiesManager.main();
+					} catch (CCException e) {
+						e.printStackTrace();
+					}
+				}
 			} // end of doGet
 	
 		

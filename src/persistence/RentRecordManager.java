@@ -21,7 +21,7 @@ public class RentRecordManager {
 	public static void store(RentRecord rentRecord) throws CCException
 	{
 		
-		String insertSQL = "INSERT INTO rent_record (total_price, start_date, end_date, rentRecord_id, user_id) VALUES"
+		String insertSQL = "INSERT INTO rent_record (total_price, start_date, end_date, cabin_id, user_id) VALUES"
 				+" (?,?,?,?,?)";
 		String updateSQL = "UDATE rent_record SET total_price = ?, start_date = ?, end_date = ?, rentRecord_id = ?, user_id = ? WHERE id = ?";
 		Connection con = DbAccessImpl.connect();
@@ -54,7 +54,7 @@ public class RentRecordManager {
 			
 			// set id if query is an update
 			if( rentRecord.getId() >= 0 )
-				ps.setInt( 10, rentRecord.getId() );
+				ps.setInt( 6, rentRecord.getId() );
 			
 			//execute the query
 			rowsModified = DbAccessImpl.update(con, ps);
@@ -126,6 +126,10 @@ public class RentRecordManager {
 					int year = cal.get( Calendar.YEAR );
 					String dateString = year + "-" + month + "-" + day;
 					condition.append(" date = '" + dateString + "'");
+				}
+				if( condition.length() > 0 ) {
+					query.append(  " where " );
+					query.append( condition );
 				}
 			}
 		}

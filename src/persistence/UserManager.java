@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import exception.CCException;
-import object.Availability;
+
 import object.Cabin;
 import object.RentRecord;
 import object.User;
@@ -49,7 +49,7 @@ public class UserManager
 			
 			// set id if query is an update
 			if( user.getId() >= 0 )
-				ps.setInt( 10, user.getId() );
+				ps.setInt( 6, user.getId() );
 			
 			//execute the query
 			rowsModified = DbAccessImpl.update(con, ps);
@@ -124,6 +124,12 @@ public class UserManager
 					if ( condition.length() > 0 )
 						condition.append( " and");
 					condition.append(" email = " + modelUser.getEmail() );
+				}
+				
+				if( condition.length() > 0)
+				{
+					query.append(" where ");
+					query.append(condition);
 				}
 			}
 		} //end of if
@@ -202,7 +208,7 @@ public class UserManager
 				
 				// create the proxy object
 				Cabin cabin = new Cabin( address, city, state, description, bedroomCount, bathCount, maxOccupancy );
-				cabin.setId(id);
+				cabin.setId(id);	
 				cabin.setUser(null);
 				cabin.setAmenities(null);
 				
@@ -251,6 +257,7 @@ public class UserManager
 				rentRecord.setId(id);
 				rentRecord.setCabin( null );
 				rentRecord.setUser( null );
+				
 				rentRecords.add( rentRecord );
 			}
 			
@@ -264,82 +271,70 @@ public class UserManager
 	
 	public static void delete(User user) throws CCException
 	{
-		String query = "DELETE FROM user WHERE id = ?";
+		String deleteUser = "DELETE FROM user WHERE id = ?";
+		String deleteCabins = "DELETE FROM cabin WHERE id = ?";
+		String deleteRentRecords = "DELETE FROM rent_record WHERE id = ?";
+		
 		PreparedStatement ps;
 		Connection con = DbAccessImpl.connect();
 		int rowsModified;
 		
-		if(user.getId() < 0) //object no in database
+		//Deleting user cabins
+		
+		List<Cabin> cabins = restoreCabinsFromUser(user);
+		
+		for(int i = 0; i < cabins.size(); i++)
+		{
+			try{
+				ps = con.prepareStatement(deleteCabins);
+				ps.setInt(1, cabins.get(i).getId());
+				rowsModified = ps.executeUpdate();
+				
+				if(rowsModified != 1)
+					throw new CCException("UserManager.delete: failed to delete user's cabins");
+				
+			}catch(SQLException e){
+				throw new CCException("UserManager.delete: failed to delete user's cabins" + e);
+			}
+		}
+		
+		//Deleting user rent records
+		
+		List<RentRecord> rentRecords = restoreRentRecordsFromUser(user);
+		
+		for(int i = 0; i < rentRecords.size(); i++)
+		{
+			try{
+				ps = con.prepareStatement(deleteRentRecords);
+				ps.setInt(1, rentRecords.get(i).getId());
+				rowsModified = ps.executeUpdate();
+				
+				if(rowsModified != 1)
+					throw new CCException("UserManager.delete: failed to delete user's rent records");
+				
+			}catch(SQLException e){
+				throw new CCException("UserManager.delete: failed to delete user's rent records" + e);
+			}
+		}
+		
+		//Deleting user
+		
+		if(user.getId() < 0) //object not in database
 			return;
 		
 		try {
-			ps = con.prepareStatement(query);
+			ps = con.prepareStatement(deleteUser);
 			ps.setInt(1,  user.getId());
 			rowsModified = ps.executeUpdate();
 			
 			if(rowsModified != 1)
 				throw new CCException("UserManager.delete: failed to delete user");
 		}catch(SQLException e) {
-			throw new CCException("UserManager.delte: failed to delete user: " + e);
+			throw new CCException("UserManager.delete: failed to delete user: " + e);
 		}
 		
 		DbAccessImpl.disconnect(con);
 		
 	} //end of delete
 	
-	//SIGN-UP & LOGIN METHODS -------------------------
-	
-	public boolean signup(User user) throws CCException
-	{
-		//check to see if username is taken
-		
-		boolean usernameFree = true;
-		String query = "SELECT username FROM user WHERE username = ?";
-		Connection con = DbAccessImpl.connect();
-		
-		try {
-			
-			PreparedStatement preparedStmt = con.prepareStatement(query);
-			preparedStmt.setString(1, user.getUsername());
-			ResultSet rs = DbAccessImpl.retrieve(con, preparedStmt);
-			
-			if (rs.next()) usernameFree = false;
-			
-		}catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		DbAccessImpl.disconnect(con);
-		
-		//if not, insert user into database
-		
-		if(usernameFree) store(user);
-		
-		return usernameFree;
-	}
-	
-	public boolean login(User user)
-	{
-		boolean validUser = false;
-		String query = "SELECT username, password FROM user WHERE username = ? AND password = ?";
-		Connection con = DbAccessImpl.connect();
-		
-		try {
-				PreparedStatement preparedStmt = con.prepareStatement(query);
-				preparedStmt.setString(1, user.getUsername());
-				preparedStmt.setString(2, user.getPassword());
-				ResultSet rs = DbAccessImpl.retrieve(con, preparedStmt);
-				
-				//checks to see if user with matching username + password exists
-				
-				if (rs.next()) validUser = true;
-			
-			} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		DbAccessImpl.disconnect(con);
-		
-		return validUser;
-	}
 }
