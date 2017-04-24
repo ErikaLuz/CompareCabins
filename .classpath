@@ -1,8 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?> <classpath>
-        <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-        <classpathentry kind="src" path="src"/>
-        <classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
-        <classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-        <classpathentry kind="lib" path="lib/jboss-servlet-api_3.1_spec-1.0.0.Final.jar"/>
-        <classpathentry kind="output" path="build/classes"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="lib/jboss-servlet-api_3.1_spec-1.0.0.Final.jar"/>
+	<classpathentry kind="lib" path="javax.json-api-1.0.jar"/>
+	<classpathentry kind="output" path="build/classes"/>
 </classpath>
