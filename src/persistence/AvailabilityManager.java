@@ -20,8 +20,8 @@ public class AvailabilityManager {
 	{
 		int rowsModified;
 		String insertSql 	= "INSERT INTO availability (price, date, cabin_id) VALUES (?,?,?)";	
-		String updateSql 	= "UPDATE availability SET price = ?, city = ?, description = ?, bedroom_count = ?, max_occupancy = ?, user_id = ?,"
-							+ "		amenities_id = ? WHERE id = ?";
+		String updateSql 	= "UPDATE availability SET price = ?, date = ?, title = ?"
+							+ "		WHERE id = ?";
 		Connection conn = DbAccessImpl.connect();
 		PreparedStatement ps;
 		
@@ -46,6 +46,10 @@ public class AvailabilityManager {
 				ps.setInt(3, availability.getCabin().getId());
 			else 
 				ps.setNull(3, java.sql.Types.INTEGER);
+			
+			// set id if query is an update
+			if( availability.getId() >= 0 )
+				ps.setInt( 4, availability.getId() );
 			
 			//execute the query
 			rowsModified = DbAccessImpl.update(conn, ps);
@@ -163,7 +167,7 @@ public class AvailabilityManager {
 	
 	public static Cabin restoreCabinFromAvailability( Availability availability ) throws CCException
 	{
-		String sqlQuery = "SELECT c.id, c.address, c.city, c.state, c.description, c.bedroom_count, c.bath_count, c.max_occupancy FROM cabin c"
+		String sqlQuery = "SELECT c.id, c.address, c.city, c.state, c.description, c.title, c.bedroom_count, c.bath_count, c.max_occupancy FROM cabin c"
 						+ "	JOIN availability ON cabin.id = availability.cabin_id"
 						+ "	WHERE availability.id = ?";
 		
@@ -185,12 +189,13 @@ public class AvailabilityManager {
 				String city = rs.getString(3);
 				String state = rs.getString(4);
 				String description = rs.getString(5);
-				int bedroomCount = rs.getInt(6);
-				float bathCount = rs.getFloat(7);
-				int maxOccupancy = rs.getInt(8);
+				String title = rs.getString(6);
+				int bedroomCount = rs.getInt(7);
+				float bathCount = rs.getFloat(8);
+				int maxOccupancy = rs.getInt(9);
 				
 				// create the proxy object
-				cabin = new Cabin( address, city, state, description, bedroomCount, bathCount, maxOccupancy );
+				cabin = new Cabin( address, city, state, description, title, bedroomCount, bathCount, maxOccupancy );
 				cabin.setId(id);
 				cabin.setUser(null);
 				cabin.setAmenities(null);

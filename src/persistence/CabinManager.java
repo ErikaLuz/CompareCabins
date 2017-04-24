@@ -22,10 +22,10 @@ public class CabinManager {
 
 	public static void store( Cabin cabin ) throws CCException
 	{
-		String insertSQL 	= "INSERT INTO cabin ( address, city, state, description, bedroom_count, bath_count, max_occupancy, user_id, amenities_id)"
-							+ "		VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ? )";
-		String updateSQL 	= "UPDATE cabin SET address = ?, city = ?, state = ?, description = ?, bedroom_count = ?, bath_count = ?, max_occupancy = ?, user_id = ?,"
-							+ "		amenities_id = ? WHERE id = ?";
+		String insertSQL 	= "INSERT INTO cabin ( address, city, state, description, title, bedroom_count, bath_count, max_occupancy, user_id, amenities_id)"
+							+ "		VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+		String updateSQL 	= "UPDATE cabin SET address = ?, city = ?, state = ?, description = ?, title = ?, bedroom_count = ?, bath_count = ?, max_occupancy = ?, "
+							+ "user_id = ?,	amenities_id = ? WHERE id = ?";
 		Connection conn = DbAccessImpl.connect();
 		PreparedStatement ps;
 		int rowsModified;
@@ -59,34 +59,39 @@ public class CabinManager {
 			else
 				ps.setNull( 4, java.sql.Types.VARCHAR );
 			
-			if( cabin.getBedroomCount() >= 0 )
-				ps.setInt( 5, cabin.getBedroomCount() );
+			if( cabin.getTitle() != null )
+				ps.setString( 5, cabin.getTitle() );
 			else
-				ps.setNull( 5, java.sql.Types.INTEGER );
+				ps.setNull( 5, java.sql.Types.VARCHAR );
 			
-			if( cabin.getBathCount() >= 0 )
-				ps.setFloat( 6, cabin.getBathCount() );
+			if( cabin.getBedroomCount() >= 0 )
+				ps.setInt( 6, cabin.getBedroomCount() );
 			else
 				ps.setNull( 6, java.sql.Types.INTEGER );
 			
-			if( cabin.getMaxOccupancy() >= 0 )
-				ps.setInt( 7, cabin.getMaxOccupancy() );
+			if( cabin.getBathCount() >= 0 )
+				ps.setFloat( 7, cabin.getBathCount() );
 			else
 				ps.setNull( 7, java.sql.Types.INTEGER );
 			
-			if( cabin.getUser() != null )
-				ps.setInt( 8, cabin.getUser().getId() );
+			if( cabin.getMaxOccupancy() >= 0 )
+				ps.setInt( 8, cabin.getMaxOccupancy() );
 			else
-				ps.setNull( 8, java.sql.Types.INTEGER);
-			if( cabin.getAmenities() != null )
-				
-				ps.setInt( 9, cabin.getAmenities().getId() );
+				ps.setNull( 8, java.sql.Types.INTEGER );
+			
+			if( cabin.getUser() != null )
+				ps.setInt( 9, cabin.getUser().getId() );
 			else
 				ps.setNull( 9, java.sql.Types.INTEGER);
+			if( cabin.getAmenities() != null )
+				
+				ps.setInt( 10, cabin.getAmenities().getId() );
+			else
+				ps.setNull( 10, java.sql.Types.INTEGER);
 			
 			// set id if query is an update
 			if( cabin.getId() >= 0 )
-				ps.setInt( 10, cabin.getId() );
+				ps.setInt( 11, cabin.getId() );
 			
 			// execute the query
 			rowsModified = DbAccessImpl.update( conn, ps );
@@ -122,7 +127,7 @@ public class CabinManager {
 	
 	public static List<Cabin> restore( Cabin modelCabin ) throws CCException
 	{
-		String  selectCabinSql = "SELECT id, address, city, state, description, bedroom_count, bath_count, max_occupancy from cabin"; 
+		String  selectCabinSql = "SELECT id, address, city, state, description, title, bedroom_count, bath_count, max_occupancy from cabin"; 
 		Statement    statement = null;
 		StringBuffer query = new StringBuffer( 250 );
 		StringBuffer condition = new StringBuffer( 250 );
@@ -153,6 +158,11 @@ public class CabinManager {
 					if ( condition.length() > 0 )
 						condition.append( " and");
 					condition.append(" description = '" + modelCabin.getDescription() + "'");
+				}
+				if( modelCabin.getTitle() != null ) {
+					if ( condition.length() > 0 )
+						condition.append( " and");
+					condition.append(" title = '" + modelCabin.getTitle() + "'");
 				}
 				if( modelCabin.getBedroomCount() >= 0 ) {
 					if ( condition.length() > 0 )
@@ -187,6 +197,7 @@ public class CabinManager {
 				String 	city;
 				String 	state;
 				String 	description;
+				String	title;
 				int		bedroomCount;
 				float	bathCount;
 				int		maxOccupancy;
@@ -202,12 +213,13 @@ public class CabinManager {
 					city = rs.getString(3);
 					state = rs.getString(4);
 					description = rs.getString(5);
-					bedroomCount = rs.getInt(6);
-					bathCount = rs.getFloat(7);
-					maxOccupancy = rs.getInt(8);
+					title = rs.getString(6);
+					bedroomCount = rs.getInt(7);
+					bathCount = rs.getFloat(8);
+					maxOccupancy = rs.getInt(9);
 
 					// create a proxy object
-					Cabin cabin = new Cabin( address, city, state, description, bedroomCount, bathCount, maxOccupancy );
+					Cabin cabin = new Cabin( address, city, state, description, title, bedroomCount, bathCount, maxOccupancy );
 					cabin.setId( id );
 					cabin.setUser( null );	
 					cabin.setAmenities( null );

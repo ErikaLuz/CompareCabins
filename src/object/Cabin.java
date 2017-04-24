@@ -7,6 +7,7 @@ public class Cabin {
 	private String 		city;
 	private String 		state;
 	private String 		description;
+	private String		title;
 	private int			bedroomCount;
 	private float		bathCount;
 	private int			maxOccupancy;
@@ -20,6 +21,7 @@ public class Cabin {
 		city = null;
 		state = null;
 		description = null;
+		title = null;
 		bedroomCount = -1;
 		bathCount = -1;
 		maxOccupancy = -1;
@@ -27,7 +29,7 @@ public class Cabin {
 		amenities = null;
 	}
 
-	public Cabin( String address, String city, String state, String description, int bedroomCount,
+	public Cabin( String address, String city, String state, String description, String title, int bedroomCount,
 			float bathCount, int maxOccupancy ) 
 	{
 		this.id = -1;
@@ -35,6 +37,7 @@ public class Cabin {
 		this.city = city;
 		this.state = state;
 		this.description = description;
+		this.title = title;
 		this.bedroomCount = bedroomCount;
 		this.bathCount = bathCount;
 		this.maxOccupancy = maxOccupancy;
@@ -110,6 +113,19 @@ public class Cabin {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	/**
+	 * @return the description
+	 */
+	public String getTitle() {
+		return title;
+	}
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	/**

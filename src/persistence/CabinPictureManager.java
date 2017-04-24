@@ -62,7 +62,7 @@ public class CabinPictureManager {
 	
 	public static Cabin restoreCabinFromCabinPicture( CabinPicture cabinPicture ) throws CCException
 	{
-		String sqlQuery = "SELECT c.id, c.address, c.city, c.state, c.description, c.bedroom_count, c.bath_count, c.max_occupancy FROM cabin"
+		String sqlQuery = "SELECT c.id, c.address, c.city, c.state, c.description, c.title, c.bedroom_count, c.bath_count, c.max_occupancy FROM cabin"
 						+ "	JOIN cabin_picture ON cabin.id = cabin_picture.cabin_id"
 						+ "	WHERE cabin_picture.id = ?";
 		
@@ -84,12 +84,13 @@ public class CabinPictureManager {
 				String city = rs.getString(3);
 				String state = rs.getString(4);
 				String description = rs.getString(5);
-				int bedroomCount = rs.getInt(6);
-				float bathCount = rs.getFloat(7);
-				int maxOccupancy = rs.getInt(8);
+				String title = rs.getString(6);
+				int bedroomCount = rs.getInt(7);
+				float bathCount = rs.getFloat(8);
+				int maxOccupancy = rs.getInt(9);
 				
 				// create the proxy object
-				cabin = new Cabin( address, city, state, description, bedroomCount, bathCount, maxOccupancy );
+				cabin = new Cabin( address, city, state, description, title, bedroomCount, bathCount, maxOccupancy );
 				cabin.setId(id);
 				cabin.setUser(null);
 				cabin.setAmenities(null);

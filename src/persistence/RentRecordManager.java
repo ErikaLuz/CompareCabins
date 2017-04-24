@@ -181,7 +181,7 @@ public class RentRecordManager {
 	
 	public static Cabin restoreCabinFromRentRecord( RentRecord rentRecord ) throws CCException
 	{
-		String sqlQuery = "SELECT cabin.id, address, city, state, description, bedroom_count, bath_count, maxOccupancy FROM cabin"
+		String sqlQuery = "SELECT cabin.id, address, city, state, description, title, bedroom_count, bath_count, maxOccupancy FROM cabin"
 						+ "	JOIN rent_record ON cabin.id = rent_record.cabin_id"
 						+ "	WHERE rent_record.id = ?";
 		
@@ -203,12 +203,13 @@ public class RentRecordManager {
 				String city = rs.getString(3);
 				String state = rs.getString(4);
 				String description = rs.getString(5);
-				int	bedroomCount = rs.getInt(6);
-				float bathCount = rs.getFloat(7);
-				int	maxOccupancy = rs.getInt(8);
+				String title = rs.getString(6);
+				int	bedroomCount = rs.getInt(7);
+				float bathCount = rs.getFloat(8);
+				int	maxOccupancy = rs.getInt(9);
 				
 				// create the proxy object
-				cabin = new Cabin( address, city, state, description, bedroomCount, bathCount, maxOccupancy );
+				cabin = new Cabin( address, city, state, description, title, bedroomCount, bathCount, maxOccupancy );
 				cabin.setId( id );
 				cabin.setUser( null );
 				cabin.setAmenities( null );

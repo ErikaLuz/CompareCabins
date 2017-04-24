@@ -181,7 +181,7 @@ public class UserManager
 	
 	public static List<Cabin> restoreCabinsFromUser( User user ) throws CCException
 	{
-		String sqlQuery = "SELECT c.id, c.address, c.city, c.state, c.description, c.bedroom_count, c.bath_count, c.max_occupancy FROM cabin c"
+		String sqlQuery = "SELECT c.id, c.address, c.city, c.state, c.description, c.title, c.bedroom_count, c.bath_count, c.max_occupancy FROM cabin c"
 						+ "	WHERE user_id = ?";
 		
 		Connection conn = DbAccessImpl.connect();
@@ -202,12 +202,13 @@ public class UserManager
 				String city = rs.getString(3);
 				String state = rs.getString(4);
 				String description = rs.getString(5);
-				int bedroomCount = rs.getInt(6);
-				float bathCount = rs.getFloat(7);
-				int maxOccupancy = rs.getInt(8);
+				String title = rs.getString(6);
+				int bedroomCount = rs.getInt(7);
+				float bathCount = rs.getFloat(8);
+				int maxOccupancy = rs.getInt(9);
 				
 				// create the proxy object
-				Cabin cabin = new Cabin( address, city, state, description, bedroomCount, bathCount, maxOccupancy );
+				Cabin cabin = new Cabin( address, city, state, description, title, bedroomCount, bathCount, maxOccupancy );
 				cabin.setId(id);	
 				cabin.setUser(null);
 				cabin.setAmenities(null);

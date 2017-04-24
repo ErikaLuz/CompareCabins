@@ -64,6 +64,7 @@ CREATE TABLE IF NOT EXISTS `compare_cabins`.`cabin` (
   `city` VARCHAR(255) NULL DEFAULT NULL,
   `state` VARCHAR(255) NULL DEFAULT NULL,
   `description` VARCHAR(255) NULL DEFAULT NULL,
+  `title` VARCHAR(255) NULL DEFAULT NULL,
   `bedroom_count` INT(11) NULL DEFAULT NULL,
   `bath_count` INT(11) NULL DEFAULT NULL,
   `max_occupancy` INT(11) NULL DEFAULT NULL,
