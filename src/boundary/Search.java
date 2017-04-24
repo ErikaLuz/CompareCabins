@@ -88,7 +88,7 @@ public class Search extends HttpServlet {
 		String hasWasherDryer = request.getParameter("hasWasherDryer");
 		String allowsPets = request.getParameter("allowsPets");
 		String allowsSmoking = request.getParameter("allowsSmoking");
-		
+		System.out.println("test1335");
 		System.out.println(hasRiver);
 		Amenities amenities = new Amenities();
 		if(hasLake != null)
