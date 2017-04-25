@@ -6,32 +6,7 @@
     <meta charset="UTF-8">
 	<title>Compare Cabins</title>
 	<link href="css/cabinListing.css" rel="stylesheet" type="text/css">
-    
-    <style>
-    
-    body
-    {
-    	padding: 10px;
-    }
-    
-    #left 
-	{
-      float: left;
-  	  width: 50%;
-	}
 
-	#right
-	{
-    	float: right;
-   		width: 50%; 
-   		height: 100%;
-	}
-
-    #top
-    {
-		width: 100%;
-    }
-    </style>
     
 </head>
 
@@ -39,26 +14,20 @@
 	
     <form action="AddCabin" method="post">
     
-    <div id="top">
-    
-	  <div id = "left">
+   
 	  <img src="placeholder_600x400.svg" alt="thumbnail" style="width:500px;height:300px;padding-left:10px;display:block;margin:auto;">
-	  <center><button name="addCabin" class="btn">Add Pictures</button></center>
-	  </div>
-    
-    	  <div id = "right">
-    	  	<br>
-    		Title: <input type="text" name="title" placeholder="Enter a title for your cabin" /><br /> 
-    		<hr>
-    		<h2> Tell us about your cabin</h2>
- 			Description: <input type="text" name="description" placeholder="enter description" />
- 			<br />
-    	</div>
-    
-    </div>
+	  <center><button name="addCabin" class="btn">Add Pictures</button></center>    
+ 
+  	<br>
+  	<h2>Choose a title for your cabin:</h2>
+	Title: <input type="text" name="title" placeholder="Enter a title for your cabin" /><br /> 
+	<hr>
+	<h2> Tell us about your cabin</h2>
+	Description: <input type="text" name="description" placeholder="enter description" />
+	<br />
+    	
     <br/>
-    
-    <div>
+   
     
     <h2> Add cabin Location</h2>
     Address: <input type="text" name="address" placeholder="enter address" /><br />
@@ -91,8 +60,6 @@
     
     <button name="addCabin" class="btn">Add Cabin</button>
     
-    
-    </div>
     
     </form>
 
