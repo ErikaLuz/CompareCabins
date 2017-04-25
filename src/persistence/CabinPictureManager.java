@@ -15,23 +15,41 @@ public class CabinPictureManager {
 	public static void store(CabinPicture cabinPicture)
 	{
 		int rowsModified;
-		String query = "INSERT INTO cabin_picture (file_path, cabin_id) VALUES (?,?)";
+		String insertSQL = "INSERT INTO cabin_picture (file_path, priority, cabin_id) VALUES (?,?,?)";
+		String updateSQL 	= "UPDATE cabin SET address = ?, city = ?, state = ?, description = ?, title = ?, bedroom_count = ?, bath_count = ?, max_occupancy = ?, "
+				+ "user_id = ?,	amenities_id = ? WHERE id = ?";
 		
-		Connection con = DbAccessImpl.connect();
-		
+		Connection conn = DbAccessImpl.connect();
+		PreparedStatement ps;
 		try 
-		{
-			PreparedStatement ps = con.prepareStatement(query);
+		{			
+			if( cabinPicture.getId() >= 0 )
+				ps = conn.prepareStatement( updateSQL );
+			else
+				ps = conn.prepareStatement( insertSQL );
 			
 			// set the PreparedStatement parameters to values given from User or to sql null values if nullable
-			if(cabinPicture.getFilePath() != null) ps.setString(1, cabinPicture.getFilePath());
-			else ps.setNull(1, java.sql.Types.VARCHAR); 
-				
-			if(cabinPicture.getCabin() != null) ps.setInt(2, cabinPicture.getCabin().getId());
-			else ps.setNull(2, java.sql.Types.INTEGER);
+			if(cabinPicture.getFilePath() != null) 
+				ps.setString(1, cabinPicture.getFilePath());
+			else 
+				ps.setNull(1, java.sql.Types.VARCHAR); 
+
+			if( cabinPicture.getPriority() >= 0 )
+				ps.setInt( 2, cabinPicture.getPriority() );
+			else
+				ps.setNull( 2, java.sql.Types.INTEGER );
+			
+			if(cabinPicture.getCabin() != null) 
+				ps.setInt(3, cabinPicture.getCabin().getId());
+			else 
+				ps.setNull(3, java.sql.Types.INTEGER);
+			
+			// set id if query is an update
+			if( cabinPicture.getId() >= 0 )
+				ps.setInt( 4, cabinPicture.getId() );
 			
 			//execute the query
-			rowsModified = DbAccessImpl.update(con, ps);
+			rowsModified = DbAccessImpl.update(conn, ps);
 			
 			// set the id value assigned by the database to the user object
 			if( rowsModified >= 1 ) {
@@ -57,7 +75,7 @@ public class CabinPictureManager {
 			e.printStackTrace();
 		}
 		
-		DbAccessImpl.disconnect(con);
+		DbAccessImpl.disconnect(conn);
 	} //end of store
 	
 	public static Cabin restoreCabinFromCabinPicture( CabinPicture cabinPicture ) throws CCException

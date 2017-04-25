@@ -15,7 +15,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import exception.CCException;
 import object.Cabin;
+import object.CabinPicture;
 import persistence.CabinManager;
 
 import javax.json.Json;
@@ -42,6 +44,7 @@ public class LoadCabinsJSON extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int cabinId;
+		String[] primaryPhotoFilePath = null;
         
         // set up the response writer
         response.setContentType("application/json;charset=UTF-8");
@@ -49,19 +52,42 @@ public class LoadCabinsJSON extends HttpServlet {
         
         //cabinId = Integer.parseInt( request.getParameter("cabinId") );
         
-        List<Cabin> cabins = CabinManager.restore(null);
-        
+        List<Cabin> cabins = null;
+		try {
+				cabins = CabinManager.restore(null);
+	
+	        primaryPhotoFilePath = new String[ cabins.size() ];
+	        
+	        for( int i = 0; i < cabins.size(); i++ )
+	        {
+	        	List<CabinPicture> pictures = CabinManager.restoreCabinPicturesFromCabin( cabins.get(i) );
+	        	for( int j = 0; j < pictures.size(); j++ )
+	        	{
+	        		CabinPicture cabinPicture = pictures.get(j);
+	        		int priority = cabinPicture.getPriority();
+	        		if( priority == 1)
+	        		{
+	        			primaryPhotoFilePath[i] = cabinPicture.getFilePath();
+	        			break;
+	        		}
+	        	}
+	        }
+		} catch (CCException cce ) {
+			cce.printStackTrace();
+		}
+		
         JsonObjectBuilder builder = Json.createObjectBuilder();
         JsonArrayBuilder cabinArray = Json.createArrayBuilder();
         for(int i = 0; i < cabins.size(); i++)
         {
         	Cabin cabin = cabins.get( i );
         	cabinArray.add( Json.createObjectBuilder()
-        			.add("title", cabin.get))
+        			.add("title", cabin.getTitle() )
+        			.add("description", cabin.getDescription() )
+        			.add("mainPhoto", primaryPhotoFilePath[i] ) 
+        			.add("id", cabin.getId() ) );       			
         }
-            .add("cabins", Json.createArrayBuilder()
-            		.add( Json.createObjectBuilder()
-            				.add(arg0, arg1))
+        builder.add("cabins", cabinArray );
         JsonObject json = builder.build();
         
         toClient.write( json.toString() );

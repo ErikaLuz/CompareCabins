@@ -324,7 +324,7 @@ public class CabinManager {
 	
 	public static List<CabinPicture> restoreCabinPicturesFromCabin( Cabin cabin ) throws CCException
 	{
-		String sqlQuery = "SELECT id, file_path FROM cabin_picture"
+		String sqlQuery = "SELECT id, file_path, priority FROM cabin_picture"
 						+ "	WHERE cabin_id = ?";
 		
 		Connection conn = DbAccessImpl.connect();
@@ -341,10 +341,11 @@ public class CabinManager {
 				
 				// retrieve the values from the result set
 				int id = rs.getInt(1);
-				String filePath = rs.getString(2);
+				int priority = rs.getInt(2);
+				String filePath = rs.getString(3);
 				
 				// create the proxy object
-				CabinPicture cabinPicture = new CabinPicture( filePath );
+				CabinPicture cabinPicture = new CabinPicture( filePath, priority );
 				cabinPicture.setId(id);
 				cabinPicture.setCabin(null);
 				

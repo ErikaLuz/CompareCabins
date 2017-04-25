@@ -112,6 +112,7 @@ DEFAULT CHARACTER SET = latin1;
 CREATE TABLE IF NOT EXISTS `compare_cabins`.`cabin_picture` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `file_path` VARCHAR(255) NULL DEFAULT NULL,
+  `priority` INT(11) NULL DEFAULT NULL,
   `cabin_id` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `cabin_id_idx` (`cabin_id` ASC),
