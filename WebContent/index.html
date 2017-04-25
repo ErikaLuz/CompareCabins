@@ -8,8 +8,9 @@
     <title>Compare Cabins</title>
 
     <!-- Bootstrap -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -18,64 +19,44 @@
     <![endif]-->
   </head>
   <body>
-    <header id="header">
-        <nav class="navbar navbar-default navbar-static-top" role="banner">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                   <div class="navbar-brand">
-						<a href="index.html"><h1>Compare Cabins</h1></a>
-					</div>
-                </div>				
-                <div class="navbar-collapse collapse">							
-					<div class="menu">
-						<ul class="nav nav-tabs" role="tablist">
-							<li role="presentation"><a href="index.html" class="active">Home</a></li>
-							<li role="presentation"><a href="search.html">Search</a></li>
-							<li role="presentation"><a href="loginForm.html">Log In</a></li>
-							<li role="presentation"><a href="registerForm.html">Register</a></li>	
-						</ul>
-					</div>
-				</div>		
-            </div><!--/.container-->
-        </nav><!--/nav-->		
-    </header><!--/header-->	 
-    <div class="img-wrapper">
-        <img class="img-responsive" src="http://placehold.it/1500x300">
-        <div class="img-overlay">
-            <button class="btn btn-md btn-success">Button</button>
-            
+        <nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Compare Cabins</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="#">Home</a></li>
+      <li><a href="search.html">Search</a></li>
+      <li><a href="search.html">Search</a></li>
+      <li><a href="search.html">Search</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="#"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+      <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+    </ul>
+  </div>
+</nav>
+      <div class="container">
+            <img class="img-responsive" src="http://placehold.it/1500x300">
             <form action="TestServlet" method="post"> 
-            <button name="TestUser" class="btn">TEST CLASSES</button>
+                <button name="TestUser" class="btn">TEST CLASSES</button>
             </form>
            <br /><br />
             <form action="CabinListing" method="post">
-            <button name="cabinListing" class="btn">CABIN LISTING</button>
+                <button name="cabinListing" class="btn">CABIN LISTING</button>
             </form>
            <br /><br />
            	<form action="UserCabinListing" method="post">
-            <button name="userCabinListing" class="btn">USER CABIN LISTING</button>
+                <button name="userCabinListing" class="btn">USER CABIN LISTING</button>
             </form>
            <br /><br />
            	<form action="AddCabin" method="post">
-            <button name="goToCabin" class="btn">GO TO ADD CABIN</button>
+                <button name="goToCabin" class="btn">GO TO ADD CABIN</button>
             </form>
             <br /><br />
            	<form action="ViewEditUserProfile" method="post">
-            <button name="viewUser" class="btn">VIEW USER</button>
+                <button name="viewUser" class="btn">VIEW USER</button>
             </form>
-           
-        </div>
-    </div>
-    
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
+      </div>
   </body>
 </html>
