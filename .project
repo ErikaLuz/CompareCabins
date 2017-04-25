@@ -28,4 +28,11 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>WebContent/placeholder_600x400.svg</name>
+			<type>1</type>
+			<location>/Users/Erika/Documents/1.SPRING2017/1. Web Programming/CompareCabins HTML/placeholder_600x400.svg</location>
+		</link>
+	</linkedResources>
 </projectDescription>

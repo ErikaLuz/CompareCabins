@@ -54,6 +54,8 @@ public class TestCabinManager
 			testDelete(cabin2);
 		
 		System.out.println("-----END TEST CABIN MANAGER-----");
+		System.out.println();
+		
 	} // end of main
 	
 	public static Cabin testInsertStore() throws CCException
@@ -64,7 +66,7 @@ public class TestCabinManager
 		
 			// Create new cabin
 		
-				Cabin cabin = new Cabin("address", "city", "state", "description", 2, 3, 5);
+				Cabin cabin = new Cabin("address", "city", "state", "description", "title", 2, 3, 5);
 				
 			// Call method to test
 		
@@ -74,7 +76,7 @@ public class TestCabinManager
 				
 				boolean cabinExists = false;
 				String dbAdd = null, dbCity = null, dbState = null, dbDescription = null;
-				int dbBedCount = -2, dbBathCount = -2, dbMaxOcc = -2, userId = -2;
+				int dbBedCount = -2, dbBathCount = -2, dbMaxOcc = -2;
 				
 			// Check to see if cabin now exists in database
 				
@@ -699,7 +701,6 @@ public class TestCabinManager
 			// Call method to test
 				
 				List<RentRecord> rentRecords = CabinManager.restoreRentRecordsFromCabin(cabin);
-				System.out.print("rent record size: " + rentRecords.size());
 				
 			// Create model rent records for testing
 				
