@@ -341,8 +341,8 @@ public class CabinManager {
 				
 				// retrieve the values from the result set
 				int id = rs.getInt(1);
-				int priority = rs.getInt(2);
-				String filePath = rs.getString(3);
+				String filePath = rs.getString(2);
+				int priority = rs.getInt(3);
 				
 				// create the proxy object
 				CabinPicture cabinPicture = new CabinPicture( filePath, priority );

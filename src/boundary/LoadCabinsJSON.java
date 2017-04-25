@@ -43,7 +43,7 @@ public class LoadCabinsJSON extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int cabinId;
+
 		String[] primaryPhotoFilePath = null;
         
         // set up the response writer
@@ -84,7 +84,7 @@ public class LoadCabinsJSON extends HttpServlet {
         	cabinArray.add( Json.createObjectBuilder()
         			.add("title", cabin.getTitle() )
         			.add("description", cabin.getDescription() )
-        			.add("mainPhoto", primaryPhotoFilePath[i] ) 
+        			.add("primaryPhotoPath", primaryPhotoFilePath[i] ) 
         			.add("id", cabin.getId() ) );       			
         }
         builder.add("cabins", cabinArray );
