@@ -103,7 +103,6 @@ public class LogicLayerImpl {
 				List<CabinPicture> cps = CabinManager.restoreCabinPicturesFromCabin(userCabins.get(i));
 			}
 
-			
 		// Place cabins in SimpleHash
 			
 			userCabinListing.put("userCabins", userCabins);

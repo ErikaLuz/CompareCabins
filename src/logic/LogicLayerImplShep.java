@@ -32,12 +32,12 @@ public class LogicLayerImplShep {
 			startAvailability.getDate().add(Calendar.DAY_OF_MONTH, 1);
 		}
 		for(int c = 0; c < cabins.size(); c++){
-			System.out.println(cabins.get(c).getId());
+			//System.out.println(cabins.get(c).getId());
 			boolean available = false;
 			for(int i = 0; i < LLAvailability.size(); i++) {
 				for(int k = 0; k < LLAvailability.get(i).size(); k++) {
-					System.out.println(LLAvailability.get(i).get(k).getCabin());
-					if(cabins.get(c) == LLAvailability.get(i).get(k).getCabin()) {
+					//System.out.println(LLAvailability.get(i).get(k).getCabin().getId());
+					if(cabins.get(c).getId() == LLAvailability.get(i).get(k).getCabin().getId()) {
 						available = true;
 						break;
 					}
@@ -46,6 +46,10 @@ public class LogicLayerImplShep {
 			if(!available)
 				cabins.remove(c);
 		}
+		System.out.println(cabins.size());
+		for(int c = 0; c < cabins.size(); c++)
+			System.out.println(cabins.get(c).getId());
+		
 		return cabins;
 	}
 }
