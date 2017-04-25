@@ -15,9 +15,16 @@ public class TestAmenitiesManager
 {
 	public static void main() throws CCException
 	{
+		System.out.println("-----START TEST AMENITIES MANAGER-----");
+		System.out.println();
+		
 		Amenities amenities = new Amenities();
 		
 		amenities = testStore();
+		testDelete(amenities);
+		
+		System.out.println("-----END TEST AMENITIES MANAGER-----");
+		System.out.println();
 	}
 	
 	public static Amenities testStore() throws CCException
@@ -59,8 +66,14 @@ public class TestAmenitiesManager
 				System.out.println("has_air_conditioning: " + hasAir);
 		
 				System.out.println("End of testInsert");
+				System.out.println();
 				
 		return amenities;
+	}
+	
+	public static void testDelete(Amenities amenities)
+	{
+		
 	}
 
 }
