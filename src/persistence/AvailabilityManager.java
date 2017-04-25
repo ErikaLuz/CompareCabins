@@ -168,7 +168,7 @@ public class AvailabilityManager {
 	public static Cabin restoreCabinFromAvailability( Availability availability ) throws CCException
 	{
 		String sqlQuery = "SELECT c.id, c.address, c.city, c.state, c.description, c.title, c.bedroom_count, c.bath_count, c.max_occupancy FROM cabin c"
-						+ "	JOIN availability ON cabin.id = availability.cabin_id"
+						+ "	JOIN availability ON c.id = availability.cabin_id"
 						+ "	WHERE availability.id = ?";
 		
 		Connection conn = DbAccessImpl.connect();

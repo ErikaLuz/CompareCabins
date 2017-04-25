@@ -3,6 +3,10 @@ package boundary;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,7 +25,10 @@ import logic.LogicLayerImpl;
 import logic.LogicLayerImplShep;
 import object.Cabin;
 import object.Amenities;
+import object.Availability;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +86,6 @@ public class Search extends HttpServlet {
             System.out.println(stringAmenities[i]); 
         }*/
         String hasLake = request.getParameter("hasLake");
-        System.out.println(hasLake);
 		String hasRiver = request.getParameter("hasRiver");
 		String hasPool = request.getParameter("hasPool");
 		String hasHotTub = request.getParameter("hasHotTub");
@@ -88,28 +94,42 @@ public class Search extends HttpServlet {
 		String hasWasherDryer = request.getParameter("hasWasherDryer");
 		String allowsPets = request.getParameter("allowsPets");
 		String allowsSmoking = request.getParameter("allowsSmoking");
-		System.out.println("test1335");
-		System.out.println(hasRiver);
+		String startDateString = request.getParameter("startAvailability");
+		String endDateString = request.getParameter("endAvailability");
+		
+		Availability start = parseDateString( startDateString );
+		Availability end = parseDateString( endDateString );
+		
 		Amenities amenities = new Amenities();
 		if(hasLake != null)
 			amenities.setHasLake(true);
+		if(hasRiver != null)
+			amenities.setHasRiver(true);
+		if(hasPool != null)
+			amenities.setHasLake(true);
+		if(hasHotTub != null)
+			amenities.setHasHotTub(true);
+		if(hasWifi != null)
+			amenities.setHasWifi(true);
+		if(hasAirConditioning != null)
+			amenities.setHasAirConditioning(true);
+		if(hasWasherDryer != null)
+			amenities.setHasWasherDryer(true);
+		if(allowsPets != null)
+			amenities.setAllowsPets(true);
+		if(allowsSmoking != null)
+			amenities.setAllowsSmoking(true);
 		
-		
-        // business logic
-        //try {
-		
-		System.out.println("test1");
-			//cabins = LogicLayerImplShep.search(hasLake, hasRiver, hasPool, hasHotTub, hasWifi, hasAirConditioning, 
-				//	hasWasherDryer, allowsPets, allowsSmoking);
-			System.out.println("test2");
-		/*} catch (CCException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+		try {
+			cabins = LogicLayerImplShep.search(amenities, start, end);
+		} catch (CCException e1) {
+			e1.printStackTrace();
+		}
 		
         // create the data model
         Map<String, Object> root = new HashMap<String, Object>();
         
+        root.put("Cabins", cabins);
         // connect template with data model
         try {
             resultTemplate.process( root, toClient );
@@ -127,6 +147,23 @@ public class Search extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
+	}
+	private Availability parseDateString( String dateString )
+	{
+		String year = dateString.substring(0,4);
+		String month = dateString.substring(5,7);
+		String day = dateString.substring(8,10);
+		
+		int yearInt = Integer.parseInt(year);
+		int monthInt = Integer.parseInt(month);
+		int dayInt = Integer.parseInt(day);
+		
+		Calendar cal = Calendar.getInstance();
+		cal.set(yearInt, monthInt, dayInt);
+		Availability availability = new Availability();
+		availability.setDate( cal );
+		
+		return availability;
 	}
 
 }

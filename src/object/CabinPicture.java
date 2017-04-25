@@ -4,12 +4,14 @@ public class CabinPicture {
 
 	private int		id;
 	private String	filePath;
+	private int		priority;
 	private Cabin	cabin;
 	
 	public CabinPicture()
 	{
 		id = -1;
 		filePath = null;
+		priority = -1;
 		cabin = null;
 	}
 	
@@ -18,9 +20,10 @@ public class CabinPicture {
 	 * @param filePath
 	 * @param cabinId
 	 */
-	public CabinPicture( String filePath ) {
+	public CabinPicture( String filePath, int priority ) {
 		this.id = -1;
 		this.filePath = filePath;
+		this.priority = priority;
 		this.cabin = null;
 	}
 
@@ -50,6 +53,20 @@ public class CabinPicture {
 	 */
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
+	}
+	
+	/**
+	 * @return the priority
+	 */
+	public int getPriority() {
+		return priority;
+	}
+
+	/**
+	 * @param priority the priority to set
+	 */
+	public void setPriority(int priority) {
+		this.priority = priority;
 	}
 
 	/**
