@@ -23,19 +23,28 @@ public class LogicLayerImplShep {
 		List<List<Availability>> LLAvailability = new LinkedList<List<Availability>>();
 		while(startAvailability.getDate().compareTo(endAvailability.getDate()) <= 0) {
 			List<Availability> sLAvailability = AvailabilityManager.restore(startAvailability);
+			for(int i = 0; i < sLAvailability.size(); i++) {
+				Availability availability = sLAvailability.get( i );
+				Cabin cabin = AvailabilityManager.restoreCabinFromAvailability( availability );
+				availability.setCabin( cabin );				
+			}
 			LLAvailability.add(sLAvailability);
 			startAvailability.getDate().add(Calendar.DAY_OF_MONTH, 1);
 		}
-		for(int i = 0; i < LLAvailability.size(); i++) {
+		for(int c = 0; c < cabins.size(); c++){
+			System.out.println(cabins.get(c).getId());
 			boolean available = false;
-			for(int k = 0; k < LLAvailability.get(i).size(); k++) {
-				if(cabins.get(i).getId() == LLAvailability.get(i).get(k).getCabin().getId()) {
-					available = true;
-					break;
+			for(int i = 0; i < LLAvailability.size(); i++) {
+				for(int k = 0; k < LLAvailability.get(i).size(); k++) {
+					System.out.println(LLAvailability.get(i).get(k).getCabin());
+					if(cabins.get(c) == LLAvailability.get(i).get(k).getCabin()) {
+						available = true;
+						break;
+					}
 				}
 			}
 			if(!available)
-					cabins.remove(i);
+				cabins.remove(c);
 		}
 		return cabins;
 	}
