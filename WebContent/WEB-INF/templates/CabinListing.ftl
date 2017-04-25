@@ -14,7 +14,14 @@
     <div id="left">
         
         <img src="placeholder_600x400.svg" alt="thumbnail" style="width:700px;height:500px;padding-left:10px;display:block;margin:auto;">
-
+		<center><button name="addCabin" class="btn">View All Photos</button></center><br/>
+		
+        <div class="section">
+            
+      		${Cabin.description}
+        
+        </div>
+        <br />
         <div class="section">
             
             <#list Features as f>
@@ -24,7 +31,7 @@
             </#list>
         
         </div>
-
+		
         <br>
         
         <div class="section">
@@ -36,10 +43,10 @@
             </p>
 
         </div>
-        
+        <br />
         <div class="section">
         	
-        	<h3>Amenities</h3>
+        	<h3>Amenities</h3><hr>
         	
         	<p>
         		Has Lake: ${(Amenities.hasLake)?c}<br />
@@ -48,10 +55,10 @@
         	</p>
         	
         </div>
-        
+        <br />
         <div class="section">
         	
-        	<h3>Reviews</h3>
+        	<h3>Reviews</h3><hr>
         	
         	<p>
         		<#list Reviews as r>
@@ -66,12 +73,12 @@
         	</p>
         	
         </div>
-    
+    	<br />
     </div>
     
     <div id="right">
         
-        <h1 id="title">${Cabin.description}</h1>
+        <h1 id="title">${Cabin.title}</h1>
         <hr>
 
         <div id="content">

@@ -88,7 +88,7 @@ public class CabinListing extends HttpServlet
 						e1.printStackTrace();
 					}
 					
-					Cabin cabin = new Cabin("address", "city", "state", "Great Cabin", 2, 3, 6);
+					Cabin cabin = new Cabin("address", "city", "state", "this cabin rocks, it has a nice view","Great Cabin", 2, 3, 6);
 					cabin.setUser(user);
 					cabin.setAmenities(amenity);
 					

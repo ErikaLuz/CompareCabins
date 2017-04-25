@@ -19,7 +19,6 @@ import persistence.CabinManager;
 import persistence.RentRecordManager;
 import persistence.UserManager;
 
-
 public class LogicLayerImpl {
 
 	public static void register( User user ) throws CCException {
@@ -44,8 +43,9 @@ public class LogicLayerImpl {
 		
 	}
 	
-	public static void cabinListing ( SimpleHash cabinListing, Cabin modelCabin ) throws CCException {
-		
+	public static void cabinListing ( SimpleHash cabinListing, Cabin modelCabin ) throws CCException 
+	{
+	
 		// Retrieve cabin
 		
 		Cabin cabin = new Cabin();
@@ -90,23 +90,63 @@ public class LogicLayerImpl {
 				cabinListing.put("Reviews", reviews);	
 			
 		} //end of if
-	}
+		
+	} // end of cabinListing
 	
 	public static void userCabinListings (SimpleHash userCabinListing, User user) throws CCException
 	{
 		// Retrieve cabins
 		
 			List<Cabin> userCabins = UserManager.restoreCabinsFromUser(user);
+			List<CabinPicture> cps = new LinkedList<CabinPicture>();
+			List<Amenities> amenities = new LinkedList<Amenities>();
+			Amenities amenity = new Amenities();
+			
 			
 			for(int i = 0; i < userCabins.size(); i++)
-			{
-				List<CabinPicture> cps = CabinManager.restoreCabinPicturesFromCabin(userCabins.get(i));
+			{	
+				cps = CabinManager.restoreCabinPicturesFromCabin(userCabins.get(i));
+				amenity = CabinManager.restoreAmenitiesFromCabin(userCabins.get(i));
+				amenities.add(amenity);
 			}
 
-			
 		// Place cabins in SimpleHash
 			
 			userCabinListing.put("userCabins", userCabins);
+			userCabinListing.put("cabinPictures", cps);
+			userCabinListing.put("cabinAmenities", amenities);
+			
+		// TODO: figure out how to link specific amenities and cabin pictures to their specific cabin
+			
+	} // end of userCabinListings
+	
+	public static void addCabin (Cabin cabin) throws CCException
+	{
+		CabinManager.store(cabin);
+	}
+	
+	public static void viewUserProfile (SimpleHash userProfile, User user) throws CCException
+	{
+		List<User> users = UserManager.restore(user);
+		
+		if(users.size() != 1 || users.isEmpty()) System.out.println("wrong user found");
+		else user = users.get(0);
+		
+		List<RentRecord> rr = UserManager.restoreRentRecordsFromUser(user);
+		System.out.println("Number of rent records found: " + rr.size());
+		List<Review> reviews = new LinkedList<Review>();
+		Review review = new Review();
+		
+		for(int i = 0; i < rr.size(); i++)
+		{
+			review = RentRecordManager.restoreReviewFromRentRecord(rr.get(i));
+			reviews.add(review);
+		}
+		
+		System.out.println("Number of reviews found: " + reviews.size());
+		
+		userProfile.put("User", user);
+		userProfile.put("Reviews", reviews);
 	}
 	
 }

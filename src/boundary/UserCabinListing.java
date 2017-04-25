@@ -70,13 +70,13 @@ public class UserCabinListing extends HttpServlet
 						e1.printStackTrace();
 					}
 					
-					Cabin cabin = new Cabin("address", "city", "state", "Great Cabin", 2, 3, 6);
+					Cabin cabin = new Cabin("address", "city", "state", "Great cabin in the mountains", "Great Cabin", 2, 3, 6);
 					cabin.setUser(user);
 					
-					Cabin cabin2 = new Cabin("Street", "Athens" ,"Georgia", "Cabin in UGA", 2, 6, 100);
+					Cabin cabin2 = new Cabin("Street", "Athens" ,"Georgia", "cabin located right inside of snelling", "Cabin in UGA", 2, 6, 100);
 					cabin2.setUser(user);
 					
-					Cabin cabin3 = new Cabin("science library", "UGA", "Georgia", "Cool cabin", 5, 79, 4);
+					Cabin cabin3 = new Cabin("science library", "UGA", "Georgia", "this cabin is great", "Cool cabin" ,5, 79, 4);
 					cabin3.setUser(user);
 					
 					try {
