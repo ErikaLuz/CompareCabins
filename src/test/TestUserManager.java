@@ -417,10 +417,10 @@ public class TestUserManager
 		
 			// Create test cabins and store into database
 			
-				Cabin cabin1 = new Cabin("address1", "city1", "state1", "description1", 1, 2, 5);
-				Cabin cabin2 = new Cabin("address2", "city2", "state2", "description2", 4, 5, 6);
+				Cabin cabin1 = new Cabin("address1", "city1", "state1", "description1", "title1", 1, 2, 5);
+				Cabin cabin2 = new Cabin("address2", "city2", "state2", "description2", "title2", 4, 5, 6);
 				
-				Cabin decoyCabin = new Cabin("address3", "city3", "state3", "description3", 0, 0, 0);
+				Cabin decoyCabin = new Cabin("address3", "city3", "state3", "description3", "title3", 0, 0, 0);
 				User decoyUser = new User("User", "Pass", "FN", "LN", "Email");
 				UserManager.store(decoyUser);
 				
@@ -566,7 +566,7 @@ public class TestUserManager
 		
 			// Create restraints
 		
-				Cabin cabin = new Cabin("add", "city", "state", "great cabin", 3 ,4, 5);
+				Cabin cabin = new Cabin("add", "city", "state", "great cabin", "title", 3 ,4, 5);
 				cabin.setUser(user);
 				
 				Calendar calendar = Calendar.getInstance();
