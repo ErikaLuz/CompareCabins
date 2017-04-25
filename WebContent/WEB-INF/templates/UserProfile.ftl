@@ -72,11 +72,11 @@
 		  
 		 <form action="ViewEditUserProfile" method="post">
 		 
-		 	Username: <input type="text" name="newUsername" placeholder="${User.username} - Enter New Username" /> <br/>
-		 	Password: <input type="text" name="newPassword" placeholder="${User.password} - Enter New Password" /> <br/>
-		 	First Name: <input type="text" name="newFN" placeholder="${User.firstName} - Enter New First Name" /> <br/>
-			Last Name: <input type="text" name="newLN" placeholder="${User.lastName} - Enter New Last Name" /> <br/>
-			Email: <input type="text" name="newEmail" placeholder="${User.email} - Enter New Email" /> <br/><br/>
+		 	Username: <input type="text" name="newUsername" placeholder="${User.username}" /> <br/><br/>
+		 	Password: <input type="text" name="newPassword" placeholder="${User.password}" /> <br/><br/>
+		 	First Name: <input type="text" name="newFN" placeholder="${User.firstName}" /> <br/><br/>
+			Last Name: <input type="text" name="newLN" placeholder="${User.lastName}" /> <br/><br/>
+			Email: <input type="text" name="newEmail" placeholder="${User.email}" /> <br/><br/><br/>
 		 
 	 	 	<center><button name="updateUser" class="btn">Submit</button></center>
 	 	 		 	 		 

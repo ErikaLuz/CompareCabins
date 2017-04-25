@@ -167,6 +167,7 @@ public class LogicLayerImpl {
 	
 	public static User updateUser(User modelUser) throws CCException
 	{	
+		
 		// Restore user from database
 			
 			List<User> users = UserManager.restore(modelUser);
@@ -177,11 +178,20 @@ public class LogicLayerImpl {
 			
 		// Compare model user to database user and change new values if needed
 			
-			if(!modelUser.getUsername().equals(user.getUsername())) user.setUsername(modelUser.getUsername());
-			if(!modelUser.getPassword().equals(user.getPassword())) user.setPassword(modelUser.getPassword());
-			if(!modelUser.getFirstName().equals(user.getFirstName())) user.setFirstName(modelUser.getFirstName());
-			if(!modelUser.getLastName().equals(user.getLastName())) user.setLastName(modelUser.getLastName());
-			if(!modelUser.getEmail().equals(user.getEmail())) user.setEmail(modelUser.getEmail());
+			if(!modelUser.getUsername().equals(user.getUsername()) && modelUser.getUsername() != null) 
+				user.setUsername(modelUser.getUsername());
+			
+			if(!modelUser.getPassword().equals(user.getPassword()) && modelUser.getPassword() != null) 
+				user.setPassword(modelUser.getPassword());
+			
+			if(!modelUser.getFirstName().equals(user.getFirstName()) && modelUser.getFirstName() != null) 
+				user.setFirstName(modelUser.getFirstName());
+			
+			if(!modelUser.getLastName().equals(user.getLastName()) && modelUser.getLastName() != null) 
+				user.setLastName(modelUser.getLastName());
+			
+			if(!modelUser.getEmail().equals(user.getEmail()) && modelUser.getEmail() != null)
+				user.setEmail(modelUser.getEmail());
 		
 		// Update user in database	
 			
