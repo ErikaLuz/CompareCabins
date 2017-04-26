@@ -2,6 +2,7 @@ var cabinDataJson;
 window.onload = function () {
 	jQuery.getJSON( "LoadCabinsJSON" , function( data ) {
 		 for( var i = 0; i < data.cabins.length; i++){
+			 
 			 var cabinDiv = jQuery("<div/>");
 			 var imgElement = jQuery("<img/>");
 			 var h3Element = jQuery("<h3/>");
@@ -21,8 +22,10 @@ window.onload = function () {
 			 cabinDiv.data("cabinId", data.cabins[i].cabinId);
 			 
 			 cabinDiv.click( cabinDivClick );
+			 cabinDiv.mouseover( cabinDivMouseOver );
+			 cabinDiv.mouseleave( cabinDivMouseLeave );
 			 
-			 jQuery("#results").append(cabinDiv);
+			 jQuery("#results").append( cabinDiv );
 		 }
 		 cabinDataJson = data;
 		 
@@ -32,4 +35,12 @@ window.onload = function () {
 
 function cabinDivClick ( ) {
 	location.href = "GuestCabinListing?" + jQuery.param( { cabinId: jQuery(this).data("cabinId") } );
+}
+
+function cabinDivMouseOver ( ) {
+	$(this).addClass( "mouseOver" );
+}
+
+function cabinDivMouseLeave ( ) {
+	$(this).removeClass( "mouseOver" );
 }
