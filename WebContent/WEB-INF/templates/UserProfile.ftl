@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Register Account</title>
+    <title>${User.username}'s Profile</title>
 
     <!-- Bootstrap -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
@@ -25,7 +25,7 @@
 </head>
 
 <body>
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-default">
   	<div class="container-fluid">
     <div class="navbar-header">
     <a class="navbar-brand" href="index.html">Compare Cabins</a>
