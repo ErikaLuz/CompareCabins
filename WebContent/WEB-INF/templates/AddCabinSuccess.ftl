@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,6 +20,7 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
+
 <body>
     <nav class="navbar navbar-default">
   	<div class="container-fluid">
@@ -37,27 +39,42 @@
     </ul>
   </div>
 </nav>
-    <div class="container">
-        <div class="row centered-form">
-        <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
-        	<div class="panel panel-default">
-        		<div class="panel-heading">
-			    		<h3 class="panel-title text-center">Log in to your account</h3>
-			 			</div>
-			 			<div class="panel-body">
-			    		<form action="Login">
-			    			<div class="form-group">
-			    				<input type="text" name="username" id="username" class="form-control input-sm text-center" placeholder="Username">
-			    			</div>
-                            <div class="form-group">
-			    				<input type="password" name="password" id="password" class="form-control input-sm text-center" placeholder="Password">
-			    			</div>
-			    			<input type="submit" value="Log in" class="btn btn-info btn-block">
-			    		</form>
-			    	</div>
-	    		</div>
-    		</div>
-    	</div>
-    </div>
+
+
+	<h1>CONGRATULATION YOU HAVE ADDED THIS CABIN: ${Cabin.title} </h1>
+    
+    <h2>Cabin pictures null for now </h2>
+    
+    <h2> Cabin Location</h2>
+    Address: ${Cabin.address}<br />
+    City:	${Cabin.city}<br />
+    State: ${Cabin.state}<br />
+ 	
+ 	<h2> More cabin info</h2>
+ 	Bedroom Count: ${Cabin.bedroomCount}<br />
+ 	Bathroom Count: ${Cabin.bathCount}<br />
+ 	Maximum Occupancy: ${Cabin.maxOccupancy}<br />
+ 	
+ 	<h2> Tell us about your cabin</h2>
+ 	Description: ${Cabin.description}<br />
+ 	<br />
+ 	Features: ${Features.featureString}<br />
+    
+    <h2>Your cabin's amenities</h2>
+    Has Lake: ${Amenities.hasLake?c}<br />
+    Has River: ${Amenities.hasRiver?c}<br />
+    Has Pool: ${Amenities.hasPool?c}<br />
+    Has Hot Tub: ${Amenities.hasHotTub?c}<br />
+    Has Wifi: ${Amenities.hasWifi?c}<br />
+    Has Air Conditioning: ${Amenities.hasAirConditioning?c}<br />
+    Has Washer & Dryer: ${Amenities.hasWasherDryer?c}<br />
+    Allows Pets: ${Amenities.allowsPets?c}<br />
+    Allows Smoking: ${Amenities.allowsSmoking?c}<br />
+    
+    <h2>Cabin availability: blank for now</h2>
+    
+    
+    </form>
+
 </body>
 </html>
