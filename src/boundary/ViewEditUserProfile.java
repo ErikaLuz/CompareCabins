@@ -140,6 +140,8 @@ public class ViewEditUserProfile extends HttpServlet
 					// TODO: somehow get the userid then create model user with id to pass to method
 					
 //						User user = new User();
+						
+						
 //						user.setId(id);
 						
 						LogicLayerImpl.viewUserProfile(root, user);	

@@ -13,8 +13,17 @@
 
     <div id="left">
         
-        <img src="${PriorityPicture.filePath}" style="width:700px;height:500px;padding-left:10px;display:block;margin:auto;">
-		<center><button name="viewAllPhotos" class="btn">View All Photos</button></center><br/>
+        <#if CPCheck != "null">
+        
+	        <img src="${PriorityPicture.filePath}" style="width:700px;height:500px;padding-left:10px;display:block;margin:auto;">
+			<br/><center><button name="viewAllPhotos" class="btn">View All Photos</button></center><br/>
+		
+		<#else>
+		
+			<img src="placeholder_600x400.svg" style="width:700px;height:500px;padding-left:10px;display:block;margin:auto;">
+			<br/><center><button name="viewAllPhotos" class="btn">View All Photos</button></center><br/>
+		
+		</#if>
 		
         <div class="section">
             
@@ -22,6 +31,7 @@
         
         </div>
         <br />
+
         
         <#if AmenitiesCheck != "null">
         

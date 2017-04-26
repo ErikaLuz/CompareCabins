@@ -35,10 +35,10 @@ import freemarker.template.DefaultObjectWrapperBuilder;
 import freemarker.template.SimpleHash;
 
 /**
- * Servlet implementation class CabinListing
+ * Servlet implementation class OwnerCabinListing
  */
-@WebServlet("/GuestCabinListing")
-public class GuestCabinListing extends HttpServlet 
+@WebServlet("/OwnerCabinListing")
+public class OwnerCabinListing extends HttpServlet 
 {
 	//VARIABLES
 		private static final long serialVersionUID = 1L;	
@@ -46,7 +46,7 @@ public class GuestCabinListing extends HttpServlet
 		private TemplateProcessor processor;
 		
     //@see HttpServlet#HttpServlet() 
-		public GuestCabinListing() 
+		public OwnerCabinListing() 
 		{
 			super();
 		} //end of constructor
@@ -82,7 +82,7 @@ public class GuestCabinListing extends HttpServlet
 			
 			// Set and process template
 		
-				String templateName = "GuestCabinListing.ftl";
+				String templateName = "OwnerCabinListing.ftl";
 				processor.processTemplate(templateName, root, request, response);
 
 /*				

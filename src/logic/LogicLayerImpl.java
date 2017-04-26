@@ -3,6 +3,7 @@ package logic;
 import java.util.Calendar;
 import java.util.List;
 import java.util.LinkedList;
+
 import freemarker.template.SimpleHash;
 
 import exception.CCException;
@@ -15,6 +16,7 @@ import object.Feature;
 import object.Availability;
 import object.RentRecord;
 import object.Review;
+import object.Group;
 
 import persistence.CabinManager;
 import persistence.RentRecordManager;
@@ -79,13 +81,10 @@ public class LogicLayerImpl {
 				// Retrieve cabin pictures and find cabin's priority picture
 					
 					List<CabinPicture> cabinPictures = CabinManager.restoreCabinPicturesFromCabin(modelCabin);
-					System.out.println("CabinPictures Size: " + cabinPictures.size());
 					CabinPicture priority = new CabinPicture();
 					
 					for(int i = 0; i < cabinPictures.size(); i++)
 					{
-						System.out.println("Priority Number: " + cabinPictures.get(i).getPriority());
-						
 						if(cabinPictures.get(i).getPriority() == 1) priority = cabinPictures.get(i);
 					}
 				
@@ -142,7 +141,6 @@ public class LogicLayerImpl {
 					}
 					else root.put("ReviewsCheck", "null");
 						
-				
 			} //end of if
 		
 	} // end of cabinListing
@@ -155,7 +153,6 @@ public class LogicLayerImpl {
 			List<CabinPicture> cps = new LinkedList<CabinPicture>();
 			List<Amenities> amenities = new LinkedList<Amenities>();		
 			
-			// TODO: look to see if can optimize this code ,, cps.add? nvm i get it
 			for(int i = 0; i < userCabins.size(); i++)
 			{	
 				cps = CabinManager.restoreCabinPicturesFromCabin(userCabins.get(i));	
@@ -276,10 +273,7 @@ public class LogicLayerImpl {
 			
 			for(int i = 0; i < cp.size(); i++)
 			{
-				if(cp.get(i).getPriority() == 1)
-				{
-					cp1 = cp.get(i);
-				}
+				if(cp.get(i).getPriority() == 1) cp1 = cp.get(i);
 			}
 		
 		// TODO: Calculate total price
@@ -301,6 +295,7 @@ public class LogicLayerImpl {
 	
 	public static void pastStays(SimpleHash root, User user) throws CCException
 	{
+		
 		// Retrieve user from database
 		
 			List<User> users = UserManager.restore(user);
@@ -312,14 +307,24 @@ public class LogicLayerImpl {
 			
 			List<RentRecord> rr = UserManager.restoreRentRecordsFromUser(user);
 			
-		// Restore cabins from rent records from database
+		// Create Group Object + List
+		
+			List<Group> groups = new LinkedList<Group>();
 			
-			List<Cabin> cabins = new LinkedList<Cabin>();
+		// Restore cabins from rent records from database and store both into group object
 			
 			for(int i = 0; i < rr.size(); i++)
 			{
-				cabins.add(RentRecordManager.restoreCabinFromRentRecord(rr.get(i)));
+				Group group = new Group();
+				group.setRentRecord(rr.get(i));
+				group.setCabin(RentRecordManager.restoreCabinFromRentRecord(rr.get(i)));
+				groups.add(group);
 			}
+			
+		// Place info into SimpleHash
+			
+			root.put("User", user);
+			root.put("PastStays", groups);
  		
 	}
 	

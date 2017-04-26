@@ -181,7 +181,7 @@ public class RentRecordManager {
 	
 	public static Cabin restoreCabinFromRentRecord( RentRecord rentRecord ) throws CCException
 	{
-		String sqlQuery = "SELECT cabin.id, address, city, state, description, title, bedroom_count, bath_count, maxOccupancy FROM cabin"
+		String sqlQuery = "SELECT cabin.id, address, city, state, description, title, bedroom_count, bath_count, max_occupancy FROM cabin"
 						+ "	JOIN rent_record ON cabin.id = rent_record.cabin_id"
 						+ "	WHERE rent_record.id = ?";
 		

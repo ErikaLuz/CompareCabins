@@ -13,8 +13,8 @@
 
     <div id="left">
         
-        <img src="placeholder_600x400.svg" alt="thumbnail" style="width:700px;height:500px;padding-left:10px;display:block;margin:auto;">
-		<center><button name="addCabin" class="btn">View All Photos</button></center><br/>
+        <img src="${(PriorityPicture.filePath)!placeholder-600x400.svg}" style="width:700px;height:500px;padding-left:10px;display:block;margin:auto;">
+		<center><button name="viewAllPhotos" class="btn">View All Photos</button></center><br/>
 		
         <div class="section">
             
@@ -22,17 +22,21 @@
         
         </div>
         <br />
-        <div class="section">
-            
-            <#list Features as f>
-            
-            ${f.featureString} 
-            
-            </#list>
         
-        </div>
-		
-        <br>
+        <#if AmenitiesCheck != "null">
+        
+	        <div class="section">
+	            
+	            <#list Features as f>
+	            
+	           		${f.featureString} 
+	            
+	            </#list>
+	        
+	        </div>
+	        <br>
+        
+        </#if>
         
         <div class="section">
 
@@ -44,36 +48,47 @@
 
         </div>
         <br />
-        <div class="section">
-        	
-        	<h3>Amenities</h3><hr>
-        	
-        	<p>
-        		Has Lake: ${(Amenities.hasLake)?c}<br />
-        		Has River: ${(Amenities.hasRiver)?c}<br />
-        		Has Pool: ${(Amenities.hasPool)?c}<br />
-        	</p>
-        	
-        </div>
-        <br />
-        <div class="section">
-        	
-        	<h3>Reviews</h3><hr>
-        	
-        	<p>
-        		<#list Reviews as r>
-            
-            		Number of Stars: ${r.numStars}<br />
-            		Title: ${r.title}<br />
-            		Review: ${r.description} <br />
-            		
-            		<br />
-            
-          	   </#list>
-        	</p>
-        	
-        </div>
-    	<br />
+        
+        <#if AmenitiesCheck != "null">
+        
+	        <div class="section">
+	        	
+	        	<h3>Amenities</h3><hr>
+	        	
+	        	<p>
+	        		Has Lake: ${(Amenities.hasLake)?c}<br />
+	        		Has River: ${(Amenities.hasRiver)?c}<br />
+	        		Has Pool: ${(Amenities.hasPool)?c}<br />
+	        	</p>
+	        	
+	        </div>
+	        <br />
+        
+        </#if>
+        
+        <#if ReviewsCheck != "null">
+        
+	        <div class="section">
+	        	
+	        	<h3>Reviews</h3><hr>
+	        	
+	        	<p>
+	        		<#list Reviews as r>
+	            
+	            		Number of Stars: ${r.numStars}<br />
+	            		Title: ${r.title}<br />
+	            		Review: ${r.description} <br />
+	            		
+	            		<br />
+	            
+	          	   </#list>
+	        	</p>
+	        	
+	        </div>
+	    	<br />
+    	
+    	</#if>
+    	
     </div>
     
     <div id="right">

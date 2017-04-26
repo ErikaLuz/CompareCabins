@@ -1,6 +1,7 @@
 package boundary;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -14,7 +15,7 @@ import boundary.TemplateProcessor;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapperBuilder;
 import freemarker.template.SimpleHash;
-
+import logic.LogicLayerImpl;
 import exception.CCException;
 
 import object.User;
@@ -93,12 +94,38 @@ public class PastStaysReview extends HttpServlet
 					// Create Cabin
 						
 						Cabin cabin = new Cabin("Address", "City", "State", "Description", "Title", 3 ,4, 6);
+						Cabin cabin2 = new Cabin("Lumpkin", "Athens", "Georgia", "a nice cabin", "Nice Stay", 5, 7, 9);
 						
-					
-					
+						CabinManager.store(cabin);
+						CabinManager.store(cabin2);
+						
+					// Create Rent Records
+						
+						float z = 2;
+						Calendar date = Calendar.getInstance();
+						
+						RentRecord rr1 = new RentRecord(z, date, date);
+						rr1.setUser(user);
+						rr1.setCabin(cabin);
+						RentRecord rr2 = new RentRecord(z, date, date);
+						rr2.setUser(user);
+						rr2.setCabin(cabin);
+						RentRecord rr3 = new RentRecord(z, date, date);
+						rr3.setUser(user);
+						rr3.setCabin(cabin);
+						
+						RentRecordManager.store(rr1);
+						RentRecordManager.store(rr2);
+						RentRecordManager.store(rr3);
+						
+					// Call logic layer
+						
+						LogicLayerImpl.pastStays(root, user);
+						
+					// Set and process template
 				
-				String templateName = "PastStays.ftl";
-				processor.processTemplate(templateName, root, request, response);
+						String templateName = "PastStays.ftl";
+						processor.processTemplate(templateName, root, request, response);
 			}
 	
 		
