@@ -42,6 +42,8 @@ public class RentCabin extends HttpServlet
 		//@see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response) 
 			protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 			{
+				// TODO: cant figure out prices right now
+				
 				String rentPage = request.getParameter("rentPage");
 				String rent = request.getParameter("rent");
 				

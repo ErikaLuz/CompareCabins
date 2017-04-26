@@ -148,7 +148,7 @@ public class CabinListing extends HttpServlet
 					e.printStackTrace();
 				}
 				
-				String templateName = "cabinListing.ftl";
+				String templateName = "GuestCabinListing.ftl";
 				processor.processTemplate(templateName, root, request, response);
 				
 				// Delete dummy objects

@@ -63,7 +63,6 @@ public class LogicLayerImpl {
 					User user = CabinManager.restoreUserFromCabin( modelCabin );
 					Amenities amenities = CabinManager.restoreAmenitiesFromCabin( modelCabin );
 					
-					List<CabinPicture> cabinPictures = CabinManager.restoreCabinPicturesFromCabin(modelCabin);
 					List<Feature> features = CabinManager.restoreFeaturesFromCabin(modelCabin);
 					List<Availability> availabilities  = CabinManager.restoreAvailabilitiesFromCabin(modelCabin);
 				
@@ -76,16 +75,73 @@ public class LogicLayerImpl {
 					{
 						reviews.add(RentRecordManager.restoreReviewFromRentRecord(rentRecords.get(i)));
 					}
+					
+				// Retrieve cabin pictures and find cabin's priority picture
+					
+					List<CabinPicture> cabinPictures = CabinManager.restoreCabinPicturesFromCabin(modelCabin);
+					System.out.println("CabinPictures Size: " + cabinPictures.size());
+					CabinPicture priority = new CabinPicture();
+					
+					for(int i = 0; i < cabinPictures.size(); i++)
+					{
+						System.out.println("Priority Number: " + cabinPictures.get(i).getPriority());
+						
+						if(cabinPictures.get(i).getPriority() == 1) priority = cabinPictures.get(i);
+					}
 				
 				// Place info in SimpleHash for ftl
 				
-					root.put("Cabin", cabin);
-					root.put("User", user);
-					root.put("Amenities", amenities);
-					root.put("CabinPictures", cabinPictures);
-					root.put("Features", features);
-					root.put("Availabilities", availabilities);
-					root.put("Reviews", reviews);	
+					root.put("Cabin", cabin); // cannot be null
+					
+					if(user != null) 
+					{
+						root.put("User", user);
+						root.put("Usercheck", "notNull");
+					}
+					else root.put("UserCheck", "null");
+					
+					if(amenities != null) 
+					{
+						root.put("Amenities", amenities);
+						root.put("AmenitiesCheck", "notNull");
+					}
+					else root.put("AmenitiesCheck", "null");
+				
+					if(cabinPictures.size() > 0)
+					{
+						root.put("CabinPictures", cabinPictures);
+						root.put("CPCheck", "notNull");
+						
+						if(priority.getFilePath() != null) 
+						{
+							root.put("PriorityPicture", priority);
+							root.put("PriorityCheck", "notNull");
+						}
+						else root.put("PriorityCheck", "null");
+					}
+					else root.put("CPCheck", "null");
+					
+					if(features.size() > 0)
+					{
+						root.put("Features", features);
+						root.put("FeaturesCheck", "notNull");
+					}
+					else root.put("FeaturesCheck", "null");
+					
+					if(availabilities.size() > 0)
+					{
+						root.put("Availabilities", availabilities);
+						root.put("AvailabilitiesCheck", "notNull");
+					}
+					else root.put("AvailabilitiesCheck", "null");
+					
+					if(reviews.size() > 0)
+					{
+						root.put("Reviews", reviews);
+						root.put("ReviewsCheck", "notNull");
+					}
+					else root.put("ReviewsCheck", "null");
+						
 				
 			} //end of if
 		
@@ -97,14 +153,13 @@ public class LogicLayerImpl {
 		
 			List<Cabin> userCabins = UserManager.restoreCabinsFromUser(user);
 			List<CabinPicture> cps = new LinkedList<CabinPicture>();
-			List<Amenities> amenities = new LinkedList<Amenities>();
-			Amenities amenity = new Amenities();
+			List<Amenities> amenities = new LinkedList<Amenities>();		
 			
+			// TODO: look to see if can optimize this code ,, cps.add? nvm i get it
 			for(int i = 0; i < userCabins.size(); i++)
 			{	
-				cps = CabinManager.restoreCabinPicturesFromCabin(userCabins.get(i));
-				amenity = CabinManager.restoreAmenitiesFromCabin(userCabins.get(i));
-				amenities.add(amenity);
+				cps = CabinManager.restoreCabinPicturesFromCabin(userCabins.get(i));	
+				amenities.add(CabinManager.restoreAmenitiesFromCabin(userCabins.get(i)));
 			}
 
 		// Place cabins in SimpleHash
@@ -150,18 +205,21 @@ public class LogicLayerImpl {
 		// Restore reviews from user's cabin's rent records
 			
 			List<Review> reviews = new LinkedList<Review>();
-			Review review = new Review();
 		
 			for(int i = 0; i < rr.size(); i++)
 			{
-				review = RentRecordManager.restoreReviewFromRentRecord(rr.get(i));
-				reviews.add(review);
+				reviews.add(RentRecordManager.restoreReviewFromRentRecord(rr.get(i)));
 			}
 		
 		// Place user and review objects in SimpleHash
-		
 			root.put("User", user);
-			root.put("Reviews", reviews);
+			if(reviews.size() > 0)
+			{
+				root.put("Reviews", reviews);
+				root.put("ReviewsCheck", "notNull");
+			}
+			else root.put("ReviewsCheck", "null");
+			
 			
 	} // end of viewUserProfile
 	
@@ -201,7 +259,7 @@ public class LogicLayerImpl {
 			
 	} // end of updateUser
 	
-	public static void rentcabin (SimpleHash root, Availability start, Availability end, Cabin modelCabin) throws CCException
+	public static void rentCabin (SimpleHash root, Availability start, Availability end, Cabin modelCabin) throws CCException
 	{
 		// Variables
 		
@@ -236,14 +294,43 @@ public class LogicLayerImpl {
 			
 		// Place objects into SimpleHash
 		
-		root.put("Cabin", cabin);
-		root.put("CabinPriorityPicture", cp1);
-		root.put("StartDate", startDate);
-		root.put("EndDate", endDate);
-		root.put("Subtotal", subtotal);
-		root.put("TotalPrice", totalPrice);
-		root.put("ServiceFee", serviceFee);
+			root.put("Cabin", cabin);
+			root.put("CabinPriorityPicture", cp1);
+			root.put("StartDate", startDate);
+			root.put("EndDate", endDate);
+			root.put("Subtotal", subtotal);
+			root.put("TotalPrice", totalPrice);
+			root.put("ServiceFee", serviceFee);
 		
 	} // end of rentCabin
+	
+	public static void pastStays(SimpleHash root, User user) throws CCException
+	{
+		// Retrieve user from database
+		
+			List<User> users = UserManager.restore(user);
+			
+			if(users.size() != 1) System.out.println("ERROR: wrong user(s) found");
+			else user = users.get(0);
+			
+		// Retrieve user's rent records from database
+			
+			List<RentRecord> rr = UserManager.restoreRentRecordsFromUser(user);
+			
+		// Restore cabins from rent records from database
+			
+			List<Cabin> cabins = new LinkedList<Cabin>();
+			
+			for(int i = 0; i < rr.size(); i++)
+			{
+				cabins.add(RentRecordManager.restoreCabinFromRentRecord(rr.get(i)));
+			}
+ 		
+	}
+	
+	public static void addReview(SimpleHash root, User user) throws CCException
+	{
+		
+	}
 	
 }
