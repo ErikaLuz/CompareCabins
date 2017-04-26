@@ -185,15 +185,15 @@ public class ViewEditUserProfile extends HttpServlet
 					
 					// DUMMY TEST CODE - create new user to edit - delete later
 					
-						User user = new User("originalUsername", "originalPassword", "originalFN", "originalLN", "originalEmail");
+						User user = new User("testUsername", "testPassword", "Erika", "Luz", "testEmail");
 						
 						UserManager.store(user);
 						
-					if(newUsername != null) user.setUsername(newUsername);
-					if(newPassword != null) user.setPassword(newPassword);
-					if(newFN != null) user.setFirstName(newLN);
-					if(newLN != null) user.setLastName(newLN);
-					if(newEmail != null) user.setEmail(newEmail);
+					if(!newUsername.equals("")) user.setUsername(newUsername);
+					if(!newPassword.equals("")) user.setPassword(newPassword);
+					if(!newFN.equals("")) user.setFirstName(newFN);
+					if(!newLN.equals("")) user.setLastName(newLN);
+					if(!newEmail.equals("")) user.setEmail(newEmail);	
 				
 				// Call logic layer to update user
 					
