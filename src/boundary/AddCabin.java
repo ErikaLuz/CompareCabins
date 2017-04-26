@@ -190,7 +190,7 @@ public class AddCabin extends HttpServlet
 							e1.printStackTrace();
 						}
 						
-						String templateName = "TestAddCabin.ftl";
+						String templateName = "AddCabinSuccess.ftl";
 						processor.processTemplate(templateName, root, request, response);
 				} 
 				
