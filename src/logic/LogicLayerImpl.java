@@ -147,25 +147,37 @@ public class LogicLayerImpl {
 	
 	public static void userCabinListings (SimpleHash root, User user) throws CCException
 	{
+		// Create Group List
+		
+			List<Group> groups = new LinkedList<Group>();
+		
 		// Retrieve cabins
 		
 			List<Cabin> userCabins = UserManager.restoreCabinsFromUser(user);
-			List<CabinPicture> cps = new LinkedList<CabinPicture>();
-			List<Amenities> amenities = new LinkedList<Amenities>();		
 			
 			for(int i = 0; i < userCabins.size(); i++)
 			{	
-				cps = CabinManager.restoreCabinPicturesFromCabin(userCabins.get(i));	
-				amenities.add(CabinManager.restoreAmenitiesFromCabin(userCabins.get(i)));
+				Group group = new Group();
+				group.setCabin(userCabins.get(i));
+				
+				List<CabinPicture> cps = CabinManager.restoreCabinPicturesFromCabin(userCabins.get(i));
+				group.setCabinPictureList(cps);
+				
+				// Get cabin's priority picture
+				
+					for(int j = 0; j < cps.size(); j++)
+					{
+						if(cps.get(j).getPriority() == 1) group.setCabinPicture(cps.get(j));
+					}
+				
+				group.setAmenities(CabinManager.restoreAmenitiesFromCabin(userCabins.get(i))); 
+				
+				groups.add(group);
 			}
 
-		// Place cabins in SimpleHash
+		// Place group of cabins in SimpleHash
 			
-			root.put("userCabins", userCabins);
-			root.put("cabinPictures", cps);
-			root.put("cabinAmenities", amenities);
-			
-		// TODO: figure out how to link specific amenities and cabin pictures to their specific cabin
+			root.put("Groups", groups);
 			
 	} // end of userCabinListings
 	
@@ -256,48 +268,6 @@ public class LogicLayerImpl {
 			
 	} // end of updateUser
 	
-	public static void rentCabin (SimpleHash root, Availability start, Availability end, Cabin modelCabin) throws CCException
-	{
-		// Variables
-		
-			float subtotal = -1, serviceFee = -1, totalPrice = -1;
-			Calendar startDate = start.getDate(), endDate = end.getDate();
-		
-		// Retrieve cabin to rent
-		
-			List<Cabin> cabins = CabinManager.restore(modelCabin);
-			Cabin cabin = new Cabin();
-			
-			if(cabins.size() != 1) System.out.println("Multiple cabins found");
-			else cabin = cabins.get(0);
-			
-		// Get cabin priority picture
-		
-			List<CabinPicture> cp = CabinManager.restoreCabinPicturesFromCabin(modelCabin);
-			CabinPicture cp1 = new CabinPicture();
-			
-			for(int i = 0; i < cp.size(); i++)
-			{
-				if(cp.get(i).getPriority() == 1) cp1 = cp.get(i);
-			}
-		
-		// TODO: Calculate total price
-			
-			// pseudo-code: get prices for all availabilities between start and end date and add them all together
-			// then calculate service fee + add those together to find total price
-			
-		// Place objects into SimpleHash
-		
-			root.put("Cabin", cabin);
-			root.put("CabinPriorityPicture", cp1);
-			root.put("StartDate", startDate);
-			root.put("EndDate", endDate);
-			root.put("Subtotal", subtotal);
-			root.put("TotalPrice", totalPrice);
-			root.put("ServiceFee", serviceFee);
-		
-	} // end of rentCabin
-	
 	public static void pastStays(SimpleHash root, User user) throws CCException
 	{
 		
@@ -316,13 +286,26 @@ public class LogicLayerImpl {
 		
 			List<Group> groups = new LinkedList<Group>();
 			
-		// Restore cabins from rent records from database and store both into group object
+		// Restore cabins, cabin pictures, and rent records from database and store into group object
 			
 			for(int i = 0; i < rr.size(); i++)
 			{
 				Group group = new Group();
 				group.setRentRecord(rr.get(i));
-				group.setCabin(RentRecordManager.restoreCabinFromRentRecord(rr.get(i)));
+				
+				Cabin cabin = RentRecordManager.restoreCabinFromRentRecord(rr.get(i));
+				group.setCabin(cabin);
+				
+				List<CabinPicture> cp = CabinManager.restoreCabinPicturesFromCabin(cabin);
+				group.setCabinPictureList(cp);
+				
+				// Retrieve cabin's priority picture
+				
+					for(int j = 0; j < cp.size(); j++)
+					{
+						if(cp.get(j).getPriority() == 1) group.setCabinPicture(cp.get(j));
+					}
+				
 				groups.add(group);
 			}
 			

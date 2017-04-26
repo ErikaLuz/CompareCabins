@@ -37,20 +37,20 @@
     <hr>
     <br />
 
-	<#list userCabins as cabin>
+	<#list Groups as group>
 	
 		<div class = "container">
 		
 			<img src="placeholder_600x400.svg" alt="thumbnail" style="width:410px;height:200px;display:block;margin:auto;float:left;vertical-align:middle">
 		
-			<h2>${cabin.title}</h2>
+			<h2>${group.getCabin().title}</h2>
 			<hr>
 			
 			<p>
-				Description: ${cabin.description}<br />
-				Address: ${cabin.address}<br />
-				City: ${cabin.city}<br />
-				State: ${cabin.state}<br />
+				Description: ${group.getCabin().description}<br />
+				Address: ${group.getCabin().address}<br />
+				City: ${group.getCabin().city}<br />
+				State: ${group.getCabin().state}<br />
 			</p>
 			
 			<form action="UserCabinListing" method="post">
