@@ -58,18 +58,37 @@
  	<h2> Tell us about your cabin</h2>
  	Description: ${Cabin.description}<br />
  	<br />
- 	Features: ${Features.featureString}<br />
+ 	
+ 	<#if FeaturesCheck == "notNull">
+ 	
+ 		Features: ${Features.featureString}<br />
+ 	
+ 	<#else>
+ 	
+ 		No features added<br/>
+ 	
+ 	</#if>
+ 	
+ 	
     
-    <h2>Your cabin's amenities</h2>
-    Has Lake: ${Amenities.hasLake?c}<br />
-    Has River: ${Amenities.hasRiver?c}<br />
-    Has Pool: ${Amenities.hasPool?c}<br />
-    Has Hot Tub: ${Amenities.hasHotTub?c}<br />
-    Has Wifi: ${Amenities.hasWifi?c}<br />
-    Has Air Conditioning: ${Amenities.hasAirConditioning?c}<br />
-    Has Washer & Dryer: ${Amenities.hasWasherDryer?c}<br />
-    Allows Pets: ${Amenities.allowsPets?c}<br />
-    Allows Smoking: ${Amenities.allowsSmoking?c}<br />
+    <#if AmenitiesCheck == "notNull">
+    
+	    <h2>Your cabin's amenities</h2>
+	    Has Lake: ${Amenities.hasLake?c}<br />
+	    Has River: ${Amenities.hasRiver?c}<br />
+	    Has Pool: ${Amenities.hasPool?c}<br />
+	    Has Hot Tub: ${Amenities.hasHotTub?c}<br />
+	    Has Wifi: ${Amenities.hasWifi?c}<br />
+	    Has Air Conditioning: ${Amenities.hasAirConditioning?c}<br />
+	    Has Washer & Dryer: ${Amenities.hasWasherDryer?c}<br />
+	    Allows Pets: ${Amenities.allowsPets?c}<br />
+	    Allows Smoking: ${Amenities.allowsSmoking?c}<br />
+	    
+	<#else>
+	
+		No amenities added<br/>
+    
+    </#if>
     
     <h2>Cabin availability: blank for now</h2>
     
