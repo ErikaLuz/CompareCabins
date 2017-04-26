@@ -31,5 +31,5 @@ window.onload = function () {
 }
 
 function cabinDivClick ( ) {
-	location.href = "SearchCabinListing?" + jQuery.param( { cabinId: jQuery(this).data("cabinId") } );
+	location.href = "GuestCabinListing?" + jQuery.param( { cabinId: jQuery(this).data("cabinId") } );
 }
