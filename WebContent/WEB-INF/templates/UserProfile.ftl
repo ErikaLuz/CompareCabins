@@ -48,61 +48,101 @@
 		 <div class="container">
         	<div class="panel panel-default">
         		<div class="panel-heading">
-			    		<h3 class="panel-title text-center">${User.username}</h3>
+			    		<h1 class="panel-title text-center">${User.username}'s Profile</h1>
 			 			</div>
 
 
              <div class="panel-body">
-		     <h3 class="text-center">Name: ${User.firstName} ${User.lastName}</h2><br />
-		 	 <h3 class="text-center">Email: ${User.email}<h2><br />
-		 	 <form action="ViewEditUserProfile" method="post">
+		     <h3 class="text-center">Name: ${User.firstName} ${User.lastName}</h3><br />
+		 	 <h3 class="text-center">Email: ${User.email}<h3><br />
+		 	 <form action="ViewEditUserProfile" method="post" class="text-center">
              <button name="editUser" class="btn text-center">Edit Profile Information</button>
 	 	     </form>
+             
+             <#if ReviewsCheck != "null">
              <hr>
-	 	 <h2 class="text-center">${User.username}'s Cabins Reviews: </h2>
+	 	 <h2 class="text-center">${User.username}'s Cabins Reviews </h2>
 	 
 	 	 <#list Reviews as r>
-	 	
-		   	 <div class = "container">
 		 	
-			 	 <h3>${(r.title)!"DefaultTitle"}</h3><br />
-			 	 ${r.numStars} Stars<br />
-			 	 Review: ${r.description}<br />
+			 	 <h3>${(r.title)!"DefaultTitle"} : ${r.numStars} Stars</h3><br />
+			     ${r.description}
 			 	 <hr>
-		 		 
-		 	 </div>
-		 	 </div>
 		 	 <br / >
 	 	
 	 	 </#list>
-	 	 
+	 	 </div>
          </div>
-	
+		</#if>
 	<#elseif viewOrEdit == "edit">
-	<div class="container">
-		 <center><h1>Edit ${User.username} Profile</h1></center><br/>
-		  
-		 <form action="ViewEditUserProfile" method="post">
-		 
-		 	Username: <input type="text" name="newUsername" placeholder="${User.username}" /> <br/><br/>
-		 	Password: <input type="text" name="newPassword" placeholder="${User.password}" /> <br/><br/>
-		 	First Name: <input type="text" name="newFN" placeholder="${User.firstName}" /> <br/><br/>
-			Last Name: <input type="text" name="newLN" placeholder="${User.lastName}" /> <br/><br/>
-			Email: <input type="text" name="newEmail" placeholder="${User.email}" /> <br/><br/><br/>
-		 
-	 	 	<center><button name="updateUser" class="btn">Submit</button></center>
-	 	 		 	 		 
-	 	 </form>
+    
+    
+    <div class="container">
+        <div class="row centered-form">
+        <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+        	<div class="panel panel-default">
+        		<div class="panel-heading">
+			    		<h3 class="panel-title text-center">Edit ${User.username}'s Profile</h3>
+			 			</div>
+			 			<div class="panel-body">
+			    		<form action="ViewEditUserProfile" method="post">
+			    			<div class="row">
+			    				<div class="col-xs-6 col-sm-6 col-md-6">
+			    					<div class="form-group">
+			                             <input type="text" name="newFN" id="newFN" class="form-control input-sm" placeholder="${User.firstName}">
+			    					</div>
+			    				</div>
+			    				<div class="col-xs-6 col-sm-6 col-md-6">
+			    					<div class="form-group">
+			    						<input type="text" name="newLN" id="newLN" class="form-control input-sm" placeholder="${User.lastName}">
+			    					</div>
+			    				</div>
+			    			</div>
+
+			    			<div class="form-group">
+			    				<input type="text" name="newEmail" id="newEmail" class="form-control input-sm" placeholder="${User.email}">
+			    			</div>
+
+			    			<div class="row">
+			    				<div class="col-xs-6 col-sm-6 col-md-6">
+			    					<div class="form-group">
+			    						<input type="text" name="newUsername" id="newUsername" class="form-control input-sm" placeholder="${User.username}">
+			    					</div>
+			    				</div>
+			    				<div class="col-xs-6 col-sm-6 col-md-6">
+			    					<div class="form-group">
+			    						<input type="password" name="newPassword" id="newPassword" class="form-control input-sm" placeholder="${User.password}">
+			    					</div>
+			    				</div>
+			    			</div>
+			    			
+			    			<input type="submit" name="updateUser" value="Submit" class="btn btn-info btn-block">
+			    		
+			    		</form>
+			    	</div>
+	    		</div>
+    		</div>
+    	</div>
+    </div>
 	 	 
 	<#elseif viewOrEdit == "updateConfirmation">
-	
-		<h1>Your profile has been edited: </h1><br/>
+	<div class="container">
+    <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+        	<div class="panel panel-default">
+        		<div class="panel-heading">
+			    		<h1 class="panel-title text-center">Your profile has been edited</h1>
+			 			</div>
+
+
+             <div class="panel-body">
 		
-		Username: ${User.username} <br/>
-		Password: ${User.password} <br/>
-		First Name: ${User.firstName} <br/>
-		Last Name: ${User.lastName} <br/>
-		Email: ${User.email} <br/>	 
+		<h4 class="text-center">Username: ${User.username}<h4><br />
+		<h4 class="text-center">Password: ${User.password}<h4><br />
+		<h4 class="text-center">First Name: ${User.firstName}<h4><br />
+		<h4 class="text-center">Last Name: ${User.lastName}<h4><br />
+		<h4 class="text-center">Email: ${User.email}<h4><br />	 
+        </div>
+        </div>
         </div>
 	</#if>
  	 

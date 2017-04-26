@@ -212,9 +212,14 @@ public class LogicLayerImpl {
 			}
 		
 		// Place user and review objects in SimpleHash
-		
 			root.put("User", user);
-			root.put("Reviews", reviews);
+			if(reviews.size() > 0)
+			{
+				root.put("Reviews", reviews);
+				root.put("ReviewsCheck", "notNull");
+			}
+			else root.put("ReviewsCheck", "null");
+			
 			
 	} // end of viewUserProfile
 	
