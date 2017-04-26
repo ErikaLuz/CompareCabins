@@ -1,4 +1,4 @@
-
+var cabinDataJson;
 window.onload = function () {
 	jQuery.getJSON( "LoadCabinsJSON" , function( data ) {
 		 for( var i = 0; i < data.cabins.length; i++){
@@ -8,8 +8,8 @@ window.onload = function () {
 			 var pElement = jQuery("<p/>");
 			 
 			 imgElement.attr( "src", data.cabins[i].primaryPhotoPath );
-			 imgElement.attr( "width", "120" );
-			 imgElement.attr( "height", "120" );
+			 imgElement.attr( "width", "250" );
+			 imgElement.attr( "height", "250" );
 			 imgElement.addClass("thumbnail");
 			 
 			 h3Element.text( data.cabins[i].title );
@@ -18,14 +18,18 @@ window.onload = function () {
 			 cabinDiv.append(imgElement);
 			 cabinDiv.append(h3Element);
 			 cabinDiv.append(pElement);
+			 cabinDiv.data("cabinId", data.cabins[i].cabinId);
 			 
-			 cabinDiv.click( function () {
-				 location.href = "SearchCabinListing?" + jQuery.param( { cabinId: data.cabins[i].id } );
-			 } );
+			 cabinDiv.click( cabinDivClick );
 			 
 			 jQuery("#results").append(cabinDiv);
 		 }
+		 cabinDataJson = data;
 		 
 		
 	});
+}
+
+function cabinDivClick ( ) {
+	location.href = "GuestCabinListing?" + jQuery.param( { cabinId: jQuery(this).data("cabinId") } );
 }
