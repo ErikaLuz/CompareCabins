@@ -72,8 +72,10 @@ public class CabinListing extends HttpServlet
 				SimpleHash root = new SimpleHash(db.build());
 				// Session Tracking
 				HttpSession session = request.getSession();
+				if(session.getAttribute("user") != null) {
 				User user = (User) session.getAttribute( "user");
 		        root.put("username", user.getUsername());
+				}
 /*				// For testing purposes - delete later
 				
 					User user = new User("Cabin", "Listing", "firstName", "lastName", "email");

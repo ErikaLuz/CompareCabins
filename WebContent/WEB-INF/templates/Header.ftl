@@ -11,9 +11,16 @@
     </ul>
     <#if username?has_content>
         <ul class="nav navbar-nav navbar-right">
+        <li>
         <form action="ViewEditUserProfile" method="post">
-                <button name="viewUser" class="btn center-block">Hello ${username}</button>
-            </form>
+                <button name="viewUser" class="btn">Hello ${username}</button>
+        </form>
+        </li>
+        <li>
+        <form action="Logout" method="post">
+                <button name="Logout" class="btn">Logout</button>
+        </form>
+        </li>
     </ul>
     <#else>
     <ul class="nav navbar-nav navbar-right">
