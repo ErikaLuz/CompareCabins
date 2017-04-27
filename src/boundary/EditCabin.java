@@ -19,7 +19,7 @@ import logic.LogicLayerImpl;
 import object.Cabin;
 
 /**
- * Servlet implementation class Servlet
+ * Servlet implementation class EditCabin
  */
 @WebServlet("/EditCabin")
 public class EditCabin extends HttpServlet 
@@ -52,14 +52,16 @@ public class EditCabin extends HttpServlet
 					try {
 						prepareEdit(request, response);
 					} catch (CCException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}
-				if(submitEdit != null)
-				{
-					
-				}
-					
+				if(submitEdit != null)	
+					try {
+						submitEdit(request, response);
+					} catch (CCException e) {
+						
+						e.printStackTrace();
+					}	
 				
 			} // end of doGet
 			
@@ -90,7 +92,11 @@ public class EditCabin extends HttpServlet
 			
 			private void submitEdit(HttpServletRequest request, HttpServletResponse response) throws CCException
 			{
+				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
+				SimpleHash root = new SimpleHash(db.build());
 				
+				String templateName = "EditCabin.ftl";
+				processor.processTemplate(templateName, root, request, response);
 			}
 	
 		

@@ -286,15 +286,17 @@ public class LogicLayerImpl {
 			if(cabins.size() != 1) System.out.println("ERROR: wrong cabin(s) found");
 			else cabin = cabins.get(0);
 			
-//			group.setC
+			group.setCabin(cabin);
 			
 		// Retrieve cabin amenities from database + add to group
 			
-//			Amenities amenity = CabinManager.restoreAmenitiesFromCabin(cabin);
+			Amenities amenity = CabinManager.restoreAmenitiesFromCabin(cabin);
+			group.setAmenities(amenity);
 			
 		// Retrieve cabin pictures from database + add to group
 			
 			List<CabinPicture> cp = CabinManager.restoreCabinPicturesFromCabin(cabin);
+			group.setCabinPictureList(cp);
 			
 		// Retrieve cabin priority picture + add to group
 			
@@ -302,8 +304,17 @@ public class LogicLayerImpl {
 			
 			for(int i = 0; i < cp.size(); i++)
 			{
-//				if(cp.get(i).getPriority() == 1) 
+				if(cp.get(i).getPriority() == 1) priorityPicture = cp.get(i);
 			}
+			
+			group.setCabinPicture(priorityPicture);
+			
+		// Retrieve cabin features from database + add to group
+			
+			List<Feature> feature = CabinManager.restoreFeaturesFromCabin(cabin);
+			group.setFeatureList(feature);
+			
+		// Retrieve cabin availabilities + add to group
 			
 	} // end of prepareEditCabin
 	
