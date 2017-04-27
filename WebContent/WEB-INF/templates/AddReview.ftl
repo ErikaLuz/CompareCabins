@@ -37,20 +37,19 @@
 			<br />
 			
 			
-			<h1>Info about your stay:</h1>
+			<h2>Info about your stay:</h2>
 			
 			Total Price: ${RentRecord.totalPrice}<br/>
-			Start Date: ${RentRecord.startDate} <br/>
-			End Date: ${RentRecord.endDate}<br/>
+			Start Date: ${StartDate} <br/>
+			End Date: ${EndDate}<br/><br />
 			
 			<hr>
 			
-			<form action="PastStaysReview" method="post">
-			[Numstars - do we want to do actual stars?]
+			<form action="PastStaysReview?rentRecordId=${RentRecord.id}" method="post">
 		
 			Number of Stars: <input type="text" name="numStars" placeholder="enter number of stars" /><br />
-			Title: <input type="text" name="title" placeholder="enter a title for your review" />
-			Review: <input type="text" name="review" placeholder="enter your review" />
+			Title: <input type="text" name="title" placeholder="enter a title for your review" /><br />
+			Review: <input type="text" name="review" placeholder="enter your review" /><br /><br />
 			
 			<button name="submitReview" class="btn">SUBMIT</button>
 			</form>

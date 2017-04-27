@@ -94,9 +94,10 @@ public class PastStaysReview extends HttpServlet
 				SimpleHash root = new SimpleHash(db.build());
 				
 				// Session Tracking
-				HttpSession session = request.getSession();
-				User user = (User) session.getAttribute( "user");
-		        root.put("username", user.getUsername());
+				
+					HttpSession session = request.getSession();
+					User user = (User) session.getAttribute( "user");
+			        root.put("username", user.getUsername());
 					
 				// Call logic layer
 					
@@ -107,52 +108,6 @@ public class PastStaysReview extends HttpServlet
 					String templateName = "PastStays.ftl";
 					processor.processTemplate(templateName, root, request, response);
 				
-					
-					
-/*				// DUMMY CODE - delete later 
-				
-					// Create User 
-				
-						User user = new User("testUser", "testPass", "First", "Last", "Email");
-						UserManager.store(user);
-						
-					// Create Cabin
-						
-						Cabin cabin = new Cabin("Address", "City", "State", "Description", "Title", 3 ,4, 6);
-						Cabin cabin2 = new Cabin("Lumpkin", "Athens", "Georgia", "a nice cabin", "Nice Stay", 5, 7, 9);
-						
-						CabinManager.store(cabin);
-						CabinManager.store(cabin2);
-						
-					// Create Rent Records
-						
-						float z = 2;
-						Calendar date = Calendar.getInstance();
-						
-						RentRecord rr1 = new RentRecord(z, date, date);
-						rr1.setUser(user);
-						rr1.setCabin(cabin);
-						RentRecord rr2 = new RentRecord(z, date, date);
-						rr2.setUser(user);
-						rr2.setCabin(cabin);
-						RentRecord rr3 = new RentRecord(z, date, date);
-						rr3.setUser(user);
-						rr3.setCabin(cabin2);
-						
-						RentRecordManager.store(rr1);
-						RentRecordManager.store(rr2);
-						RentRecordManager.store(rr3);
-*/						
-					
-/*						
-					// Delete dummy code objects
-						
-						RentRecordManager.delete(rr1);
-						RentRecordManager.delete(rr2);
-						RentRecordManager.delete(rr3);
-						CabinManager.delete(cabin);
-						CabinManager.delete(cabin2);
-						UserManager.delete(user); */
 			}
 	
 			private void goToReview(HttpServletRequest request, HttpServletResponse response) throws CCException
@@ -161,11 +116,12 @@ public class PastStaysReview extends HttpServlet
 				SimpleHash root = new SimpleHash(db.build());
 				
 				// Session Tracking
-				HttpSession session = request.getSession();
-				User user = (User) session.getAttribute( "user");
-		        root.put("username", user.getUsername());
 				
-				// Somehow get the rent record id
+					HttpSession session = request.getSession();
+					User user = (User) session.getAttribute( "user");
+			        root.put("username", user.getUsername());
+				
+				// Retrieve the rent record id
 				
 					RentRecord rr = new RentRecord();
 					String rentRecordIdString = request.getParameter("rentRecordId");
@@ -179,51 +135,6 @@ public class PastStaysReview extends HttpServlet
 				
 					String templateName = "AddReview.ftl";
 					processor.processTemplate(templateName, root, request, response);
-				
-				
-/*				// DUMMY CODE - delete later 
-				
-					// Create User 
-				
-						User user = new User("testUser", "testPass", "First", "Last", "Email");
-						UserManager.store(user);
-						
-					// Create Cabin
-						
-						Cabin cabin = new Cabin("Address", "City", "State", "Description", "Title", 3 ,4, 6);
-						Cabin cabin2 = new Cabin("Lumpkin", "Athens", "Georgia", "a nice cabin", "Nice Stay", 5, 7, 9);
-						
-						CabinManager.store(cabin);
-						CabinManager.store(cabin2);
-						
-					// Create Rent Records
-						
-						float z = 2;
-						Calendar date = Calendar.getInstance();
-						
-						RentRecord rr1 = new RentRecord(z, date, date);
-						rr1.setUser(user);
-						rr1.setCabin(cabin);
-						RentRecord rr2 = new RentRecord(z, date, date);
-						rr2.setUser(user);
-						rr2.setCabin(cabin);
-						RentRecord rr3 = new RentRecord(z, date, date);
-						rr3.setUser(user);
-						rr3.setCabin(cabin);
-						
-						RentRecordManager.store(rr1);
-						RentRecordManager.store(rr2);
-						RentRecordManager.store(rr3);
-*/				
-				
-/*				// Delete dummy code objects
-				
-					RentRecordManager.delete(rr1);
-					RentRecordManager.delete(rr2);
-					RentRecordManager.delete(rr3);
-					CabinManager.delete(cabin);
-					CabinManager.delete(cabin2);
-					UserManager.delete(user); */
 					
 			} // end of goToReview
 			
@@ -233,9 +144,10 @@ public class PastStaysReview extends HttpServlet
 				SimpleHash root = new SimpleHash(db.build());
 				
 				// Session Tracking
-				HttpSession session = request.getSession();
-				User user = (User) session.getAttribute( "user");
-		        root.put("username", user.getUsername());
+				
+					HttpSession session = request.getSession();
+					User user = (User) session.getAttribute( "user");
+			        root.put("username", user.getUsername());
 				
 				// Get Review values
 				
@@ -255,7 +167,7 @@ public class PastStaysReview extends HttpServlet
 				
 				// Get rent record id
 				
-					String rrId = request.getParameter("RentRecord.id");		
+					String rrId = request.getParameter("rentRecordId");		
 					RentRecord rr = new RentRecord();
 					rr.setId(Integer.parseInt(rrId));
 				
@@ -267,51 +179,7 @@ public class PastStaysReview extends HttpServlet
 				
 					String templateName = "AddReviewSuccess.ftl";
 					processor.processTemplate(templateName, root, request, response);
-				
-/*				// DUMMY CODE - delete later 
-				
-				// Create User 
-			
-					User user = new User("testUser", "testPass", "First", "Last", "Email");
-					UserManager.store(user);
-					
-				// Create Cabin
-					
-					Cabin cabin = new Cabin("Address", "City", "State", "Description", "Title", 3 ,4, 6);
-					Cabin cabin2 = new Cabin("Lumpkin", "Athens", "Georgia", "a nice cabin", "Nice Stay", 5, 7, 9);
-					
-					CabinManager.store(cabin);
-					CabinManager.store(cabin2);
-					
-				// Create Rent Records
-					
-					float z = 2;
-					Calendar date = Calendar.getInstance();
-					
-					RentRecord rr1 = new RentRecord(z, date, date);
-					rr1.setUser(user);
-					rr1.setCabin(cabin);
-					RentRecord rr2 = new RentRecord(z, date, date);
-					rr2.setUser(user);
-					rr2.setCabin(cabin);
-					RentRecord rr3 = new RentRecord(z, date, date);
-					rr3.setUser(user);
-					rr3.setCabin(cabin);
-					
-					RentRecordManager.store(rr1);
-					RentRecordManager.store(rr2);
-					RentRecordManager.store(rr3);
-*/
-				
-/*				// Delete dummy code objects
-				
-				RentRecordManager.delete(rr1);
-				RentRecordManager.delete(rr2);
-				RentRecordManager.delete(rr3);
-				CabinManager.delete(cabin);
-				CabinManager.delete(cabin2);
-				UserManager.delete(user);
-*/							
+									
 			}
 		
 		//@see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

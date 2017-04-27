@@ -157,7 +157,7 @@ public class EditCabin extends HttpServlet
 					root.put("CP", cp);	
 					
 					root.put("add", "picture");
-					String templateName = "AddFeatureSuccess.ftl";
+					String templateName = "EditCabinConfirmation.ftl";
 					processor.processTemplate(templateName, root, request, response);
 					
 				// Delete Picture
@@ -215,7 +215,7 @@ public class EditCabin extends HttpServlet
 				
 				root.put("Availability", availability);
 				root.put("add", "availability");
-				String templateName = "AddFeatureSuccess.ftl";
+				String templateName = "EditCabinConfirmation.ftl";
 				processor.processTemplate(templateName, root, request, response);
 			}
 
@@ -411,7 +411,7 @@ public class EditCabin extends HttpServlet
 					
 					root.put("Feature", feature);
 					root.put("add", "add");
-					String templateName = "AddFeatureSuccess.ftl";
+					String templateName = "EditCabinConfirmation.ftl";
 					processor.processTemplate(templateName, root, request, response);
 				
 			}
@@ -446,7 +446,7 @@ public class EditCabin extends HttpServlet
 					FeatureManager.delete(feature);
 
 					root.put("add", "delete");
-					String templateName = "AddFeatureSuccess.ftl";
+					String templateName = "EditCabinConfirmation.ftl";
 					processor.processTemplate(templateName, root, request, response);
 			}
 			
@@ -471,7 +471,7 @@ public class EditCabin extends HttpServlet
 				root.put("Feature", feature);
 				
 				root.put("add", "edit");
-				String templateName = "AddFeatureSuccess.ftl";
+				String templateName = "EditCabinConfirmation.ftl";
 				processor.processTemplate(templateName, root, request, response);
 			}
 	
@@ -501,7 +501,7 @@ public class EditCabin extends HttpServlet
 				root.put("Feature", feature);
 				
 				root.put("add", "submitEditFeature");
-				String templateName = "AddFeatureSuccess.ftl";
+				String templateName = "EditCabinConfirmation.ftl";
 				processor.processTemplate(templateName, root, request, response);
 			}
 		
