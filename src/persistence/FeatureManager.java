@@ -66,9 +66,11 @@ public class FeatureManager {
 			     	 }
 				}
 		     }else { 
+		    	 DbAccessImpl.disconnect(con);
 		    	 throw new CCException("FeatureManager.store: failed to save a feature");
 			 }			
 		}catch(SQLException e){
+			DbAccessImpl.disconnect(con);
 			throw new CCException("FeatureManager.store: failed to save a feature: " + e );
 		}
 		
@@ -127,13 +129,16 @@ public class FeatureManager {
 					features.add( feature );
 				}
 				
+				DbAccessImpl.disconnect(con);
 				return features;
 				
 			} else {
+				DbAccessImpl.disconnect(con);
 				return null;
 			}
 		}
-		catch( SQLException e ) {      
+		catch( SQLException e ) {   
+			DbAccessImpl.disconnect(con);
 			throw new CCException("FeatureManager.restore: Could not restore persistent Feature objects: " + e );
 		}		
 	}//end of restore
@@ -173,11 +178,14 @@ public class FeatureManager {
 				cabin.setUser( null );
 				cabin.setAmenities( null );
 				
+				DbAccessImpl.disconnect(con);
 				return cabin;
 			} else { // no matches found for the query
+				DbAccessImpl.disconnect(con);
 				return null;
 			}
 		} catch( SQLException e ) {
+			DbAccessImpl.disconnect(con);
 			throw new CCException("FeatureManager.restoreCabinFromFeature: could not restore persistent Cabin object: " + e );
 		}
 	} //end of restoreCabinFromFeature

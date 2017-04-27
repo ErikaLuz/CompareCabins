@@ -10,6 +10,7 @@ import object.Availability;
 import object.Cabin;
 import persistence.AmenitiesManager;
 import persistence.AvailabilityManager;
+import persistence.CabinManager;
 
 public class LogicLayerImplShep {
 	
@@ -20,16 +21,21 @@ public class LogicLayerImplShep {
 			Cabin cabin = AmenitiesManager.restoreCabinFromAmenities(listAmenities.get(i));	
 			cabins.add(cabin);
 		}
+		if( listAmenities.size() == 0 ) {
+			cabins = CabinManager.restore(null);
+		}
 		List<List<Availability>> LLAvailability = new LinkedList<List<Availability>>();
-		while(startAvailability.getDate().compareTo(endAvailability.getDate()) <= 0) {
-			List<Availability> sLAvailability = AvailabilityManager.restore(startAvailability);
-			for(int i = 0; i < sLAvailability.size(); i++) {
-				Availability availability = sLAvailability.get( i );
-				Cabin cabin = AvailabilityManager.restoreCabinFromAvailability( availability );
-				availability.setCabin( cabin );				
+		if( startAvailability != null && endAvailability != null ) { // ignore availabilities is null
+			while(startAvailability.getDate().compareTo(endAvailability.getDate()) <= 0) {
+				List<Availability> sLAvailability = AvailabilityManager.restore(startAvailability);
+				for(int i = 0; i < sLAvailability.size(); i++) {
+					Availability availability = sLAvailability.get( i );
+					Cabin cabin = AvailabilityManager.restoreCabinFromAvailability( availability );
+					availability.setCabin( cabin );				
+				}
+				LLAvailability.add(sLAvailability);
+				startAvailability.getDate().add(Calendar.DAY_OF_MONTH, 1);
 			}
-			LLAvailability.add(sLAvailability);
-			startAvailability.getDate().add(Calendar.DAY_OF_MONTH, 1);
 		}
 		for(int c = 0; c < cabins.size(); c++){
 			//System.out.println(cabins.get(c).getId());
@@ -43,8 +49,10 @@ public class LogicLayerImplShep {
 					}
 				}
 			}
-			if(!available)
+			if(!available && startAvailability != null && endAvailability != null) {
 				cabins.remove(c);
+				c--;
+			}
 		}
 		System.out.println(cabins.size());
 		for(int c = 0; c < cabins.size(); c++)
@@ -52,4 +60,6 @@ public class LogicLayerImplShep {
 		
 		return cabins;
 	}
+	
+	
 }

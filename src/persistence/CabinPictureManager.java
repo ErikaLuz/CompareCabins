@@ -12,7 +12,7 @@ import object.CabinPicture;
 
 public class CabinPictureManager {
 
-	public static void store(CabinPicture cabinPicture)
+	public static void store(CabinPicture cabinPicture) throws CCException
 	{
 		int rowsModified;
 		String insertSQL = "INSERT INTO cabin_picture (file_path, priority, cabin_id) VALUES (?,?,?)";
@@ -67,12 +67,14 @@ public class CabinPictureManager {
 				   }
 		     	 }
 		     }else { 
-		    	 // throw new CompareCabinsException( "CabinPictureManager.store: failed to save a CabinPicture to the database" );
+		 		DbAccessImpl.disconnect(conn);
+		    	 throw new CCException( "CabinPictureManager.store: failed to save a CabinPicture to the database" );
 			 }
 			
 		}catch(SQLException e)
 		{
-			e.printStackTrace();
+			DbAccessImpl.disconnect(conn);
+			throw new CCException( "CabinPictureManager.store: failed to save a CabinPicture to the database" );
 		}
 		
 		DbAccessImpl.disconnect(conn);
@@ -113,11 +115,14 @@ public class CabinPictureManager {
 				cabin.setUser(null);
 				cabin.setAmenities(null);
 				
+				DbAccessImpl.disconnect(conn);
 				return cabin;
 			} else { // no matches found for the query
+				DbAccessImpl.disconnect(conn);
 				return null;
 			}
 		} catch( SQLException e ) {
+			DbAccessImpl.disconnect(conn);
 			throw new CCException("AvailabilityManager.restoreCabinFromAvailabilty: could not restore persistent Cabin object: " + e );
 		}
 		
@@ -127,24 +132,29 @@ public class CabinPictureManager {
 	{
 		String query = "DELETE FROM cabin_picture WHERE id = ?";
 		PreparedStatement ps;
-		Connection con = DbAccessImpl.connect();
+		Connection conn = DbAccessImpl.connect();
 		int rowsModified;
 		
 		if(cabinPicture.getId() < 0) //object no in database
 			return;
 		
 		try {
-			ps = con.prepareStatement(query);
+			ps = conn.prepareStatement(query);
 			ps.setInt(1,  cabinPicture.getId());
 			rowsModified = ps.executeUpdate();
 			
-			if(rowsModified != 1)
+			if(rowsModified != 1) {
+				DbAccessImpl.disconnect(conn);
+			
 				throw new CCException("CabinPictureManager.delete: failed to delete cabin picture");
+			}
 		}catch(SQLException e) {
+			DbAccessImpl.disconnect(conn);
+		
 			throw new CCException("CabinPictureManager.delte: failed to delete cabin picture: " + e);
 		}
 		
-		DbAccessImpl.disconnect(con);
+		DbAccessImpl.disconnect(conn);
 		
 	} //end of delete
 }

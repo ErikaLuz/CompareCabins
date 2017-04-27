@@ -118,11 +118,14 @@ public class CabinManager {
 				}
 	        }
 	        else { 
+	    		DbAccessImpl.disconnect(conn);
 	            throw new CCException("CabinManager.store: failed to save a cabin");
 	        }
 	    } catch( SQLException e) {
+			DbAccessImpl.disconnect(conn);
 			throw new CCException("CabinManager.store: failed to save a cabin: " + e );
 		}
+		DbAccessImpl.disconnect(conn);
 	}
 	
 	public static List<Cabin> restore( Cabin modelCabin ) throws CCException
@@ -227,13 +230,16 @@ public class CabinManager {
 					cabins.add( cabin );
 				}
 				
+				DbAccessImpl.disconnect(conn);
 				return cabins;
 				
 			} else {
+				DbAccessImpl.disconnect(conn);
 				return null;
 			}
 		}
-		catch( SQLException e ) {      
+		catch( SQLException e ) { 
+			DbAccessImpl.disconnect(conn);
 			throw new CCException("CabinManager.restore: Could not restore persistent Cabin objects: " + e );
 		}		
 	}//end of restore
@@ -268,11 +274,14 @@ public class CabinManager {
 				user = new User( username, password, firstName, lastName, email );
 				user.setId(id);
 				
+				DbAccessImpl.disconnect(conn);
 				return user;
 			} else { // no matches found for the query
+				DbAccessImpl.disconnect(conn);
 				return null;
 			}
 		} catch( SQLException e ) {
+			DbAccessImpl.disconnect(conn);
 			throw new CCException("CabinManager.restoreUserFromCabin: could not restore persistent User object: " + e );
 		}
 		
@@ -313,11 +322,14 @@ public class CabinManager {
 				amenities = new Amenities( hasLake, hasRiver, hasPool, hasHotTub, hasWifi, hasAirConditioning, hasWasherDryer, allowsPets, allowsSmoking );
 				amenities.setId(id);
 				
+				DbAccessImpl.disconnect(conn);
 				return amenities;
 			} else { // no matches found for the query
+				DbAccessImpl.disconnect(conn);
 				return null;
 			}
 		} catch( SQLException e ) {
+			DbAccessImpl.disconnect(conn);
 			throw new CCException("CabinManager.restoreAmenitiesFromCabin: could not restore persistent Amenities object: " + e );
 		}		
 	}
@@ -352,9 +364,11 @@ public class CabinManager {
 				cabinPictures.add( cabinPicture );
 			}
 			
+			DbAccessImpl.disconnect(conn);
 			return cabinPictures;
 			
 		} catch( SQLException e ) {
+			DbAccessImpl.disconnect(conn);
 			throw new CCException("CabinManager.restoreCabinPicturesFromCabin: could not restore persistent CabinPicture objects: " + e );
 		}
 		
@@ -389,9 +403,11 @@ public class CabinManager {
 				features.add( feature );
 			}
 			
+			DbAccessImpl.disconnect(conn);
 			return features;
 			
 		} catch( SQLException e ) {
+			DbAccessImpl.disconnect(conn);
 			throw new CCException("CabinManager.restoreFeaturesFromCabin: could not restore persistent Feature objects: " + e );
 		}
 		
@@ -431,9 +447,11 @@ public class CabinManager {
 				availabilities.add( availability );
 			}
 			
+			DbAccessImpl.disconnect(conn);
 			return availabilities;
 			
 		} catch( SQLException e ) {
+			DbAccessImpl.disconnect(conn);
 			throw new CCException("CabinManager.restoreAvailabilitiesFromCabin: could not restore persistent Availabilities objects: " + e );
 		}
 		
@@ -476,9 +494,11 @@ public class CabinManager {
 				rentRecords.add( rentRecord );
 			}
 			
+			DbAccessImpl.disconnect(conn);
 			return rentRecords;
 			
 		} catch( SQLException e ) {
+			DbAccessImpl.disconnect(conn);
 			throw new CCException("CabinManager.restoreRentRecordsFromCabin: could not restore persistent RentRecord objects: " + e );
 		}
 		
@@ -508,10 +528,12 @@ public class CabinManager {
 				ps.setInt(1, availability.get(i).getId());
 				rowsModified = ps.executeUpdate();
 				
-				if(rowsModified != 1)
+				if(rowsModified != 1) {
+					DbAccessImpl.disconnect(con);
 					throw new CCException("CabinManager.delete: failed to delete cabin's availabilities");
-				
+				}
 			}catch(SQLException e){
+				DbAccessImpl.disconnect(con);
 				throw new CCException("CabinManager.delete: failed to delete cabin's availabilities" + e);
 			}
 		}
@@ -527,10 +549,13 @@ public class CabinManager {
 				ps.setInt(1, cabinPicture.get(i).getId());
 				rowsModified = ps.executeUpdate();
 				
-				if(rowsModified != 1)
-					throw new CCException("CabinManager.delete: failed to delete cabin's cabin pictures");
+				if(rowsModified != 1) {
+					DbAccessImpl.disconnect(con);
 				
+					throw new CCException("CabinManager.delete: failed to delete cabin's cabin pictures");
+				}
 			}catch(SQLException e){
+				DbAccessImpl.disconnect(con);
 				throw new CCException("CabinManager.delete: failed to delete cabin's cabin pictures" + e);
 			}
 		}
@@ -546,10 +571,14 @@ public class CabinManager {
 				ps.setInt(1, feature.get(i).getId());
 				rowsModified = ps.executeUpdate();
 				
-				if(rowsModified != 1)
-					throw new CCException("CabinManager.delete: failed to delete cabin's features");
+				if(rowsModified != 1) {
+					DbAccessImpl.disconnect(con);
 				
+					throw new CCException("CabinManager.delete: failed to delete cabin's features");
+				}
 			}catch(SQLException e){
+				DbAccessImpl.disconnect(con);
+			
 				throw new CCException("CabinManager.delete: failed to delete cabin's features" + e);
 			}
 		}
@@ -565,30 +594,40 @@ public class CabinManager {
 				ps.setInt(1, rentRecords.get(i).getId());
 				rowsModified = ps.executeUpdate();
 				
-				if(rowsModified != 1)
-					throw new CCException("CabinManager.delete: failed to delete cabin's rent records");
+				if(rowsModified != 1) {
+					DbAccessImpl.disconnect(con);
 				
+					throw new CCException("CabinManager.delete: failed to delete cabin's rent records");
+				}
 			}catch(SQLException e){
+				DbAccessImpl.disconnect(con);
+			
 				throw new CCException("CabinManager.delete: failed to delete cabin's rent records" + e);
 			}
 		}
         
         // Deleting cabin
              
-        if( cabin.getId() < 0 ) // object not in database
-            return;
+        if( cabin.getId() < 0 ) {
+    		DbAccessImpl.disconnect(con);// object not in database
         
+            return;
+        }
         try {
             ps = con.prepareStatement( deleteCabin );         
             ps.setInt( 1, cabin.getId() );
             rowsModified = ps.executeUpdate();          
             
-            if( rowsModified != 1 ) 
+            if( rowsModified != 1 ) {
+            	
+        		DbAccessImpl.disconnect(con);
                 throw new CCException("CabinManager.delete: failed to delete a cabin" );
+            }
         }
         catch( SQLException e ) {
+    		DbAccessImpl.disconnect(con);
             throw new CCException( "CabinManager.delete: failed to delete a cabin: " + e );   
         }
-        
+		DbAccessImpl.disconnect(con);
     }
 }

@@ -70,12 +70,15 @@ public class AmenitiesManager {
 		            }
 				}
 	        }
-	        else { 
+	        else {
+	    		DbAccessImpl.disconnect(conn);
 	            throw new CCException("AmenitiesManager.store: failed to save an amenities");
 	        }
 	    } catch( SQLException e) {
+			DbAccessImpl.disconnect(conn);
 			throw new CCException("AmenitiesManager.store: failed to save an amenities: " + e );
 		}
+		DbAccessImpl.disconnect(conn);
 	}
 	
 	public static List<Amenities> restore( Amenities modelAmenities ) throws CCException
@@ -185,14 +188,16 @@ public class AmenitiesManager {
 					
 					amenitiesList.add( amenities );
 				}
-				
+				DbAccessImpl.disconnect(conn);
 				return amenitiesList;
 				
 			} else {
+				DbAccessImpl.disconnect(conn);
 				return null;
 			}
 		}
-		catch( SQLException e ) {      
+		catch( SQLException e ) {
+			DbAccessImpl.disconnect(conn);
 			throw new CCException("AmenitiesManager.restore: Could not restore persistent Amenities objects: " + e );
 		}		
 	}
@@ -231,11 +236,14 @@ public class AmenitiesManager {
 				cabin.setUser( null );
 				cabin.setAmenities( null );
 				
+				DbAccessImpl.disconnect(conn);
 				return cabin;
 			} else { // no matches found for the query
+				DbAccessImpl.disconnect(conn);
 				return null;
 			}
 		} catch( SQLException e ) {
+			DbAccessImpl.disconnect(conn);
 			throw new CCException("AmenitiesManager.restoreCabinFromAmenities: could not restore persistent cabin object: " + e );
 		}
 	}

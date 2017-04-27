@@ -75,10 +75,12 @@ public class UserManager
 			     	 }
 				}
 		     }else { 
+		    	 DbAccessImpl.disconnect(con);
 		    	 throw new CCException("UserManager.store: failed to save a user");
 			 }
 		}
 		catch (SQLException e) {
+			DbAccessImpl.disconnect(con);
 			throw new CCException("UserManager.store: failed to save a cabin: " + e );
 		}
 		
@@ -167,13 +169,16 @@ public class UserManager
 					users.add( user );
 				}
 				
+				DbAccessImpl.disconnect(con);
 				return users;
 				
 			} else {
+				DbAccessImpl.disconnect(con);
 				return null;
 			}
 		}
-		catch( SQLException e ) {      
+		catch( SQLException e ) {  
+			DbAccessImpl.disconnect(con);
 			throw new CCException("UserManager.restore: Could not restore persistent User objects: " + e );
 		}		
 
@@ -216,9 +221,11 @@ public class UserManager
 				cabins.add( cabin );
 			}
 			
+			DbAccessImpl.disconnect(conn);
 			return cabins;
 			
 		} catch( SQLException e ) {
+			DbAccessImpl.disconnect(conn);
 			throw new CCException("UserManager.restoreCabinsFromUser: could not restore persistent Cabin objects: " + e );
 		}
 		
@@ -262,9 +269,11 @@ public class UserManager
 				rentRecords.add( rentRecord );
 			}
 			
+			DbAccessImpl.disconnect(conn);
 			return rentRecords;
 			
 		} catch( SQLException e ) {
+			DbAccessImpl.disconnect(conn);
 			throw new CCException("UserManager.restoreRentRecordsFromUser: could not restore persistent RentRecord objects: " + e );
 		}
 		
@@ -291,10 +300,14 @@ public class UserManager
 				ps.setInt(1, cabins.get(i).getId());
 				rowsModified = ps.executeUpdate();
 				
-				if(rowsModified != 1)
+				if(rowsModified != 1) {
+					DbAccessImpl.disconnect(con);
+				
 					throw new CCException("UserManager.delete: failed to delete user's cabins");
+				}
 				
 			}catch(SQLException e){
+				DbAccessImpl.disconnect(con);
 				throw new CCException("UserManager.delete: failed to delete user's cabins" + e);
 			}
 		}
@@ -310,27 +323,36 @@ public class UserManager
 				ps.setInt(1, rentRecords.get(i).getId());
 				rowsModified = ps.executeUpdate();
 				
-				if(rowsModified != 1)
-					throw new CCException("UserManager.delete: failed to delete user's rent records");
+				if(rowsModified != 1) {
+					DbAccessImpl.disconnect(con);
 				
+					throw new CCException("UserManager.delete: failed to delete user's rent records");
+				}
 			}catch(SQLException e){
+				DbAccessImpl.disconnect(con);
 				throw new CCException("UserManager.delete: failed to delete user's rent records" + e);
 			}
 		}
 		
 		//Deleting user
 		
-		if(user.getId() < 0) //object not in database
-			return;
+		if(user.getId() < 0) {
+			DbAccessImpl.disconnect(con);//object not in database
 		
+			return;
+		}
 		try {
 			ps = con.prepareStatement(deleteUser);
 			ps.setInt(1,  user.getId());
 			rowsModified = ps.executeUpdate();
 			
-			if(rowsModified != 1)
+			if(rowsModified != 1) {
+				DbAccessImpl.disconnect(con);
+			
 				throw new CCException("UserManager.delete: failed to delete user");
+			}
 		}catch(SQLException e) {
+			DbAccessImpl.disconnect(con);
 			throw new CCException("UserManager.delete: failed to delete user: " + e);
 		}
 		

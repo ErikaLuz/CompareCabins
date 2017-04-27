@@ -81,11 +81,14 @@ public class RentRecordManager {
 				}
 		     }
 			 else { 
+				 DbAccessImpl.disconnect(con);
 				 throw new CCException("RentRecordManager.store: failed to save a Rent Record");
 			 }
 		}catch(SQLException e){
+			DbAccessImpl.disconnect(con);
 			throw new CCException("RentRecordManager.store: failed to save a cabin: " + e );	
 		}
+		DbAccessImpl.disconnect(con);
 	} //end of store
 
 	public static List<RentRecord> restore( RentRecord modelRentRecord ) throws CCException
@@ -168,13 +171,16 @@ public class RentRecordManager {
 					rentRecords.add( rentRecord );
 				}
 				
+				DbAccessImpl.disconnect(con);
 				return rentRecords;
 				
 			} else {
+				DbAccessImpl.disconnect(con);
 				return null;
 			}
 		}
-		catch( SQLException e ) {      
+		catch( SQLException e ) {   
+			DbAccessImpl.disconnect(con);
 			throw new CCException("RentRecordManager.restore: Could not restore persistent RentRecord objects: " + e );
 		}		
 	}//end of restore
@@ -214,11 +220,14 @@ public class RentRecordManager {
 				cabin.setUser( null );
 				cabin.setAmenities( null );
 				
+				DbAccessImpl.disconnect(con);
 				return cabin;
 			} else { // no matches found for the query
+				DbAccessImpl.disconnect(con);
 				return null;
 			}
 		} catch( SQLException e ) {
+			DbAccessImpl.disconnect(con);
 			throw new CCException("RentRecordManager.restoreCabinFromRentRecord: could not restore persistent Cabin object: " + e );
 		}
 	} //end of restoreCabinFromRentRecord
@@ -253,11 +262,14 @@ public class RentRecordManager {
 				user = new User( username, password, firstName, lastName, email );
 				user.setId(id);
 				
+				DbAccessImpl.disconnect(con);
 				return user;
 			} else { // no matches found for the query
+				DbAccessImpl.disconnect(con);
 				return null;
 			}
 		} catch( SQLException e ) {
+			DbAccessImpl.disconnect(con);
 			throw new CCException("RentRecordManager.restoreUserFromRentRecord: could not restore persistent User object: " + e );
 		}
 	} //end of restoreUserFromRentRecord
@@ -290,12 +302,15 @@ public class RentRecordManager {
 				review.setId(id);
 				review.setRentRecord( null );
 				
+				DbAccessImpl.disconnect(conn);
 				return review;
 				
 			} else { // no matches found for the query
+				DbAccessImpl.disconnect(conn);
 				return null;
 			}
 		} catch( SQLException e ) {
+			DbAccessImpl.disconnect(conn);
 			throw new CCException("RentRecordManager.restoreReviewFromRentRecord: could not restore persistent Reveiw object: " + e );
 		}
 	}
@@ -324,9 +339,13 @@ public class RentRecordManager {
 			ps.setInt(1,  rentRecord.getId());
 			rowsModified = ps.executeUpdate();
 			
-			if(rowsModified != 1)
+			if(rowsModified != 1) {
+				DbAccessImpl.disconnect(con);
+			
 				throw new CCException("RentRecordManager.delete: failed to delete rent record");
+			}
 		}catch(SQLException e) {
+			DbAccessImpl.disconnect(con);
 			throw new CCException("RentRecordManager.delte: failed to delete rent record: " + e);
 		}
 		
