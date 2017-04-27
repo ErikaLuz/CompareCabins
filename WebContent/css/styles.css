@@ -39,3 +39,11 @@ body{
 .cabinListing {
     background-color: ghostwhite;
 }
+
+#rentbutton {
+	display: none;
+}
+
+#price {
+	font-size: 22pt;
+}

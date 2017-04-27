@@ -29,57 +29,30 @@
 </head>
 <body>
 	<nav class="navbar navbar-default">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="#">Compare Cabins</a>
-			</div>
-			<ul class="nav navbar-nav">
-				<li class="active"><a href="#">Home</a></li>
-				<li><a href="search.html">Search</a></li>
-				<li><a href="search.html">Search</a></li>
-				<li><a href="search.html">Search</a></li>
-			</ul>
-			<ul class="nav navbar-nav navbar-right">
-				<li><a href="registerForm.html"><span
-						class="glyphicon glyphicon-user"></span> Register</a></li>
-				<li><a href="loginForm.html"><span
-						class="glyphicon glyphicon-log-in"></span> Login</a></li>
-			</ul>
-		</div>
-	</nav>
-	<div class="container">
-		<img class="img-responsive" src="http://placehold.it/1500x300">
-		<form action="TestServlet" method="post">
-			<button name="TestUser" class="btn">TEST CLASSES</button>
-		</form>
-		<br />
-		<br />
-		<form action="CabinListing" method="post">
-			<button name="cabinListing" class="btn">CABIN LISTING</button>
-		</form>
-		<br />
-		<br />
-		<form action="UserCabinListing" method="post">
-			<button name="userCabinListing" class="btn">USER CABIN
-				LISTING</button>
-		</form>
-		<br />
-		<br />
-		<form action="AddCabin" method="post">
-			<button name="goToCabin" class="btn">GO TO ADD CABIN</button>
-		</form>
-		<br />
-		<br />
-		<form action="ViewEditUserProfile" method="post">
-			<button name="viewUser" class="btn">VIEW USER</button>
-		</form>
-		<br />
-		<br />
-		<form action="PastStaysReview" method="post">
-			<button name="pastStays" class="btn">TEST PAST STAYS</button>
-		</form>
-
-	</div>
+  	<div class="container-fluid">
+        <div class="navbar-header">
+        <form action="LoadHomePage" method="post">
+            <button name="LoadHomePage" class="btn">Compare Cabins</button>
+            </form>
+        </div>
+        <ul class="nav navbar-nav">
+          <li><form action="LoadHomePage" method="post">
+			  	<button name="LoadHomePage" class="btn">Home</button>
+		      </form>
+          </li>
+        </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><form action="LoadRegisterPage" method="post">
+                        <button name="LoadRegisterPage" class="btn">Register</button>
+                </form></li>
+          
+                <li><form action="LoadLoginPage" method="post">
+                        <button name="LoadLoginPage" class="btn">Log in</button>
+                </form></li>
+            
+            </ul>
+    </div>
+</nav>
 
 	<form action="Search" method="get">
 		<div>

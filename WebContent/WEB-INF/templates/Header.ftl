@@ -1,7 +1,9 @@
 <nav class="navbar navbar-default">
   	<div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="index.html">Compare Cabins</a>
+        <form action="LoadHomePage" method="post">
+            <button name="LoadHomePage" class="btn">Compare Cabins</button>
+            </form>
         </div>
         <#if username?has_content>
             <ul class="nav navbar-nav">
@@ -44,11 +46,18 @@
             </ul>
         <#else>
         <ul class="nav navbar-nav">
-          <li class="active"><a href="index.html">Home</a></li>
+          <li><form action="LoadHomePage" method="post">
+			         <button name="LoadHomePage" class="btn">Home</button>
+		            </form>
+                </li>
         </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="registerForm.html"><span class="glyphicon glyphicon-user"></span> Register</a></li>
-                <li><a href="loginForm.html"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                <li><form action="LoadRegisterPage" method="post">
+                        <button name="LoadRegisterPage" class="btn">Register</button>
+                </form></li>
+                <li><form action="LoadLoginPage" method="post">
+                        <button name="LoadLoginPage" class="btn">Log in</button>
+                </form></li>
             </ul>
         </#if>
     </div>

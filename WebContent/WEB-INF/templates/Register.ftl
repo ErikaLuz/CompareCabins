@@ -20,23 +20,7 @@
     <![endif]-->
   </head>
 <body>
-    <nav class="navbar navbar-default">
-  	<div class="container-fluid">
-    <div class="navbar-header">
-    <a class="navbar-brand" href="index.html">Compare Cabins</a>
-    </div>
-    <ul class="nav navbar-nav">
-      <li class="active"><a href="index.html">Home</a></li>
-      <li><a href="search.html">Search</a></li>
-      <li><a href="search.html">Search</a></li>
-      <li><a href="search.html">Search</a></li>
-    </ul>
-    <ul class="nav navbar-nav navbar-right">
-      <li><a href="registerForm.html"><span class="glyphicon glyphicon-user"></span> Register</a></li>
-      <li><a href="loginForm.html"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-    </ul>
-  </div>
-</nav>
+    <#include "Header.ftl">
     <div class="container">
         <div class="row centered-form">
         <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">

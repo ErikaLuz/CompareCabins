@@ -27,8 +27,17 @@
         <div class="container">
         	<div class="panel panel-default">
         		<div class="panel-heading">
-			    		<h1 class="text-center">${Cabin.title}</h1>
-			 			</div>
+        			<div class="row">
+        				<div class="col-xs-6 col-sm-6 col-md-6">
+			    			<h1 class="text-left">${Cabin.title}</h1>
+			    		</div>
+			    		<div class="col-xs-6 col-sm-6 col-md-6">
+			    			<form action="RentCabin?cabinId=${Cabin.id}" method="post">
+			  					<button name="RentCabin" class="btn btn-block">Rent!</button>
+		      				</form>
+			    		</div>
+			    	</div>
+			 	</div>
              <div class="panel-body">
              
         <div class="row">
@@ -128,12 +137,34 @@
         <#if AmenitiesCheck != "null">
         
 	        	<p class="text-center">
-	        		Has Lake: ${(Amenities.hasLake)?c}<br />
-	        		Has River: ${(Amenities.hasRiver)?c}<br />
-	        		Has Pool: ${(Amenities.hasPool)?c}<br />
-	        	</p>
-	        	
-        
+	        		<#if Amenities.hasLake == true>
+	        		<strong>Lake :</strong> Yes!
+	        		</#if>
+	        		<#if Amenities.hasRiver == true>
+	        		<strong>River :</strong> Yes!
+	        		</#if>
+	        		<#if Amenities.hasPool == true>
+	        		<strong>Pool :</strong> Yes!
+	        		</#if>
+	        		<#if Amenities.hasHotTub == true>
+	        		<strong>Hot Tub :</strong> Yes!
+	        		</#if>
+	        		<#if Amenities.hasWifi == true>
+	        		<strong>WiFi :</strong> Yes!
+	        		</#if>
+	        		<#if Amenities.hasAirConditioning == true>
+	        		<strong>Air Conditiong :</strong> Yes!
+	        		</#if>
+	        		<#if Amenities.hasWasherDryer == true>
+	        		<strong>Washer Dryer :</strong> Yes!
+	        		</#if>
+	        		<#if Amenities.allowsPets == true>
+	        		<strong>Do we allow pets? :</strong> Yes!
+	        		</#if>
+	        		<#if Amenities.allowsSmoking == true>
+	        		<strong>Do we allow smoking? :</strong> Yes!
+	        		</#if>
+	        	</p>   
         </#if>
         
         </div>
@@ -150,17 +181,28 @@
         <#if ReviewsCheck != "null">
         
 	        <div class="section">
-	        	<p>
+	        	
 	        		<#list Reviews as r>
-	            
-	            		Number of Stars: ${r.numStars}<br />
-	            		Title: ${r.title}<br />
-	            		Review: ${r.description} <br />
-	            		
-	            		<br />
+	            		<div class="row">
+        				<div class="col-xs-4 col-sm-4 col-md-4">
+        				<h3 class="text-right">Title: ${r.title}</h3><br />
+	            		</div>
+	            		<div class="col-xs-4 col-sm-4 col-md-4">
+	            		<h3 class="text-center">Review</h3>
+	            		</div>
+	            		<div class="col-xs-4 col-sm-4 col-md-4">
+	            		<h3 class="text-left">Number of Stars: ${r.numStars}</h3><br />
+	            		</div>
+	            		</div>
+	            		<div class="row">
+	            		<div class="col-xs-12 col-sm-12 col-md-12">
+	            		<h4 class="text-center">Review: ${r.description}</h4> <br />
+	            		</div>
+	            		</div>
+	            		<hr>
 	            
 	          	   </#list>
-	        	</p>
+	        	
 	        	
 	        </div>
 	    	<br />
