@@ -44,6 +44,13 @@ public class LoadCabinsSearchJSON extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String[] primaryPhotoFilePath = null;
         
+		StringBuffer requestURL = request.getRequestURL();
+		if (request.getQueryString() != null) {
+		    requestURL.append("?").append(request.getQueryString());
+		}
+		String completeURL = requestURL.toString();
+		
+		System.out.println(completeURL);
         // set up the response writer
         response.setContentType("application/json;charset=UTF-8");
         PrintWriter toClient = response.getWriter();
