@@ -21,32 +21,28 @@
   </head>
   <body>
     <#include "Header.ftl">
-      <div class="container">
-            <img class="img-responsive" src="http://placehold.it/1500x300">
-            <form action="TestServlet" method="post"> 
-                <button name="TestUser" class="btn">TEST CLASSES</button>
-            </form>
-           <br /><br />
-            <form action="CabinListing" method="post">
-                <button name="cabinListing" class="btn">CABIN LISTING</button>
-            </form>
-           <br /><br />
-           	<form action="UserCabinListing" method="post">
-                <button name="userCabinListing" class="btn">USER CABIN LISTING</button>
-            </form>
-           <br /><br />
-           	<form action="AddCabin" method="post">
-                <button name="goToCabin" class="btn">GO TO ADD CABIN</button>
-            </form>
-            <br /><br />
-           	<form action="ViewEditUserProfile" method="post">
-                <button name="viewUser" class="btn">VIEW USER</button>
-            </form>
-            <br /><br />
-           	<form action="PastStaysReview" method="post">
-                <button name="pastStays" class="btn">TEST PAST STAYS</button>
-            </form>
- 		   
-      </div>
-  </body>
+
+	<form action="Search" method="get">
+		<div>
+			<input type="checkbox" name="hasLake" />Lake<br> <input
+				type="checkbox" name="hasRiver" />River<br> <input
+				type="checkbox" name="hasPool" />Pool<br> <input
+				type="checkbox" name="hasHotTub" />Hot tub<br> <input
+				type="checkbox" name="hasWifi" />WiFi<br> <input
+				type="checkbox" name="hasAirConditioning" />Air Conditioning<br>
+			<input type="checkbox" name="hasWasherDryer" />Washer Dryer<br>
+			<input type="checkbox" name="allowsPets" />Allows Pets<br> <input
+				type="checkbox" name="allowsSmoking" />Allows Smoking<br> <input
+				type="date" name="startAvailability" />Start Date(2000-01-01
+			format)<br> <input type="date" name="endAvailability" />End
+			Date(2000-01-01 format)<br> <input id="searchButton"
+				type="submit" value="Submit">
+		</div>
+	</form>
+
+	<div id="results">
+		<h2>cabins:</h2>
+	</div>
+
+</body>
 </html>

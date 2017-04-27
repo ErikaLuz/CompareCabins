@@ -21,7 +21,7 @@ import logic.LogicLayerImpl;
 import object.User;
 
 /**
- * Servlet implementation class Login
+ * Servlet implementation class Logout
  */
 @WebServlet("/Logout")
 public class Logout extends HttpServlet {
