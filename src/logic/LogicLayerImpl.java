@@ -18,6 +18,7 @@ import object.Availability;
 import object.RentRecord;
 import object.Review;
 import object.Group;
+
 import persistence.AmenitiesManager;
 import persistence.CabinManager;
 import persistence.RentRecordManager;
@@ -48,8 +49,12 @@ public class LogicLayerImpl {
 		
 	}
 	
-	public static void cabinListing ( SimpleHash root, Cabin modelCabin ) throws CCException 
+	public static Group cabinListing ( Cabin modelCabin ) throws CCException 
 	{	
+		// Create group
+		
+			Group group = new Group();
+		
 		// Retrieve cabin
 		
 			List<Cabin> cabins = CabinManager.restore( modelCabin );
@@ -57,6 +62,7 @@ public class LogicLayerImpl {
 		
 			if ( cabins.size() != 1) System.out.println("ERROR: incorrect cabin(s) found");
 			else cabin = cabins.get(0);
+			group.setCabin(cabin);
 			
 		// Retrieve cabin info
 		
@@ -65,14 +71,22 @@ public class LogicLayerImpl {
 				// Retrieve cabin info
 				
 					User user = CabinManager.restoreUserFromCabin( modelCabin );
+					group.setUser(user);
+					
 					Amenities amenities = CabinManager.restoreAmenitiesFromCabin( modelCabin );
+					group.setAmenities(amenities);
 					
 					List<Feature> features = CabinManager.restoreFeaturesFromCabin(modelCabin);
+					group.setFeatureList(features);
+					
 					List<Availability> availabilities  = CabinManager.restoreAvailabilitiesFromCabin(modelCabin);
+					group.setAvailabilityList(availabilities);
 				
 				// Retrieve reviews from cabin's rent records
 				
 					List<RentRecord> rentRecords = CabinManager.restoreRentRecordsFromCabin(modelCabin);
+					group.setRentRecordList(rentRecords);
+					
 				    List<Review> reviews = new LinkedList<Review>();
 					
 					for(int i = 0; i < rentRecords.size(); i++)
@@ -80,9 +94,13 @@ public class LogicLayerImpl {
 						reviews.add(RentRecordManager.restoreReviewFromRentRecord(rentRecords.get(i)));
 					}
 					
+					group.setReviewList(reviews);
+					
 				// Retrieve cabin pictures and find cabin's priority picture
 					
 					List<CabinPicture> cabinPictures = CabinManager.restoreCabinPicturesFromCabin(modelCabin);
+					
+					
 					CabinPicture priority = new CabinPicture();
 					
 					for(int i = 0; i < cabinPictures.size(); i++)
@@ -90,66 +108,21 @@ public class LogicLayerImpl {
 						if(cabinPictures.get(i).getPriority() == 1) priority = cabinPictures.get(i);
 					}
 					
+					group.setCabinPicture(priority);
+					
 					List<CabinPicture> cabinPicturesNoPriority = getCabinPicturesWithoutPriority(modelCabin);
-				
-				// Place info in SimpleHash for ftl
-				
-					root.put("Cabin", cabin); // cannot be null
-					
-					if(user != null) 
-					{
-						root.put("User", user);
-						root.put("Usercheck", "notNull");
-					}
-					else root.put("UserCheck", "null");
-					
-					if(amenities != null) 
-					{
-						root.put("Amenities", amenities);
-						root.put("AmenitiesCheck", "notNull");
-					}
-					else root.put("AmenitiesCheck", "null");
-				
-					if(cabinPictures.size() > 0)
-					{
-						root.put("CabinPictures", cabinPicturesNoPriority);
-						root.put("CPCheck", "notNull");
-						
-						if(priority.getFilePath() != null) 
-						{
-							root.put("PriorityPicture", priority);
-							root.put("PriorityCheck", "notNull");
-						}
-						else root.put("PriorityCheck", "null");
-					}
-					else root.put("CPCheck", "null");
-					
-					if(features.size() > 0)
-					{
-						root.put("Features", features);
-						root.put("FeaturesCheck", "notNull");
-					}
-					else root.put("FeaturesCheck", "null");
-					
-					if(availabilities.size() > 0)
-					{
-						root.put("Availabilities", availabilities);
-						root.put("AvailabilitiesCheck", "notNull");
-					}
-					else root.put("AvailabilitiesCheck", "null");
-					
-					if(reviews.size() > 0)
-					{
-						root.put("Reviews", reviews);
-						root.put("ReviewsCheck", "notNull");
-					}
-					else root.put("ReviewsCheck", "null");
+					group.setCabinPictureList(cabinPicturesNoPriority);
+		
 						
 			} //end of if
+			
+		// Return group
+			
+			return group;
 		
 	} // end of cabinListing
 	
-	public static void userCabinListings (SimpleHash root, User user) throws CCException
+	public static List<Group> ownersCabins ( User user ) throws CCException
 	{
 		// Create Group List
 		
@@ -180,9 +153,9 @@ public class LogicLayerImpl {
 				groups.add(group);
 			}
 
-		// Place group of cabins in SimpleHash
+		// Return groups
 			
-			root.put("Groups", groups);
+			return groups;
 			
 	} // end of userCabinListings
 	
@@ -427,42 +400,53 @@ public class LogicLayerImpl {
 			
 	} // end of updateUser
 	
-	public static void pastStays(SimpleHash root, User user) throws CCException
-	{
-		
+	
+	/**
+	 * Retrieves a list of the user's past stays
+	 * 
+	 * @param modelUser		user from which rent records are pulled
+	 * @return				list of user's past stays 
+	 * @throws CCException
+	 */
+	public static List<Group> pastStays( User modelUser ) throws CCException
+	{	
 		// Retrieve user from database
 		
-			List<User> users = UserManager.restore(user);
+			List<User> users = UserManager.restore(modelUser);
 			
 			if(users.size() != 1) System.out.println("ERROR: wrong user(s) found");
-			else user = users.get(0);
+			else modelUser = users.get(0);
 			
 		// Retrieve user's rent records from database
 			
-			List<RentRecord> rr = UserManager.restoreRentRecordsFromUser(user);
+			List<RentRecord> rr = UserManager.restoreRentRecordsFromUser(modelUser);
 			
-		// Create Group Object + List
+		// Create Group List
 		
 			List<Group> groups = new LinkedList<Group>();
 			
-		// Restore cabins, cabin pictures, and rent records from database and store into group object
+		// Restore cabins, cabin pictures, and rent records from database and store into group objects
 			
 			for(int i = 0; i < rr.size(); i++)
 			{
 				Group group = new Group();
+				
+				group.setUser(modelUser);
 				group.setRentRecord(rr.get(i));
 				
-				Calendar start = rr.get(i).getStartDate();
-				Calendar end = rr.get(i).getEndDate();
-			
-				SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY");
+				// Get start + end dates, then format 
 				
-				String startDate = sdf.format(start.getTime()); 
-				String endDate = sdf.format(end.getTime()); 
+					Calendar start = rr.get(i).getStartDate();
+					Calendar end = rr.get(i).getEndDate();
 				
-				root.put("StartDate", startDate);
-				root.put("EndDate", endDate);
-				
+					SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY");
+					
+					String startDate = sdf.format(start.getTime()); 
+					String endDate = sdf.format(end.getTime()); 
+					
+					group.setStartDate(startDate);
+					group.setEndDate(endDate);
+					
 				Cabin cabin = RentRecordManager.restoreCabinFromRentRecord(rr.get(i));
 				group.setCabin(cabin);
 				
@@ -479,23 +463,33 @@ public class LogicLayerImpl {
 				groups.add(group);
 			}
 			
-		// Place info into SimpleHash
+			return groups;
 			
-			root.put("User", user);
-			root.put("PastStays", groups);
- 		
-	}
+	} // end of pastStays
 	
-	public static void goToReview(SimpleHash root, RentRecord modelRR) throws CCException
+	/**
+	 * Retrieves info on a user's specific rent record
+	 * 
+	 * @param modelRR	rent record from which info is pulled
+	 * @return	group containing the rent record and the rent record's cabin
+	 * @throws CCException
+	 */
+	public static Group goToReview( RentRecord modelRR ) throws CCException
 	{
-		// Retrieve rent record from database and place in root
+		// Create group object
+		
+			Group group = new Group();
+		
+		// Retrieve rent record from database
 		
 			List<RentRecord> rrs = RentRecordManager.restore(modelRR);
 			RentRecord rr = new RentRecord();
 			
 			if(rrs.size() != 1) System.out.println("ERROR: wrong rent record(s) found");
 			else rr = rrs.get(0);
-			root.put("RentRecord", rr);
+			group.setRentRecord(rr);
+			
+		// Get start + end dates, then format 
 			
 			Calendar start = rr.getStartDate();
 			Calendar end = rr.getEndDate();
@@ -505,53 +499,83 @@ public class LogicLayerImpl {
 			String startDate = sdf.format(start.getTime()); 
 			String endDate = sdf.format(end.getTime()); 
 			
-			root.put("StartDate", startDate);
-			root.put("EndDate", endDate);
+			group.setStartDate(startDate);
+			group.setEndDate(endDate);
 			
-		// Retrieve Cabin from RentRecord
+		// Retrieve cabin from rent record
 			
 			Cabin cabin = RentRecordManager.restoreCabinFromRentRecord(rr);
+			group.setCabin(cabin);
 			
-		// Get cabin info - places info in root
+		// Retrieve cabin pictures from cabin
 			
-			cabinListing(root, cabin);
+			List<CabinPicture> cps = CabinManager.restoreCabinPicturesFromCabin(cabin);
+			List<CabinPicture> cps2 = getCabinPicturesWithoutPriority(cabin);
+			
+			group.setCabinPictureList(cps2);
+			
+			// Get Priority Picture
+			
+			for(int i = 0; i < cps.size(); i++)
+			{
+				if(cps.get(i).getPriority() == 1) group.setCabinPicture(cps.get(i));
+			}
+			
+		// Return group
+			
+			return group;
 	}
 	
-	public static void addReview(SimpleHash root, RentRecord modelRentRecord, Review modelReview) throws CCException
+	/**
+	 * Adds review to database
+	 * 
+	 * @param modelRentRecord	the rent record that review belongs to 
+	 * @param modelReview		review to be added to the database
+	 * @return
+	 * @throws CCException
+	 */
+	public static Group addReview(RentRecord modelRentRecord, Review modelReview) throws CCException
 	{
+		// Create group object
+		
+			Group group = new Group();
+		
 		// Retrieve review's rent record from database
 		
 			List<RentRecord> rr = RentRecordManager.restore(modelRentRecord);
-			RentRecord rentRecord  = new RentRecord();
 			
 			if(rr.size() != 1) System.out.println("ERROR: wrong rent record(s) found");
-			else rentRecord = rr.get(0);
+			else modelRentRecord = rr.get(0);
+			group.setRentRecord(modelRentRecord);
 			
 			// Format start and end date
 			
-				Calendar start = rentRecord.getStartDate();
-				Calendar end = rentRecord.getEndDate();
+				Calendar start = modelRentRecord.getStartDate();
+				Calendar end = modelRentRecord.getEndDate();
 			
 				SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY");
 				
 				String startDate = sdf.format(start.getTime()); 
 				String endDate = sdf.format(end.getTime()); 
+				
+				group.setStartDate(startDate);
+				group.setEndDate(endDate);
 			
 		// Assign rent record found to modelReview
 			
-			modelReview.setRentRecord(rentRecord);
+			modelReview.setRentRecord(modelRentRecord);
+			group.setReview(modelReview);
 		
 		// Store review into database
 		
 			ReviewManager.store(modelReview);
 			
-		// Store rent record and review into SimpleHash
+		// Return group
 			
-			root.put("RentRecord", rentRecord);
-			root.put("StartDate", startDate);
-			root.put("EndDate", endDate);
-			root.put("Review", modelReview);
-	}
+			return group;
+			
+	} // end of addReview
+	
 	public static List<CabinPicture> getCabinPicturesWithoutPriority( Cabin cabin) throws CCException {
 		List<CabinPicture> cabinPictures = CabinManager.restoreCabinPicturesFromCabin(cabin);
 		

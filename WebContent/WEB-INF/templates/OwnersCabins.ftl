@@ -7,7 +7,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Your Profile</title>
 
     <!-- Bootstrap -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
@@ -25,54 +24,61 @@
 	<script src="scripts/jquery-3.2.1.js" type="text/javascript"></script>
 	<script src="scripts/ownersCabins.js" type="text/javascript"></script>
 	
+	 <title>Your Cabins</title>
+	
 </head>
 
 <body>
-<#include "Header.ftl">
+    
+    <#include "Header.ftl">
 
-<div class="container">
-        	<div class="panel panel-default">
-        		<div class="panel-heading">
-			    		<h1 class="text-center">Your Cabins</h1>
-			 			</div>
+    <div class="container">
+    <div class="panel panel-default">
+    <div class="panel-heading">
+        <h1 class="text-center">Your Cabins</h1>
+    </div>
 
+    <div class="panel-body">
 
-             <div class="panel-body">
-	
-	<form action="AddCabin" method="post">
-    <button name="goToCabin" class="btn center-block">ADD CABIN</button>
-    </form>
-    <br />
-    <hr>
-    <br />
+    <form action="AddCabin" method="post">
+        <button name="goToCabin" class="btn center-block">ADD CABIN</button>
+    </form><br/><hr><br/>
 
-	<#list Groups as group>
-	
-		<div class = "cabinListing" id="${group.getCabin().id}">
+    <#list Groups as g>
+
+        <div class = "cabinListing" id="${g.getCabin().id}">
         <div class="row">
+            
         <div class="col-xs-5 col-sm-5 col-md-5">
-			<img src="${group.cabinPicture.filePath}" class="img-rounded img-responsive" alt="thumbnail"></img>
-		</div>
-        
+            <img src="${g.cabinPicture.filePath}" class="img-rounded img-responsive" alt="thumbnail"></img>
+        </div>
+
         <div class="col-xs-7 col-sm-7 col-md-7">
-			<h2 class="text-center">${group.getCabin().title}</h2>
-			<hr>
-			
-			<p>
-				Description: ${group.getCabin().description}<br />
-				Address: ${group.getCabin().address}<br />
-				City: ${group.getCabin().city}<br />
-				State: ${group.getCabin().state}<br />
-			</p>
+            
+            <h2 class="text-center">${g.getCabin().title}</h2>
+            <hr>
+
+            <p>
+                <center>
+                    ${g.getCabin().description}<br /><br />
+                    Address: ${g.getCabin().address}<br />
+                    City: ${g.getCabin().city}<br />
+                    State: ${g.getCabin().state}<br />
+                </center>
+            </p>
+            
+        </div>
+            
         </div>
         </div>
-        </div>
-		
-		<br />
-	
-	</#list>
+
+        <br />
+
+    </#list>
+        
     </div>
     </div>
     </div>
+    
 </body>
 </html>

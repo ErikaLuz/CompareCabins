@@ -47,7 +47,7 @@
 			    				<input type="text" name="cvc" id="cvc" class="form-control input-sm" placeholder="CVC">
 			    			</div>
                             <div class="form-group">
-			    				<input type="email" name="month" id="month" class="form-control input-sm" placeholder="MM">
+			    				<input type="text" name="month" id="month" class="form-control input-sm" placeholder="MM">
 			    			</div>
                             <div class="form-group">
 			    				<input type="text" name="year" id="year" class="form-control input-sm" placeholder="YYYY">

@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Rent ${Cabin.title}</title>
+    <title>Rent ${Group.getCabin().title}</title>
 
     <!-- Bootstrap -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
@@ -40,9 +40,9 @@
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
       <div class="item active">
-      <img src="${PriorityPicture.filePath}" class="img-rounded img-responsive" alt="thumbnail">
+      <img src="${Group.getCabinPicture().filePath}" class="img-rounded img-responsive" alt="thumbnail">
       </div>
-				<#list CabinPictures as cp>
+				<#list Group.cabinPictureList as cp>
 				<div class="item">
 				<img src="${cp.filePath}" class="img-rounded img-responsive" alt="thumbnail">
 				</div>
@@ -68,9 +68,9 @@
 		
         </div>
         <div class="col-xs-6 col-sm-6 col-md-6">
-        <h1 class="text-center">${Cabin.title}</h1>
+        <h1 class="text-center">${Group.getCabin().title}</h1>
         <hr>
-        <p class="text-center">${Cabin.description}</p>
+        <p class="text-center">${Group.getCabin().description}</p>
         </div>
         </div>
         <hr>
@@ -78,15 +78,15 @@
         <div class="col-xs-6 col-sm-6 col-md-6">
 
             <p class="text-center">
-                Street Address : ${Cabin.address}<br/> 
-                City : ${Cabin.city}<br/> 
-                State : ${Cabin.state}<br/> 
+                Street Address : ${Group.getCabin().address}<br/> 
+                City : ${Group.getCabin().city}<br/> 
+                State : ${Group.getCabin().state}<br/> 
             </p>
 
         </div>
         <div class="col-xs-6 col-sm-6 col-md-6">
-			<form action="PayRent?cabinId=${Cabin.id}">
-				<input type="hidden" name="hiddenId" value="${Cabin.id}">
+			<form action="PayRent?cabinId=${Group.getCabin().id}">
+				<input type="hidden" name="hiddenId" value="${Group.getCabin().id}">
 			  Start Date:
 			  <input type="date" id="startDate" name="startDate">
 			  End Date:

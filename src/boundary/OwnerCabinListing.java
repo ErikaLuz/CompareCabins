@@ -17,6 +17,7 @@ import boundary.TemplateProcessor;
 import logic.LogicLayerImpl;
 
 import object.Cabin;
+import object.Group;
 //import object.User;
 //import object.Review;
 import object.User;
@@ -66,118 +67,67 @@ public class OwnerCabinListing extends HttpServlet
 			DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 			SimpleHash root = new SimpleHash(db.build());
 			
-			HttpSession  session = request.getSession();
-			User user = (User) session.getAttribute("user");
-			root.put("username", user.getUsername());
+			// Session Tracking
 			
-			// Get CabinId
-			
-				String cabinIdString = request.getParameter("cabinId");
+				HttpSession session = request.getSession();
+				if(session.getAttribute("user") != null) {
+				User user = (User) session.getAttribute( "user");
+		        root.put("username", user.getUsername());
+				}
+				
+			// Create Group object 
+				
+				Group group = new Group();
 				
 			// Create model cabin and set id 
 				
 				Cabin modelCabin = new Cabin();
-				modelCabin.setId(Integer.parseInt(cabinIdString));
+				modelCabin.setId(Integer.parseInt(request.getParameter("cabinId")));
+				
+			// Call logic layer to get information about cabin
 				
 				try{
-					LogicLayerImpl.cabinListing(root, modelCabin);
+					group = LogicLayerImpl.cabinListing( modelCabin );
 				}catch (CCException e)
 				{
 					e.printStackTrace();
 				}
+				
+			// If statements for Hash
+				
+				if(group.getUser() != null) root.put("Usercheck", "notNull");
+				else root.put("UserCheck", "null");
+				
+				if(group.getAmenities() != null) root.put("AmenitiesCheck", "notNull");
+				else root.put("AmenitiesCheck", "null");
+			
+				if(group.getCabinPictureList() != null)
+				{
+					root.put("CPCheck", "notNull");
+					
+					if(group.getCabinPicture() != null) root.put("PriorityCheck", "notNull"); 
+					else root.put("PriorityCheck", "null");
+				}
+				else root.put("CPCheck", "null");
+				
+				if(group.getFeatureList() != null) root.put("FeaturesCheck", "notNull");
+				else root.put("FeaturesCheck", "null");
+				
+				if(group.getAvailabilityList() != null)	root.put("AvailabilitiesCheck", "notNull");
+				else root.put("AvailabilitiesCheck", "null");
+				
+				if(group.getReviewList() != null) root.put("ReviewsCheck", "notNull");
+				else root.put("ReviewsCheck", "null");
+			
+			// Place group into root
+				
+				root.put("Group", group);
 			
 			// Set and process template
 		
 				String templateName = "OwnerCabinListing.ftl";
 				processor.processTemplate(templateName, root, request, response);
 
-/*				
-			// For testing purposes - delete later
-				
-				User user = new User("Cabin", "Listing", "firstName", "lastName", "email");
-				
-				try {
-					LogicLayerImpl.register(user);
-				} catch (CCException e1) {
-
-					e1.printStackTrace();
-				}
-				
-				Amenities amenity = new Amenities(true, false, true, true, false, true, true, false, true);
-				
-				try {
-					AmenitiesManager.store(amenity);;
-				} catch (CCException e1) {
-
-					e1.printStackTrace();
-				}
-				
-				Cabin cabin = new Cabin("address", "city", "state", "this cabin rocks, it has a nice view","Great Cabin", 2, 3, 6);
-				cabin.setUser(user);
-				cabin.setAmenities(amenity);
-				
-				try {
-					CabinManager.store(cabin);
-				} catch (CCException e1) {
-					e1.printStackTrace();
-				}
-				
-				Feature feature = new Feature("This cabin is the greatest cabin ever, I love it a lot.");
-				feature.setCabin(cabin);
-				
-				try {
-					FeatureManager.store(feature);
-				} catch (CCException e1) {
-					e1.printStackTrace();
-				}
-				
-				float z = 2, y = 3;
-				Calendar date = Calendar.getInstance();
-				
-				RentRecord rr1 = new RentRecord(z, date, date);
-				RentRecord rr2 = new RentRecord(y, date, date);
-				rr1.setCabin(cabin);
-				rr2.setCabin(cabin);
-				
-				try {
-					RentRecordManager.store(rr1);
-					RentRecordManager.store(rr2);
-				} catch (CCException e1) {
-					e1.printStackTrace();
-				}
-				
-				Review review1 = new Review(10, "Great place", "Nice place, nice view");
-				Review review2 = new Review(5, "this place blows", "dont rent, bad idea");
-				review1.setRentRecord(rr1);
-				review2.setRentRecord(rr2);
-				
-				try {
-					ReviewManager.store(review1);
-					ReviewManager.store(review2);
-				} catch (CCException e1) {
-					e1.printStackTrace();
-				}	
-					
-*/				
-
-				
-/*				
-				// Delete dummy objects
-				
-					try {
-					ReviewManager.delete(review1);
-						ReviewManager.delete(review2);
-						RentRecordManager.delete(rr1);
-						RentRecordManager.delete(rr2);
-						FeatureManager.delete(feature);
-     					CabinManager.delete(cabin);
-						AmenitiesManager.delete(amenity);
-						UserManager.delete(user);
-					} catch (CCException e1) {
-						e1.printStackTrace();
-					}
-			}
-*/		
 		} // end of doGet
 
 	//@see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

@@ -5,28 +5,11 @@
     
     <meta charset="UTF-8">
 	<title>Compare Cabins</title>
-	
-	<style>
-    
-	    .container
-	    {
-	    	padding-left: 5px;
-	    	padding-right: 10px;
-	    	border-style: solid;
-	    	margin-left: .5cm;
-	    	margin-right: .5cm;
-	    }
-	    
-	    h1 
-	    {
-	    	font-size: 50px;
-	    }
-    
-    </style>
     
 </head>
 
 <body>
+    
 	<#if add = "add">
 	
 		<h1>Added your feature: </h1>
@@ -68,5 +51,6 @@
 		<img src="${CP.filePath}" alt="cabin" style="width:300px;height:300px;">
 	
 	</#if>
+        
 </body>
 </html>
