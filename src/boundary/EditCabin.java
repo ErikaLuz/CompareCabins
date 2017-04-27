@@ -10,10 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import boundary.TemplateProcessor;
-
+import exception.CCException;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapperBuilder;
 import freemarker.template.SimpleHash;
+import logic.LogicLayerImpl;
+
+import object.Cabin;
 
 /**
  * Servlet implementation class Servlet
@@ -43,18 +46,52 @@ public class EditCabin extends HttpServlet
 			protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 			{
 				String prepareEdit = request.getParameter("prepareEdit");
+				String submitEdit = request.getParameter("submitEdit");
 				
 				if(prepareEdit != null)
+					try {
+						prepareEdit(request, response);
+					} catch (CCException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				if(submitEdit != null)
 				{
-					DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
-					SimpleHash root = new SimpleHash(db.build());
 					
-					//LogicLayerImpl.
-					
-					String templateName = "EditCabin.ftl";
-					processor.processTemplate(templateName, root, request, response);
 				}
+					
+				
 			} // end of doGet
+			
+			private void prepareEdit(HttpServletRequest request, HttpServletResponse response) throws CCException
+			{
+				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
+				SimpleHash root = new SimpleHash(db.build());
+				
+				// Get cabin 
+				
+					Cabin modelCabin = new Cabin();
+					modelCabin.setId(Integer.parseInt(request.getParameter("cabinId")));
+				
+				// Call logic layer to prepare cabin editing
+				
+					try {
+						LogicLayerImpl.prepareEditCabin(root, modelCabin);
+					} catch (CCException e) {
+						
+						e.printStackTrace();
+					}
+					
+				// Set and process template
+				
+				String templateName = "EditCabin.ftl";
+				processor.processTemplate(templateName, root, request, response);
+			}
+			
+			private void submitEdit(HttpServletRequest request, HttpServletResponse response) throws CCException
+			{
+				
+			}
 	
 		
 		//@see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

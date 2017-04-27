@@ -34,6 +34,7 @@
 			<hr>
 			<br />
 			
+			
 			<h1>Info about your stay:</h1>
 			
 			Total Price: ${RentRecord.totalPrice}<br/>

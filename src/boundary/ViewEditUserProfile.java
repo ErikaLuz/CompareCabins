@@ -93,8 +93,8 @@ public class ViewEditUserProfile extends HttpServlet
 				
 				// Session Tracking
 				HttpSession session = request.getSession();
-				User userTracking = (User) session.getAttribute( "user");
-		        root.put("username", userTracking.getUsername());
+				User user= (User) session.getAttribute( "user");
+		        root.put("username", user.getUsername());
 				
 				// Place view or edit into root for ftl template
 				
@@ -102,10 +102,6 @@ public class ViewEditUserProfile extends HttpServlet
 					else if (viewOrEdit.equals("edit")) root.put("viewOrEdit", "edit");
 					
 				// Get user 
-					
-					User user = new User();
-					String userId = request.getParameter("userId");
-					user.setId(Integer.parseInt(userId));
 				
 					LogicLayerImpl.viewUserProfile(root, user);	
 					
