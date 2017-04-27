@@ -32,7 +32,7 @@
 	
 	<#list PastStays as PS>
 	
-		<div class = "container" id="${PS.getRentRecord().id}">
+		<div class = "container">
 		
 			<img src="${PS.getCabinPicture().filePath}" alt="thumbnail" style="width:410px;height:200px;display:block;margin:auto;float:left;vertical-align:middle">
 		
@@ -44,7 +44,7 @@
 				Start Date: ${StartDate}<br />
 				End Date: ${EndDate}<br />
 				
-				<form action="PastStaysReview" method="post">
+				<form action="PastStaysReview?rentRecordId=${PS.getRentRecord().id}" method="post">
            	    <button name="addReview" class="btn">ADD REVIEW</button>
                 </form>
 				

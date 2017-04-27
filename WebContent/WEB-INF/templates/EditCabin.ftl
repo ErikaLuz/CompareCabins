@@ -33,29 +33,39 @@
 	
 	<form action="EditCabin" method="post">
 	
-	New Description: <input type="text" name="newDescription" placeholder="${Group.getCabin().description}" /><br />	
-	New Bedroom Count: <input type="text" name="newBedCount" placeholder="${Group.getCabin().bedroomCount}" /><br />
-	New Bathroom Count: <input type="text" name="neBathCount" placeholder="${Group.getCabin().bathCount}" /><br />
-	New Max Occupancy: <input type="text" name="newMaxOcc" placeholder="${Group.getCabin().maxOccupancy}" /><br />
+	Title: <input type="text" name="newTitle" value="${Group.getCabin().title}" /><br />
+	Address: <input type="text" name="newAddress" value="${Group.getCabin().address}" /><br />
+	City: <input type="text" name="newCity" value="${Group.getCabin().city}" /><br />
+	State: <input type="text" name="newState" value="${Group.getCabin().state}" /><br />
+	Description: <input type="text" name="newDescription" value="${Group.getCabin().description}" /><br />	
+	Bedroom Count: <input type="text" name="newBedCount" value="${Group.getCabin().bedroomCount}" /><br />
+	Bathroom Count: <input type="text" name="newBathCount" value="${Group.getCabin().bathCount}" /><br />
+	Max Occupancy: <input type="text" name="newMaxOcc" value="${Group.getCabin().maxOccupancy}" /><br />
 	
-	<h2>New Amenities</h2>
+	<h2>Amenities</h2>
 	
-	    Lake?<input type = "checkbox" name="amenities" value="hasLake" <#if Group.getAmenities().hasLake  > checked</#if>>
-        River?<input type = "checkbox" name="amenities" value="hasRiver" <#if Group.getAmenities().hasRiver  > checked</#if>>
+	    Lake?<input type = "checkbox" name="amenities" value="hasLake" <#if Group.getAmenities().hasLake  > checked</#if>><br />
+        River?<input type = "checkbox" name="amenities" value="hasRiver" <#if Group.getAmenities().hasRiver  > checked</#if>><br />
         Pool?<input type = "checkbox" name="amenities" value="hasPool" <#if Group.getAmenities().hasPool  >checked</#if>><br />
-        Hot Tub?<input type = "checkbox" name="amenities" value="hasHotTub" <#if Group.getAmenities().hasHotTub  >checked</#if>>
-        WiFi?<input type = "checkbox" name="amenities" value="hasWifi" <#if Group.getAmenities().hasWifi  >checked</#if>>
+        Hot Tub?<input type = "checkbox" name="amenities" value="hasHotTub" <#if Group.getAmenities().hasHotTub  >checked</#if>><br />
+        WiFi?<input type = "checkbox" name="amenities" value="hasWifi" <#if Group.getAmenities().hasWifi  >checked</#if>><br />
         Air Conditioning?<input type = "checkbox" name="amenities" value="hasAirConditioning" <#if Group.getAmenities().hasAirConditioning  >checked</#if>><br />
-        Washer & Dryer?<input type = "checkbox" name="amenities" value="hasWasherDryer" <#if Group.getAmenities().hasWasherDryer  >checked</#if>>
-        Allow Pets?<input type = "checkbox" name="amenities" value="allowsPets" <#if Group.getAmenities().allowsPets  >checked</#if>>
+        Washer & Dryer?<input type = "checkbox" name="amenities" value="hasWasherDryer" <#if Group.getAmenities().hasWasherDryer  >checked</#if>><br />
+        Allow Pets?<input type = "checkbox" name="amenities" value="allowsPets" <#if Group.getAmenities().allowsPets  >checked</#if>><br />
         Allow Smoking?<input type = "checkbox" name="amenities" value="allowsSmoking" <#if Group.getAmenities().allowsSmoking  >checked</#if>><br />
+      
 	
-	<h2>New Features</h2>
+<!--	
+	<h2>Features</h2>
 	
 	<#list Group.getFeatureList() as FL>
-	New Feature: <input type="text" name="newFeature" placeholder="${FL.featureString}" /><br />
+	Feature: ${FL.featureString}
+	<button name="editFeature" class="btn">Edit Feature</button>
+	<button name="deleteFeature" class="btn">Delete Feature</button><br/>
 	</#list>
 	
+	<button name="addFeature" class="btn">Add Feature</button><br/>
+-->	
 	<br /><br /><button name="submitEdit" class="btn">Submit</button>
 	
 	

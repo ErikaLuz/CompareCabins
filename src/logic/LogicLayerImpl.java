@@ -296,6 +296,7 @@ public class LogicLayerImpl {
 		// Retrieve cabin pictures from database + add to group
 			
 			List<CabinPicture> cp = CabinManager.restoreCabinPicturesFromCabin(cabin);
+			System.out.println("cabin picture list size: " + cp.size());
 			group.setCabinPictureList(cp);
 			
 		// Retrieve cabin priority picture + add to group
@@ -312,6 +313,7 @@ public class LogicLayerImpl {
 		// Retrieve cabin features from database + add to group
 			
 			List<Feature> feature = CabinManager.restoreFeaturesFromCabin(cabin);
+			System.out.println("Features: " + feature.size());
 			group.setFeatureList(feature);
 			
 		// Retrieve cabin availabilities + add to group
@@ -325,13 +327,25 @@ public class LogicLayerImpl {
 			
 	} // end of prepareEditCabin
 	
-	public static void updateCabin(Cabin modelCabin, Amenities modelAmenities) throws CCException
+	public static Group updateCabin(Cabin modelCabin, Amenities modelAmenities) throws CCException
 	{
+		// Create Group 
+		
+			Group group = new Group();
+			
+		// Restore cabin from database
+		
+			List<Cabin> cabins = CabinManager.restore(modelCabin);
+			Cabin cabin = new Cabin();
+			
+			if(cabins.size() != 1) System.out.println("ERROR: wrong cabin(s) found");
+			else cabin = cabins.get(0);
+			
 		if(modelAmenities != null) 
 		{
 			// Restore amenities from database
 			
-				Amenities amenities = CabinManager.restoreAmenitiesFromCabin(modelCabin);
+				Amenities amenities = CabinManager.restoreAmenitiesFromCabin(cabin);
 				
 			// Compare model amenities to database amenities and change to new values if needed
 				
@@ -365,16 +379,9 @@ public class LogicLayerImpl {
 			// Update amenities in database
 				
 				AmenitiesManager.store(amenities);
+				group.setAmenities(amenities);
 				
 		} // end of amenities if statement
-				
-		// Restore cabin from database
-		
-			List<Cabin> cabins = CabinManager.restore(modelCabin);
-			Cabin cabin = new Cabin();
-			
-			if(cabins.size() != 1) System.out.println("ERROR: wrong cabin(s) found");
-			else cabin = cabins.get(0);
 			
 		// Compare model cabin to database cabin and change to new values if needed
 			
@@ -405,6 +412,11 @@ public class LogicLayerImpl {
 		// Update cabin in database
 			
 			CabinManager.store(cabin);
+			group.setCabin(cabin);
+			
+		// Return group
+			
+			return group;
 	}
 	
 	public static void deleteCabin(Cabin cabin) throws CCException

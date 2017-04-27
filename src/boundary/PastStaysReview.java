@@ -168,7 +168,7 @@ public class PastStaysReview extends HttpServlet
 				// Somehow get the rent record id
 				
 					RentRecord rr = new RentRecord();
-					String rentRecordIdString = request.getParameter("${PS.getRentRecord().id}");
+					String rentRecordIdString = request.getParameter("rentRecordId");
 					rr.setId(Integer.parseInt(rentRecordIdString));
 					
 				// Call the logic layer
