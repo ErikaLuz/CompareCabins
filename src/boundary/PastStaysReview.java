@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import boundary.TemplateProcessor;
 
@@ -91,6 +92,11 @@ public class PastStaysReview extends HttpServlet
 			{
 				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 				SimpleHash root = new SimpleHash(db.build());
+				
+				// Session Tracking
+				HttpSession session = request.getSession();
+				User userTracking = (User) session.getAttribute( "user");
+		        root.put("username", userTracking.getUsername());
 				
 				// Get user id 
 				

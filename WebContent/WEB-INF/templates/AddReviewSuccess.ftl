@@ -27,7 +27,7 @@
 </head>
 
 <body>
-		
+		<#include "Header.ftl">
 		<h1> test: you review has been submitted </h1>
 		
 		<h2>Info about your stay:</h2>

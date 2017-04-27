@@ -27,6 +27,7 @@
 </head>
 
 <body>
+<#include "Header.ftl">
 
 			<h2>Insert Cabin Listing code minus calendar here</h2>
 			<br />

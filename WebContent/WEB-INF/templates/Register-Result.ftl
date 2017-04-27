@@ -3,7 +3,7 @@
 <head><title> Register a User</title>
 </head>
 <body>
-
+<#include "Header.ftl">
 <h1>Hello!</h1>
 
 <p>You have registered a user</p>

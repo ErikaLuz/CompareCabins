@@ -28,7 +28,7 @@ public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private Configuration   cfg = null;
     static  String          templateDir = "/WEB-INF/templates";
-    static  String          resultTemplateName = "Register-Result.ftl";
+    static  String          resultTemplateName = "index.ftl";
 
     @Override
     public void init() { 
@@ -88,7 +88,7 @@ public class Login extends HttpServlet {
 
         // create the data model
         Map<String, Object> root = new HashMap<String, Object>();
-        
+        root.put("username", user.getUsername());
         // connect template with data model
         try {
             resultTemplate.process( root, toClient );

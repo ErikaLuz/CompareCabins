@@ -27,7 +27,7 @@
 </head>
 
 <body>
-
+<#include "Header.ftl">
 	<center><h1>${User.username} Past Stays</h1></center>
 	
 	<#list PastStays as PS>

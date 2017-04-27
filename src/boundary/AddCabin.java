@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import boundary.TemplateProcessor;
 
@@ -65,6 +66,10 @@ public class AddCabin extends HttpServlet
 				{
 					DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 					SimpleHash root = new SimpleHash(db.build());
+					// Session Tracking
+					HttpSession session = request.getSession();
+					User user = (User) session.getAttribute( "username");
+			        root.put("username", user.getUsername());
 					
 					String templateName = "AddCabin.ftl";
 					processor.processTemplate(templateName, root, request, response);
@@ -74,6 +79,10 @@ public class AddCabin extends HttpServlet
 				{
 					DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 					SimpleHash root = new SimpleHash(db.build());
+					// Session Tracking
+					HttpSession session = request.getSession();
+					User userTracking = (User) session.getAttribute( "user");
+			        root.put("username", userTracking.getUsername());
 					
 					// Get user
 					

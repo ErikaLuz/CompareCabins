@@ -24,6 +24,7 @@ import freemarker.template.TemplateExceptionHandler;
 import logic.LogicLayerImpl;
 import logic.LogicLayerImplShep;
 import object.Cabin;
+import object.User;
 import object.Amenities;
 import object.Availability;
 
@@ -128,6 +129,11 @@ public class Search extends HttpServlet {
 		
         // create the data model
         Map<String, Object> root = new HashMap<String, Object>();
+        
+        // Session Tracking
+        HttpSession session = request.getSession();
+		User user = (User) session.getAttribute( "user");
+        root.put("username", user.getUsername());
         
         root.put("Cabins", cabins);
         // connect template with data model
