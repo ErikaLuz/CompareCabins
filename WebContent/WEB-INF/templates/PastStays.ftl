@@ -37,29 +37,29 @@
         
     <div class="panel-body">
         
-        <#list PastStays as PS>
+        <#list Group as g>
 
             <div class ="row">
             <div class="col-sm-6">
             
-                <img src="${PS.getCabinPicture().filePath}" alt="thumbnail" style="width:410px;height:200px;display:block;margin:auto;float:left;vertical-align:middle">
+                <img src="${g.getCabinPicture().filePath}" alt="thumbnail" style="width:410px;height:200px;display:block;margin:auto;float:left;vertical-align:middle">
                 
             </div>
                 
             <div class="col-sm-6">
             
-                <h2 class="text-center">${PS.getCabin().title}</h2>
+                <h2 class="text-center">${g.getCabin().title}</h2>
                 <hr>
 
                 <p>
                     <center>
-                    ${PS.getCabin().description}<br /><br />
-                    Day of arrival: ${StartDate}<br />
-                    Day of departure: ${EndDate}<br />
+                    ${g.getCabin().description}<br /><br />
+                    Day of arrival: ${g.startDate}<br />
+                    Day of departure: ${g.endDate}<br />
                     </center>
                 </p>
 
-                <form action="PastStaysReview?rentRecordId=${PS.getRentRecord().id}" method="post">
+                <form action="PastStaysReview?rentRecordId=${g.getRentRecord().id}" method="post">
                     <button name="addReview" class="btn center-block">ADD REVIEW</button>
                 </form>
                 <br/>

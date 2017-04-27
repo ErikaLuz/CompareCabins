@@ -1,7 +1,9 @@
 package boundary;
 
 import java.io.IOException;
-import java.util.Calendar;
+
+import java.util.List;
+import java.util.LinkedList;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -20,13 +22,9 @@ import logic.LogicLayerImpl;
 import exception.CCException;
 
 import object.User;
-import object.Cabin;
 import object.RentRecord;
 import object.Review;
-
-import persistence.UserManager;
-import persistence.CabinManager;
-import persistence.RentRecordManager;
+import object.Group;
 
 /**
  * Servlet implementation class PastStaysReview
@@ -88,32 +86,61 @@ public class PastStaysReview extends HttpServlet
 				
 			} // end of doGet
 			
+			
+			/**
+			 * Retrieves user's past stays' info
+			 * 
+			 * @param request	HttpServletRequest
+			 * @param response	HttpServletResponse
+			 * @throws CCException
+			 */
 			private void viewPastStays(HttpServletRequest request, HttpServletResponse response) throws CCException
 			{
-				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
-				SimpleHash root = new SimpleHash(db.build());
+				// Create DefaultObjectWrapperBuiler and SimpleHash
+				
+					DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
+					SimpleHash root = new SimpleHash(db.build());
 				
 				// Session Tracking
 				
 					HttpSession session = request.getSession();
 					User user = (User) session.getAttribute( "user");
 			        root.put("username", user.getUsername());
+			        
+			    // Create Group List
+			        
+			        List<Group> groups = new LinkedList<Group>();
 					
 				// Call logic layer
 					
-					LogicLayerImpl.pastStays(root, user);
+					groups = LogicLayerImpl.pastStays( user );
+				
+				// Place groups + user into root
+					
+					root.put("Group", groups);
+					root.put("User", user);
 					
 				// Set and process template
 			
 					String templateName = "PastStays.ftl";
 					processor.processTemplate(templateName, root, request, response);
 				
-			}
-	
+			} // end of viewPastStays
+			
+			
+			/**
+			 * Takes user to page where they can add a review to a cabin they've stayed at
+			 * 
+			 * @param request	HttpServletRequest
+			 * @param response	HttpServletResponse
+			 * @throws CCException
+			 */
 			private void goToReview(HttpServletRequest request, HttpServletResponse response) throws CCException
 			{
-				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
-				SimpleHash root = new SimpleHash(db.build());
+				// Create DefaultObjectWrapperBuilder and SimpleHash
+				
+					DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
+					SimpleHash root = new SimpleHash(db.build());
 				
 				// Session Tracking
 				
@@ -123,13 +150,20 @@ public class PastStaysReview extends HttpServlet
 				
 				// Retrieve the rent record id
 				
-					RentRecord rr = new RentRecord();
-					String rentRecordIdString = request.getParameter("rentRecordId");
-					rr.setId(Integer.parseInt(rentRecordIdString));
+					RentRecord modelRR = new RentRecord();
+					modelRR.setId(Integer.parseInt(request.getParameter("rentRecordId")));
+					
+				// Create group object
+					
+					Group group = new Group();
 					
 				// Call the logic layer
 					
-					LogicLayerImpl.goToReview(root, rr);
+					group = LogicLayerImpl.goToReview( modelRR );
+					
+				// Place group into root
+					
+					root.put("Group", group);
 					
 				// Set and process template
 				
@@ -138,10 +172,20 @@ public class PastStaysReview extends HttpServlet
 					
 			} // end of goToReview
 			
+			
+			/**
+			 * Adds a review to the specified rent record
+			 * 
+			 * @param request HttpSerlvetRequest
+			 * @param response HttpServletResponse
+			 * @throws CCException
+			 */
 			private void addReview(HttpServletRequest request, HttpServletResponse response) throws CCException
 			{
-				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
-				SimpleHash root = new SimpleHash(db.build());
+				// Create DefaultObjectWrapperBuilder and SimpleHash 
+				
+					DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
+					SimpleHash root = new SimpleHash(db.build());
 				
 				// Session Tracking
 				
@@ -170,17 +214,25 @@ public class PastStaysReview extends HttpServlet
 					String rrId = request.getParameter("rentRecordId");		
 					RentRecord rr = new RentRecord();
 					rr.setId(Integer.parseInt(rrId));
+					
+				// Create group object
+					
+					Group group = new Group();
 				
 				// Call logic layer and pass rent record and model review
 				
-					LogicLayerImpl.addReview(root, rr, modelReview);
+					group = LogicLayerImpl.addReview(rr, modelReview);
+					
+				// Place group into SimpleHash
+					
+					root.put("Group", group);
 				
 				// Set and process template
 				
 					String templateName = "AddReviewSuccess.ftl";
 					processor.processTemplate(templateName, root, request, response);
-									
-			}
+					
+			} // end of addReview
 		
 		//@see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 			protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
