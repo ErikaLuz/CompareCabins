@@ -76,7 +76,7 @@ public class OwnersCabins extends HttpServlet
 				
 				// Set and process template
 				
-					String templateName = "userCabinListing.ftl";
+					String templateName = "UserCabinListing.ftl";
 					processor.processTemplate(templateName, root, request, response);
 				
 /*				// For testing purposes - delete later: make dummy user with dummy cabins

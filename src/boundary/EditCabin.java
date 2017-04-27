@@ -1,6 +1,10 @@
 package boundary;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+
+import java.util.Calendar;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -17,6 +21,9 @@ import freemarker.template.SimpleHash;
 
 import logic.LogicLayerImpl;
 
+import object.CabinPicture;
+import persistence.CabinPictureManager;
+import object.Availability;
 import object.Group;
 import object.Cabin;
 import object.Feature;
@@ -24,6 +31,7 @@ import persistence.CabinManager;
 import persistence.FeatureManager;
 import object.Amenities;
 import persistence.AmenitiesManager;
+import persistence.AvailabilityManager;
 
 /**
  * Servlet implementation class EditCabin
@@ -52,15 +60,18 @@ public class EditCabin extends HttpServlet
 		//@see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response) 
 			protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 			{
+				String addAvailability = request.getParameter("addAvailability");
+				
 				String prepareEdit = request.getParameter("prepareEdit");
 				String submitEdit = request.getParameter("submitEdit");
 				
-				String addPhoto = request.getParameter("addPhoto");
+//				String addPhoto = request.getParameter("addPhoto");
 				String deletePhoto = request.getParameter("deletePhoto");
 				
 				String addFeature = request.getParameter("addFeature");
 				String editFeature = request.getParameter("editFeature");
 				String deleteFeature = request.getParameter("deleteFeature");
+				String submitEditFeature = request.getParameter("submitEditedFeature");
 				
 				
 				if(prepareEdit != null)
@@ -77,10 +88,140 @@ public class EditCabin extends HttpServlet
 						
 						e.printStackTrace();
 					}
+				else if(deleteFeature != null)
+					try {
+						deleteFeature(request, response);
+					} catch (CCException e) {
+						
+						e.printStackTrace();
+					}
+				else if(addFeature != null)
+					try {
+						addFeature(request, response);
+					} catch (CCException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				else if(editFeature != null)
+					try {
+						editFeature(request, response);
+					} catch (CCException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				else if(submitEditFeature != null)
+					try {
+						submitEditedFeature(request, response);
+					} catch (CCException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				else if(addAvailability != null)
+					try {
+						addAvailability(request, response);
+					} catch (CCException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				else if(deletePhoto != null)
+					try {
+						deletePhoto(request, response);
+					} catch (CCException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				
 				
 				
 				
 			} // end of doGet
+			
+			private void deletePhoto(HttpServletRequest request, HttpServletResponse response) throws CCException
+			{
+
+				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
+				SimpleHash root = new SimpleHash(db.build());
+				
+				// Somehow get the cabin picture id
+				
+					CabinPicture cp = new CabinPicture();
+//					int cpId = Integer.parseInt(request.getParameter("cpId"));
+//					cp.setId(cpId);
+	
+					cp.setId(3);
+					
+				// Retrieve cabin picture from database 
+					
+					List<CabinPicture> cps = CabinPictureManager.restore(cp);
+					
+					if(cps.size() != 1) System.out.println("ERROR: incorrect cabin pictures found");
+					else cp = cps.get(0);
+					root.put("CP", cp);	
+					
+					root.put("add", "picture");
+					String templateName = "AddFeatureSuccess.ftl";
+					processor.processTemplate(templateName, root, request, response);
+					
+					CabinPictureManager.delete(cp);
+			
+			}
+			
+			private void addAvailability(HttpServletRequest request, HttpServletResponse response) throws CCException
+			{
+				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
+				SimpleHash root = new SimpleHash(db.build());
+				
+				// create model availability
+				
+				Availability availability = new Availability();
+				// cabin - price - date
+				
+				// get cabin id from ftl file and restore
+				
+					Cabin cabin = new Cabin();
+//					String cabinId = request.getParameter("cabinId");
+//					int cabinIdint = Integer.parseInt(cabinId);
+//					cabin.setId(cabinIdint);
+					
+					cabin.setId(6);
+					List<Cabin> cabins = CabinManager.restore(cabin);
+					
+					if(cabins.size() != 1) System.out.println("ERROR: wrong cabin(s) found");
+					else cabin = cabins.get(0);
+					
+				availability.setCabin(cabin);
+				
+				String stringPrice = request.getParameter("cabinPrice");
+				availability.setPrice(Float.parseFloat(stringPrice));
+				
+				String dateString = request.getParameter("cabinAvailability");
+				
+				String year = dateString.substring(0,4);
+				String month = dateString.substring(5,7);
+				String day = dateString.substring(8,10);
+				
+				int yearInt = Integer.parseInt(year);
+				int monthInt = Integer.parseInt(month);
+				int dayInt = Integer.parseInt(day);
+				
+				Calendar cal = Calendar.getInstance();
+				cal.set(yearInt, monthInt, dayInt);
+				availability.setDate( cal );
+				
+				SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY");		
+				String date = sdf.format(availability.getDate().getTime());
+				root.put("Date", date);
+				
+				// Store availability 
+				
+				AvailabilityManager.store(availability);
+				
+				root.put("Availability", availability);
+				root.put("add", "availability");
+				String templateName = "AddFeatureSuccess.ftl";
+				processor.processTemplate(templateName, root, request, response);
+			}
+
 			
 			private void prepareEdit(HttpServletRequest request, HttpServletResponse response) throws CCException
 			{
@@ -89,30 +230,16 @@ public class EditCabin extends HttpServlet
 				
 				// Get cabin 
 				
-//					Cabin modelCabin = new Cabin();
-//					modelCabin.setId(Integer.parseInt(request.getParameter("cabinId")));
+					Cabin modelCabin = new Cabin();
+					modelCabin.setId(Integer.parseInt(request.getParameter("cabinId")));
 				
 				// Create group
 				
 					Group group = new Group();
-	
-				// Dummy code - delete later 
-				
-					Cabin modelCabin = new Cabin();
-					modelCabin.setId(3);
-					
-					Feature feature = new Feature("i'm a test feature");
-					feature.setCabin(modelCabin);
-					
-					FeatureManager.store(feature);
 					
 				// Call logic layer to prepare cabin editing
 				
 					group = LogicLayerImpl.prepareEditCabin( modelCabin );
-					
-				// Dummy code - delete later	
-				
-					FeatureManager.delete(feature);
 					
 				// Place group into root
 					
@@ -133,49 +260,91 @@ public class EditCabin extends HttpServlet
 				
 					Group group = new Group();
 					
+				// Get Cabin id 
+					
+//					String cabinIdString = request.getParameter("cabinId");
+//					int cabinId = Integer.parseInt(cabinIdString);
+					Cabin modelCabin = new Cabin();
+//					modelCabin.setId(cabinId);
+					modelCabin.setId(5);
+
+				// Restore original cabin from database
+					
+					Cabin cabin = new Cabin();
+					List<Cabin> cabins = CabinManager.restore(modelCabin);
+					
+					if(cabins.size() != 1) System.out.println("ERROR: wrong cabin(s) found editcabin.java");
+					else cabin = cabins.get(0);
+					
 				// Create model cabin object
 				
 					// Get cabin parameters
 							
-						String address = "No Address"; 
-						if(!request.getParameter("newAddress").equals("")) address = request.getParameter("newAddress");
+						String address = cabin.getAddress(); 
+						if(!request.getParameter("newAddress").equals("") && !request.getParameter("newAddress").equals(cabin.getAddress())) 
+							address = request.getParameter("newAddress");
 						
-						String city = "No City";
-						if(!request.getParameter("newCity").equals("")) city = request.getParameter("newCity");		
+						String city = cabin.getCity();
+						if(!request.getParameter("newCity").equals("") && !request.getParameter("newCity").equals(cabin.getCity())) 
+							city = request.getParameter("newCity");		
 						
-						String state = "No State";
-						if(!request.getParameter("newState").equals("")) state = request.getParameter("newState");
+						String state = cabin.getState();
+						if(!request.getParameter("newState").equals("") && !request.getParameter("newState").equals(cabin.getState())) 
+							state = request.getParameter("newState");
 						
-						String description = "No Description";
-						if(!request.getParameter("newDescription").equals("")) description = request.getParameter("newDescription");
+						String description = cabin.getDescription();
+						if(!request.getParameter("newDescription").equals("") && !request.getParameter("newDescription").equals(cabin.getDescription())) 
+							description = request.getParameter("newDescription");
 						
-						String title = "No Title";
-						if(!request.getParameter("newTitle").equals("")) title = request.getParameter("newTitle");
+						String title = cabin.getTitle();
+						if(!request.getParameter("newTitle").equals("") && !request.getParameter("newTitle").equals(cabin.getTitle())) 
+							title = request.getParameter("newTitle");
 						
-						int bedCount = 0;
+						int bedCount = cabin.getBedroomCount();
 						String bed = request.getParameter("newBedCount");
-						if(!bed.equals("")) bedCount = Integer.parseInt(bed);
+						if(!bed.equals("") && Integer.parseInt(bed) != cabin.getBedroomCount()) 
+							bedCount = Integer.parseInt(bed);
 					
-						int bathCount = 0;
+						float bathCount = cabin.getBathCount();
 						String bath = request.getParameter("newBathCount");
-						if(!bath.equals("")) bathCount = Integer.parseInt(bath);
+						if(!bath.equals("") && Integer.parseInt(bath) != cabin.getBathCount()) 
+							bathCount = Integer.parseInt(bath);
 						
-						int maxOcc = 0;
+						int maxOcc = cabin.getMaxOccupancy();
 						String max = request.getParameter("newMaxOcc");
-						if(!max.equals("")) maxOcc = Integer.parseInt(max);
-					
-					Cabin modelCabin = new Cabin(address, city, state, description, title, bedCount, bathCount, maxOcc);
-					modelCabin.setId(3);
+						if(!max.equals("") && Integer.parseInt(max) != cabin.getMaxOccupancy()) 
+							maxOcc = Integer.parseInt(max);
+					    
+					    modelCabin.setAddress(address);
+					    modelCabin.setCity(city);
+					    modelCabin.setState(state);
+					    modelCabin.setDescription(description);
+					    modelCabin.setTitle(title);
+					    modelCabin.setBedroomCount(bedCount);
+					    modelCabin.setBathCount(bathCount);
+					    modelCabin.setMaxOccupancy(maxOcc);
 			
 				//TODO: PASS CABIN ID	
 				
-				// Get amenities
+				// Get original amenities from database
+					    
+					Amenities amenities = CabinManager.restoreAmenitiesFromCabin(cabin);
 				
 					// Variables
 					
 						boolean hasLake = false, hasRiver = false, hasPool = false, hasHotTub = false, hasWifi = false;
 						boolean hasAirConditioning = false, hasWasherDryer = false, allowsPets = false, allowsSmoking = false;
 					
+						hasLake = amenities.isHasLake();
+						hasRiver = amenities.isHasRiver();
+						hasPool = amenities.isHasPool();
+						hasHotTub = amenities.isHasHotTub();
+						hasWifi = amenities.isHasWifi();
+						hasAirConditioning = amenities.isHasAirConditioning();
+						hasWasherDryer = amenities.isHasWasherDryer();
+						allowsPets = amenities.isAllowsPets();
+						allowsSmoking = amenities.isAllowsSmoking();
+						
 					// Get user selected amenities	
 						
 						String[] checkBoxAmenities = request.getParameterValues("amenities");
@@ -209,7 +378,7 @@ public class EditCabin extends HttpServlet
 						} // end of if
 						
 				// Call logic layer to update amenities + cabin
-						
+					
 					group = LogicLayerImpl.updateCabin(modelCabin, modelAmenities);
 					root.put("Group", group);
 					
@@ -222,11 +391,17 @@ public class EditCabin extends HttpServlet
 			
 			private void addFeature(HttpServletRequest request, HttpServletResponse response) throws CCException
 			{
+				System.out.println("Enter add feature");
+				
+				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
+				SimpleHash root = new SimpleHash(db.build());
+				
 				// Get cabin
 				
 					Cabin cabin = new Cabin();
-					String cabinIdString = request.getParameter("cabinId");
-					cabin.setId(Integer.parseInt(request.getParameter("cabinId")));
+					cabin.setId(6);
+//					String cabinIdString = request.getParameter("cabinId");
+//					cabin.setId(Integer.parseInt(request.getParameter("cabinId")));
 				
 				// Create modelFeature
 				
@@ -234,32 +409,114 @@ public class EditCabin extends HttpServlet
 					
 				// Get user feature string and set
 					
-					String featureString = request.getParameter("featureString");
+					String featureString = request.getParameter("newFeature");
 					feature.setFeatureString(featureString);
 					feature.setCabin(cabin);
 					
 				// Store feature into database
 					
-					FeatureManager.delete(feature);
+					FeatureManager.store(feature);
+					
+				// Set and process template
+					
+					root.put("Feature", feature);
+					root.put("add", "add");
+					String templateName = "AddFeatureSuccess.ftl";
+					processor.processTemplate(templateName, root, request, response);
 				
 			}
 			
 			private void deleteFeature(HttpServletRequest request, HttpServletResponse response) throws CCException
 			{	
+				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
+				SimpleHash root = new SimpleHash(db.build());
+				
 				// Create modelFeature
 					
-					Feature feature = new Feature();
+					Feature modelFeature = new Feature();
 					
 				// Get feature id
 					
-					String featureIdString = request.getParameter("featureId");
-					feature.setId(Integer.parseInt(featureIdString));
+//					String featureIdString = request.getParameter("featureId");
+//					feature.setId(Integer.parseInt(featureIdString));
+	
+					modelFeature.setId(5);
+				// Retrieve feature from the database
+					
+					List<Feature> features = FeatureManager.restore(modelFeature);
+					Feature feature = new Feature();
+					
+					if(features.size() != 1) System.out.println("ERROR: wrong feature(s) found");
+					else feature = features.get(0);
+					
+					root.put("Feature", feature);
 					
 				// delete feature
 					
 					FeatureManager.delete(feature);
+
+					root.put("add", "delete");
+					String templateName = "AddFeatureSuccess.ftl";
+					processor.processTemplate(templateName, root, request, response);
+			}
+			
+			private void editFeature(HttpServletRequest request, HttpServletResponse response) throws CCException
+			{
+				System.out.println("enter edit feature");
+				
+				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
+				SimpleHash root = new SimpleHash(db.build());
+				
+				Feature modelFeature = new Feature();
+//				String featureId = request.getParameter("featureId");
+//				int featureIdInt  = Integer.parseInt(featureId);
+//				modelFeature.setId(featureIdInt);
+				
+				modelFeature.setId(5);
+				
+				List<Feature> features = FeatureManager.restore(modelFeature);
+				Feature feature = new Feature();
+				
+				if(features.size() != 1) System.out.println("ERROR: wrong feature(s) found");
+				else feature = features.get(0);
+				
+				root.put("Feature", feature);
+				
+				root.put("add", "edit");
+				String templateName = "AddFeatureSuccess.ftl";
+				processor.processTemplate(templateName, root, request, response);
 			}
 	
+			private void submitEditedFeature(HttpServletRequest request, HttpServletResponse response) throws CCException
+			{
+				System.out.println("enter submit edit feature");
+				
+				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
+				SimpleHash root = new SimpleHash(db.build());
+				
+				Feature modelFeature = new Feature();
+//				String featureId = request.getParameter("featureId");
+//				modelFeature.setId(Integer.parseInt(featureId));
+				
+				modelFeature.setId(5);
+				
+				List<Feature> features = FeatureManager.restore(modelFeature);
+				Feature feature = new Feature();
+				
+				if(features.size() != 1) System.out.println("ERROR: wrong feature(s) found");
+				else feature = features.get(0);
+				
+				String newFeatureString = request.getParameter("editFeatureString");
+				feature.setFeatureString(newFeatureString);
+				
+				FeatureManager.store(feature);
+				
+				root.put("Feature", feature);
+				
+				root.put("add", "submitEditFeature");
+				String templateName = "AddFeatureSuccess.ftl";
+				processor.processTemplate(templateName, root, request, response);
+			}
 		
 		//@see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 			protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 

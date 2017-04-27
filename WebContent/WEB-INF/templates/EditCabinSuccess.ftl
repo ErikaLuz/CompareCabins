@@ -44,15 +44,15 @@
 		
 		<h2>Amenities</h2>
 	
-	    Lake: ${Group.getAmenities().isHasLake?c}<br />
-        River: ${Group.getAmenities().isHasRiver?c}<br /> 
-        Pool: ${Group.getAmenities().isHasPool?c}<br />
-        Hot Tub: ${Group.getAmenities().isHasHotTub?c}<br />
-        WiFi: ${Group.getAmenities().isHasWifi?c}<br />
-        Air Conditioning: ${Group.getAmenities().isHasAirConditioning?c}<br />
-        Washer & Dryer: ${Group.getAmenities().isHasWasherDryer?c}<br />
-        Allow Pets: ${Group.getAmenities().isAllowsPets?c}<br />
-        Allow Smoking: ${Group.getAmenities().isAllowsSmoking?c}<br />
+	    Lake: ${Group.getAmenities().hasLake?c}<br />
+        River: ${Group.getAmenities().hasRiver?c}<br /> 
+        Pool: ${Group.getAmenities().hasPool?c}<br />
+        Hot Tub: ${Group.getAmenities().hasHotTub?c}<br />
+        WiFi: ${Group.getAmenities().hasWifi?c}<br />
+        Air Conditioning: ${Group.getAmenities().hasAirConditioning?c}<br />
+        Washer & Dryer: ${Group.getAmenities().hasWasherDryer?c}<br />
+        Allow Pets: ${Group.getAmenities().allowsPets?c}<br />
+        Allow Smoking: ${Group.getAmenities().allowsSmoking?c}<br />
 	
 	</form>
 

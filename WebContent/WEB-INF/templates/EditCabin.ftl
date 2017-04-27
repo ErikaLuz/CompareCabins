@@ -33,6 +33,23 @@
 	
 	<form action="EditCabin" method="post">
 	
+	<h2>Delete Pictures:</h2>
+	
+	<#list Group.getCabinPictureList() as CP>	
+	<img src="${CP.filePath}" alt="cabin" style="width:300px;height:300px;">
+	<button name="deletePhoto" class="btn">Delete Photo</button><br />
+	</#list>
+
+	
+	<h2>Add an Availability:</h2>
+   	
+   	Date(2000-01-01 format)<input type="date" name="cabinAvailability" /><br>
+   	Price: <input type="text" name="cabinPrice" /><br />
+   	<button name="addAvailability" class="btn">Add Availability</button>
+	
+	
+	<h2>Cabin Info</h2>
+	
 	Title: <input type="text" name="newTitle" value="${Group.getCabin().title}" /><br />
 	Address: <input type="text" name="newAddress" value="${Group.getCabin().address}" /><br />
 	City: <input type="text" name="newCity" value="${Group.getCabin().city}" /><br />
@@ -53,9 +70,9 @@
         Washer & Dryer?<input type = "checkbox" name="amenities" value="hasWasherDryer" <#if Group.getAmenities().hasWasherDryer  >checked</#if>><br />
         Allow Pets?<input type = "checkbox" name="amenities" value="allowsPets" <#if Group.getAmenities().allowsPets  >checked</#if>><br />
         Allow Smoking?<input type = "checkbox" name="amenities" value="allowsSmoking" <#if Group.getAmenities().allowsSmoking  >checked</#if>><br />
-      
-	
-<!--	
+      	
+    <br /><br /><button name="submitEdit" class="btn">Submit</button>  	
+      	
 	<h2>Features</h2>
 	
 	<#list Group.getFeatureList() as FL>
@@ -64,12 +81,13 @@
 	<button name="deleteFeature" class="btn">Delete Feature</button><br/>
 	</#list>
 	
-	<button name="addFeature" class="btn">Add Feature</button><br/>
--->	
-	<br /><br /><button name="submitEdit" class="btn">Submit</button>
-	
-	
+	<input type="text" name="newFeature" value="" /><button name="addFeature" class="btn">Add Feature</button><br/>
+	 
 	</form>
+	
+	
+	
+	
 
 </body>
 </html>

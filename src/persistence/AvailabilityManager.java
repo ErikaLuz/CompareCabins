@@ -76,11 +76,14 @@ public class AvailabilityManager {
 				}
 	        }
 	        else { 
+	    		DbAccessImpl.disconnect(conn);
 	            throw new CCException("AvailabilityManager.store: failed to save an availability ");
 	        }
 	    } catch( SQLException e) {
+			DbAccessImpl.disconnect(conn);
 			throw new CCException("AvailabilityManager.store: failed to save an availability: " + e );
 		}
+		DbAccessImpl.disconnect(conn);
 	}
 	
 	public static List<Availability> restore( Availability modelAvailability ) throws CCException
@@ -154,13 +157,16 @@ public class AvailabilityManager {
 					availabilities.add( availability );
 				}
 				
+				DbAccessImpl.disconnect(conn);
 				return availabilities;
 				
 			} else {
+				DbAccessImpl.disconnect(conn);
 				return null;
 			}
 		}
-		catch( SQLException e ) {      
+		catch( SQLException e ) { 
+			DbAccessImpl.disconnect(conn);
 			throw new CCException("AmenitiesManager.restore: Could not restore persistent Amenities objects: " + e );
 		}		
 	}
@@ -200,11 +206,14 @@ public class AvailabilityManager {
 				cabin.setUser(null);
 				cabin.setAmenities(null);
 				
+				DbAccessImpl.disconnect(conn);
 				return cabin;
 			} else { // no matches found for the query
+				DbAccessImpl.disconnect(conn);
 				return null;
 			}
 		} catch( SQLException e ) {
+			DbAccessImpl.disconnect(conn);
 			throw new CCException("AvailabilityManager.restoreCabinFromAvailabilty: could not restore persistent Cabin object: " + e );
 		}
 		
@@ -217,17 +226,22 @@ public class AvailabilityManager {
 		Connection con = DbAccessImpl.connect();
 		int rowsModified;
 		
-		if(availability.getId() < 0) //object no in database
+		if(availability.getId() < 0) {
+			DbAccessImpl.disconnect(con);//object no in database
 			return;
+		}
 		
 		try {
 			ps = con.prepareStatement(query);
 			ps.setInt(1,  availability.getId());
 			rowsModified = ps.executeUpdate();
 			
-			if(rowsModified != 1)
+			if(rowsModified != 1) {
+				DbAccessImpl.disconnect(con);
 				throw new CCException("AvailabilityManager.delete: failed to delete availability");
+			}
 		}catch(SQLException e) {
+			DbAccessImpl.disconnect(con);
 			throw new CCException("AvailabilityManager.delte: failed to delete availability: " + e);
 		}
 		

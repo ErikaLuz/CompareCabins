@@ -193,6 +193,160 @@ public class LogicLayerImpl {
 			
 	} // end of addCabin
 	
+	public static Group prepareEditCabin( Cabin modelCabin ) throws CCException
+	{
+		// Create group object 
+		
+			Group group = new Group();
+		
+		// Retrieve cabin from the database + add to group
+		
+			List<Cabin> cabins = CabinManager.restore(modelCabin);
+			Cabin cabin = new Cabin();
+			
+			if(cabins.size() != 1) System.out.println("ERROR: wrong cabin(s) found");
+			else cabin = cabins.get(0);
+			
+			group.setCabin(cabin);
+			
+		// Retrieve cabin amenities from database + add to group
+			
+			Amenities amenity = CabinManager.restoreAmenitiesFromCabin(cabin);
+			group.setAmenities(amenity);
+			
+		// Retrieve cabin pictures from database + add to group
+			
+			List<CabinPicture> cp = CabinManager.restoreCabinPicturesFromCabin(cabin);
+			System.out.println("cabin picture list size: " + cp.size());
+			group.setCabinPictureList(cp);
+			
+		// Retrieve cabin priority picture + add to group
+			
+			CabinPicture priorityPicture = new CabinPicture();
+			
+			for(int i = 0; i < cp.size(); i++)
+			{
+				if(cp.get(i).getPriority() == 1) priorityPicture = cp.get(i);
+			}
+			
+			group.setCabinPicture(priorityPicture);
+			
+		// Retrieve cabin features from database + add to group
+			
+			List<Feature> feature = CabinManager.restoreFeaturesFromCabin(cabin);
+			System.out.println("Features: " + feature.size());
+			group.setFeatureList(feature);
+			
+		// Retrieve cabin availabilities + add to group
+			
+			List<Availability> availability = CabinManager.restoreAvailabilitiesFromCabin(cabin);
+			group.setAvailabilityList(availability);
+			
+		// Return group
+			
+			return group;
+			
+	} // end of prepareEditCabin
+
+	public static Group updateCabin(Cabin modelCabin, Amenities modelAmenities) throws CCException
+	{
+		// Create Group 
+		
+			Group group = new Group();
+			
+		// Restore cabin from database
+		
+			List<Cabin> cabins = CabinManager.restore(modelCabin);
+			Cabin cabin = new Cabin();
+			
+			if(cabins.size() != 1) System.out.println("ERROR: wrong cabin(s) found");
+			else cabin = cabins.get(0);
+			
+			// Restore amenities from database
+			
+			Amenities amenities = CabinManager.restoreAmenitiesFromCabin(cabin);
+			
+		if(modelAmenities != null) 
+		{	
+			// Compare model amenities to database amenities and change to new values if needed
+				
+				if(modelAmenities.isHasLake() != amenities.isHasLake())
+					amenities.setHasLake(modelAmenities.isHasLake());
+				
+				if(modelAmenities.isHasRiver() != amenities.isHasRiver())
+					amenities.setHasRiver(modelAmenities.isHasRiver());
+				
+				if(modelAmenities.isHasPool() != amenities.isHasPool())
+					amenities.setHasPool(modelAmenities.isHasPool());
+				
+				if(modelAmenities.isHasHotTub() != amenities.isHasHotTub())
+					amenities.setHasHotTub(modelAmenities.isHasHotTub());
+				
+				if(modelAmenities.isHasWifi() != amenities.isHasWifi())
+					amenities.setHasWifi(modelAmenities.isHasWifi());
+				
+				if(modelAmenities.isHasAirConditioning() != amenities.isHasAirConditioning())
+					amenities.setHasAirConditioning(modelAmenities.isHasAirConditioning());
+				
+				if(modelAmenities.isHasWasherDryer() != amenities.isHasWasherDryer())
+					amenities.setHasWasherDryer(modelAmenities.isHasWasherDryer());
+				
+				if(modelAmenities.isAllowsPets() != amenities.isAllowsPets())
+					amenities.setAllowsPets(modelAmenities.isAllowsPets());
+				
+				if(modelAmenities.isAllowsSmoking() != amenities.isAllowsSmoking())
+					amenities.setAllowsSmoking(modelAmenities.isAllowsSmoking());
+				
+		} // end of amenities if statement
+		
+		// Update amenities in database
+		
+			AmenitiesManager.store(amenities);
+			group.setAmenities(amenities);
+			
+		// Compare model cabin to database cabin and change to new values if needed
+			
+			if(!modelCabin.getAddress().equals(cabin.getAddress()) && modelCabin.getAddress() != null)
+				cabin.setAddress(modelCabin.getAddress());
+			
+			if(!modelCabin.getCity().equals(cabin.getCity()) && modelCabin.getCity() != null)
+				cabin.setCity(modelCabin.getCity());
+			
+			if(!modelCabin.getState().equals(cabin.getState()) && modelCabin.getState() != null)
+				cabin.setState(modelCabin.getState());
+			
+			if(!modelCabin.getDescription().equals(cabin.getDescription()) && modelCabin.getDescription() != null)
+				cabin.setDescription(modelCabin.getDescription());
+			
+			if(!modelCabin.getTitle().equals(cabin.getTitle()) && modelCabin.getTitle() != null)
+				cabin.setTitle(modelCabin.getTitle());
+			
+			if(modelCabin.getBedroomCount() != cabin.getBedroomCount() && modelCabin.getBedroomCount() > -1)
+				cabin.setBedroomCount(modelCabin.getBedroomCount());
+			
+			if(modelCabin.getBathCount() != cabin.getBathCount() && modelCabin.getBathCount() > -1)
+				cabin.setBathCount(modelCabin.getBathCount());
+			
+			if(modelCabin.getMaxOccupancy() != cabin.getMaxOccupancy() && modelCabin.getMaxOccupancy() > -1)
+				cabin.setMaxOccupancy(modelCabin.getMaxOccupancy());	
+			
+		// Update cabin in database
+			
+			CabinManager.store(cabin);
+			group.setCabin(cabin);
+			
+		// Return group
+			
+			return group;
+	}
+
+	public static void deleteCabin(Cabin cabin) throws CCException
+	{
+		// Delete cabin from database
+		
+			CabinManager.delete(cabin);
+	}
+
 	public static void viewUserProfile (SimpleHash root, User user) throws CCException
 	{
 		// Restore user from database
@@ -271,160 +425,6 @@ public class LogicLayerImpl {
 		return user;
 			
 	} // end of updateUser
-	
-	public static Group prepareEditCabin( Cabin modelCabin ) throws CCException
-	{
-		// Create group object 
-		
-			Group group = new Group();
-		
-		// Retrieve cabin from the database + add to group
-		
-			List<Cabin> cabins = CabinManager.restore(modelCabin);
-			Cabin cabin = new Cabin();
-			
-			if(cabins.size() != 1) System.out.println("ERROR: wrong cabin(s) found");
-			else cabin = cabins.get(0);
-			
-			group.setCabin(cabin);
-			
-		// Retrieve cabin amenities from database + add to group
-			
-			Amenities amenity = CabinManager.restoreAmenitiesFromCabin(cabin);
-			group.setAmenities(amenity);
-			
-		// Retrieve cabin pictures from database + add to group
-			
-			List<CabinPicture> cp = CabinManager.restoreCabinPicturesFromCabin(cabin);
-			System.out.println("cabin picture list size: " + cp.size());
-			group.setCabinPictureList(cp);
-			
-		// Retrieve cabin priority picture + add to group
-			
-			CabinPicture priorityPicture = new CabinPicture();
-			
-			for(int i = 0; i < cp.size(); i++)
-			{
-				if(cp.get(i).getPriority() == 1) priorityPicture = cp.get(i);
-			}
-			
-			group.setCabinPicture(priorityPicture);
-			
-		// Retrieve cabin features from database + add to group
-			
-			List<Feature> feature = CabinManager.restoreFeaturesFromCabin(cabin);
-			System.out.println("Features: " + feature.size());
-			group.setFeatureList(feature);
-			
-		// Retrieve cabin availabilities + add to group
-			
-			List<Availability> availability = CabinManager.restoreAvailabilitiesFromCabin(cabin);
-			group.setAvailabilityList(availability);
-			
-		// Return group
-			
-			return group;
-			
-	} // end of prepareEditCabin
-	
-	public static Group updateCabin(Cabin modelCabin, Amenities modelAmenities) throws CCException
-	{
-		// Create Group 
-		
-			Group group = new Group();
-			
-		// Restore cabin from database
-		
-			List<Cabin> cabins = CabinManager.restore(modelCabin);
-			Cabin cabin = new Cabin();
-			
-			if(cabins.size() != 1) System.out.println("ERROR: wrong cabin(s) found");
-			else cabin = cabins.get(0);
-			
-		if(modelAmenities != null) 
-		{
-			// Restore amenities from database
-			
-				Amenities amenities = CabinManager.restoreAmenitiesFromCabin(cabin);
-				
-			// Compare model amenities to database amenities and change to new values if needed
-				
-				if(modelAmenities.isHasLake() != amenities.isHasLake())
-					amenities.setHasLake(modelAmenities.isHasLake());
-				
-				if(modelAmenities.isHasRiver() != amenities.isHasRiver())
-					amenities.setHasRiver(modelAmenities.isHasRiver());
-				
-				if(modelAmenities.isHasPool() != amenities.isHasPool())
-					amenities.setHasPool(modelAmenities.isHasPool());
-				
-				if(modelAmenities.isHasHotTub() != amenities.isHasHotTub())
-					amenities.setHasHotTub(modelAmenities.isHasHotTub());
-				
-				if(modelAmenities.isHasWifi() != amenities.isHasWifi())
-					amenities.setHasWifi(modelAmenities.isHasWifi());
-				
-				if(modelAmenities.isHasAirConditioning() != amenities.isHasAirConditioning())
-					amenities.setHasAirConditioning(modelAmenities.isHasAirConditioning());
-				
-				if(modelAmenities.isHasWasherDryer() != amenities.isHasWasherDryer())
-					amenities.setHasWasherDryer(modelAmenities.isHasWasherDryer());
-				
-				if(modelAmenities.isAllowsPets() != amenities.isAllowsPets())
-					amenities.setAllowsPets(modelAmenities.isAllowsPets());
-				
-				if(modelAmenities.isAllowsSmoking() != amenities.isAllowsSmoking())
-					amenities.setAllowsSmoking(modelAmenities.isAllowsSmoking());
-				
-			// Update amenities in database
-				
-				AmenitiesManager.store(amenities);
-				group.setAmenities(amenities);
-				
-		} // end of amenities if statement
-			
-		// Compare model cabin to database cabin and change to new values if needed
-			
-			if(!modelCabin.getAddress().equals(cabin.getAddress()) && modelCabin.getAddress() != null)
-				cabin.setAddress(modelCabin.getAddress());
-			
-			if(!modelCabin.getCity().equals(cabin.getCity()) && modelCabin.getCity() != null)
-				cabin.setCity(modelCabin.getCity());
-			
-			if(!modelCabin.getState().equals(cabin.getState()) && modelCabin.getState() != null)
-				cabin.setState(modelCabin.getState());
-			
-			if(!modelCabin.getDescription().equals(cabin.getDescription()) && modelCabin.getDescription() != null)
-				cabin.setDescription(modelCabin.getDescription());
-			
-			if(!modelCabin.getTitle().equals(cabin.getTitle()) && modelCabin.getTitle() != null)
-				cabin.setTitle(modelCabin.getTitle());
-			
-			if(modelCabin.getBedroomCount() != cabin.getBedroomCount() && modelCabin.getBedroomCount() > -1)
-				cabin.setBedroomCount(modelCabin.getBedroomCount());
-			
-			if(modelCabin.getBathCount() != cabin.getBathCount() && modelCabin.getBathCount() > -1)
-				cabin.setBathCount(modelCabin.getBathCount());
-			
-			if(modelCabin.getMaxOccupancy() != cabin.getMaxOccupancy() && modelCabin.getMaxOccupancy() > -1)
-				cabin.setMaxOccupancy(modelCabin.getMaxOccupancy());	
-			
-		// Update cabin in database
-			
-			CabinManager.store(cabin);
-			group.setCabin(cabin);
-			
-		// Return group
-			
-			return group;
-	}
-	
-	public static void deleteCabin(Cabin cabin) throws CCException
-	{
-		// Delete cabin from database
-		
-			CabinManager.delete(cabin);
-	}
 	
 	public static void pastStays(SimpleHash root, User user) throws CCException
 	{
