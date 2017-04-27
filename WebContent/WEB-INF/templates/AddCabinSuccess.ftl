@@ -25,9 +25,7 @@
 <#include "Header.ftl">
 
 
-	<h1>CONGRATULATION YOU HAVE ADDED THIS CABIN: ${Cabin.title} </h1>
-    
-    <h2>Cabin pictures null for now </h2>
+	<h1>CONGRATULATION YOU HAVE ADDED THE CABIN: ${Cabin.title} </h1>
     
     <h2> Cabin Location</h2>
     Address: ${Cabin.address}<br />
@@ -74,10 +72,6 @@
     
     </#if>
     
-    <h2>Cabin availability: blank for now</h2>
-    
-    
-    </form>
 
 </body>
 </html>
