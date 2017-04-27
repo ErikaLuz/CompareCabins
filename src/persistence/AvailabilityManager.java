@@ -111,8 +111,23 @@ public class AvailabilityManager {
 					Calendar cal = modelAvailability.getDate();
 					int day = cal.get( Calendar.DAY_OF_MONTH );
 					int month = cal.get( Calendar.MONTH );
+					month++;
 					int year = cal.get( Calendar.YEAR );
-					String dateString = year + "-" + month + "-" + day;
+					String monthString;
+					String dayString;
+					if( month < 10)
+					{
+						monthString = "0" + month;
+					} else {
+						monthString = Integer.toString( month );
+					}
+					if( day < 10)
+					{
+						dayString = "0" + day;
+					} else {
+						dayString = Integer.toString( day );
+					}
+					String dateString = year + "-" + monthString + "-" + dayString;
 					condition.append(" date = '" + dateString + "'");
 				}
 				
@@ -126,9 +141,8 @@ public class AvailabilityManager {
 		
 		try {			
 			statement = conn.createStatement();
-			
 			if( statement.execute( query.toString() ) ) { // statement returned a result
-				
+
 				// fields of an availability object
 				int   		id;
 				float		price;
@@ -143,10 +157,13 @@ public class AvailabilityManager {
 					id = rs.getInt(1);
 					price = rs.getFloat(2);
 					java.sql.Date sqlDate = rs.getDate(3);
+
 					
 					// set calendar value from sql date
 					calendar = Calendar.getInstance();
 					calendar.setTime(sqlDate);
+					
+
 
 
 					// create a proxy object

@@ -5,10 +5,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import exception.CCException;
+import object.Amenities;
 import object.Availability;
 import object.Cabin;
 import object.RentRecord;
 import object.User;
+import persistence.AmenitiesManager;
 import persistence.AvailabilityManager;
 import persistence.CabinManager;
 import persistence.RentRecordManager;
@@ -172,10 +174,13 @@ public class LogicLayerImplAlt {
 		Calendar temp = Calendar.getInstance();
 		temp.setTime( startCal.getTime() );
 		
-		while( temp.compareTo( endCal ) <= 0 )
+		while( compareCalendars( temp, endCal) <= 0 )
 		{
 			Availability availability = new Availability();
-			availability.setDate( startCal );
+			Calendar cal = Calendar.getInstance();
+			
+			cal.setTime( temp.getTime() );
+			availability.setDate( cal );
 			
 			availabilities.add( availability );
 			
@@ -191,6 +196,101 @@ public class LogicLayerImplAlt {
 				if( cal2.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) )
 					return true;
 		return false;
+	}
+	public static int compareCalendars( Calendar cal1, Calendar cal2 )
+	{
+		if( cal1.get(Calendar.YEAR) < cal2.get(Calendar.YEAR) )
+			return -1;
+		if( cal1.get(Calendar.MONTH) < cal2.get(Calendar.MONTH) )
+			return -1;
+		if( cal1.get( Calendar.DAY_OF_MONTH ) < cal2.get( Calendar.DAY_OF_MONTH ) )
+			return -1;
+		if( checkDatesEqual( cal1, cal2 ) )
+			return 0;
+		return 1;
+	}
+	public static List<Cabin> search ( Amenities amenities, Calendar startCal, Calendar endCal ) throws CCException
+	{
+		List<Amenities> matchedAmenities;
+		List<Cabin> cabins = new LinkedList<Cabin>();
+		LinkedList<Cabin> matchedCabins = new LinkedList<Cabin>();
+		List<Availability> rentDates;
+		LinkedList<List<Availability>> allAvailabilitiesPerRentDay = new LinkedList<List<Availability>>();
+		boolean cabinFound = false;
+		boolean cabinMatched = true;
+		
+		if( amenities == null )
+		{
+			cabins = CabinManager.restore(null);
+		} else {					
+			matchedAmenities = AmenitiesManager.restore( amenities );
+			
+			// fill list of cabins that match the amenities
+			for( int i = 0; i < matchedAmenities.size(); i++)
+			{
+				Cabin cabin = AmenitiesManager.restoreCabinFromAmenities( matchedAmenities.get(i) );
+				cabins.add( cabin );
+			}
+		}
+		
+		if( startCal == null || endCal == null)
+			return cabins;
+		
+		// get list of Availabilities of each day between start and end
+		rentDates = getDatesBetween( startCal, endCal );
+		
+
+		// make list of lists of Availabilities for each rent day
+		for( int i = 0; i < rentDates.size(); i++ )
+		{
+			List<Availability> allAvailabilitiesInRentDay = AvailabilityManager.restore( rentDates.get(i) );
+			for( int j = 0; j < allAvailabilitiesInRentDay.size(); j++)
+			{
+				Availability availability = allAvailabilitiesInRentDay.get(j);
+				availability.setCabin( AvailabilityManager.restoreCabinFromAvailability( availability )); // set cabin for proxy object
+			}
+
+			allAvailabilitiesPerRentDay.add( allAvailabilitiesInRentDay );
+		}
+
+		int j = 0; // outer list counter
+		int k = 0; // inner list counter
+		int outerListSize;
+		int innerListSize;
+		
+		// test each cabin is available during each rent day
+		for( int i = 0; i < cabins.size(); i++) // for all cabins to consider after matching by amenities
+		{
+			j = 0; // reset counter
+			outerListSize = allAvailabilitiesPerRentDay.size();
+			while( cabinMatched == true && j < outerListSize ) // while cabin has not been ruled out and outer list testing is not done
+			{
+				k = 0; // reset counter
+				innerListSize = allAvailabilitiesPerRentDay.get(j).size();
+				while( cabinFound == false && k < innerListSize ) // while cabin has not been found in the inner list and testing is not done
+				{
+					if( cabins.get(i).getId() == allAvailabilitiesPerRentDay.get(j).get(k).getCabin().getId() )
+					{
+						cabinFound = true;
+					}
+					k++;
+				}
+				if( cabinFound == false) // cabin not available during one of the desired rent days
+				{
+					cabinMatched = false;
+				}
+				j++;
+				cabinFound = false; // reset sentinel
+			}
+			if( cabinMatched == true ) // cabin is available during all of the desired rent days
+			{
+				matchedCabins.add( cabins.get(i) ); // return matched cabin
+			}
+			
+			cabinMatched = true; // reset sentinel
+		}
+		
+		return matchedCabins;
 	}
 }
 

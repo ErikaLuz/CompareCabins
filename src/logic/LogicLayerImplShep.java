@@ -15,6 +15,7 @@ import persistence.CabinManager;
 public class LogicLayerImplShep {
 	
 	public static List<Cabin> search(Amenities amenities, Availability startAvailability, Availability endAvailability) throws CCException{
+		System.out.println("LogicLayerImplShep.search entered");
 		List<Cabin> cabins = new LinkedList<Cabin>();
 		List<Amenities> listAmenities = AmenitiesManager.restore(amenities);
 		for(int i = 0; i < listAmenities.size(); i++) {

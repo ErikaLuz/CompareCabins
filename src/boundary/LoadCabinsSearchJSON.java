@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import exception.CCException;
+import logic.LogicLayerImplAlt;
 import logic.LogicLayerImplShep;
 import object.Amenities;
 import object.Availability;
@@ -42,15 +43,10 @@ public class LoadCabinsSearchJSON extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		String[] primaryPhotoFilePath = null;
         
-		StringBuffer requestURL = request.getRequestURL();
-		if (request.getQueryString() != null) {
-		    requestURL.append("?").append(request.getQueryString());
-		}
-		String completeURL = requestURL.toString();
 		
-		System.out.println(completeURL);
         // set up the response writer
         response.setContentType("application/json;charset=UTF-8");
         PrintWriter toClient = response.getWriter();
@@ -67,12 +63,12 @@ public class LoadCabinsSearchJSON extends HttpServlet {
 		String startDateString = request.getParameter("startAvailability");
 		String endDateString = request.getParameter("endAvailability");
 		
-		Availability start;
+		Calendar start;
 		if(startDateString.length() > 0)
 			start = parseDateString( startDateString );
 		else
 			start = null;
-		Availability end;
+		Calendar end;
 		if(endDateString.length() > 0)
 			end = parseDateString( endDateString );
 		else
@@ -102,8 +98,7 @@ public class LoadCabinsSearchJSON extends HttpServlet {
         
         List<Cabin> cabins = null;
 		try {
-			cabins = LogicLayerImplShep.search( amenities, start, end );
-			System.out.println("---------------------------" + cabins.size());
+			cabins = LogicLayerImplAlt.search( amenities, start , end );
 	        primaryPhotoFilePath = new String[ cabins.size() ];
 	        
 	        for( int i = 0; i < cabins.size(); i++ )
@@ -149,7 +144,7 @@ public class LoadCabinsSearchJSON extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-	private Availability parseDateString( String dateString )
+	private Calendar parseDateString( String dateString )
 	{
 		String year = dateString.substring(0,4);
 		String month = dateString.substring(5,7);
@@ -162,10 +157,8 @@ public class LoadCabinsSearchJSON extends HttpServlet {
 		
 		Calendar cal = Calendar.getInstance();
 		cal.set(yearInt, monthInt, dayInt);
-		Availability availability = new Availability();
-		availability.setDate( cal );
 		
-		return availability;
+		return cal;
 	}
 
 
