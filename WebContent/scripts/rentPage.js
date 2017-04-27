@@ -27,7 +27,6 @@ function checkPriceButtonClick ( event ) {
 			$("#rentButton").css("display", "none" );
 		}
 		 
-		 event.preventDefault();
 		 
 		
 	});
