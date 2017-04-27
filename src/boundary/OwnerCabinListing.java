@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import boundary.TemplateProcessor;
 
@@ -18,6 +19,7 @@ import logic.LogicLayerImpl;
 import object.Cabin;
 //import object.User;
 //import object.Review;
+import object.User;
 
 //import persistence.AmenitiesManager;
 //import persistence.CabinManager;
@@ -63,6 +65,10 @@ public class OwnerCabinListing extends HttpServlet
 		{
 			DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 			SimpleHash root = new SimpleHash(db.build());
+			
+			HttpSession  session = request.getSession();
+			User user = (User) session.getAttribute("user");
+			root.put("username", user.getUsername());
 			
 			// Get CabinId
 			

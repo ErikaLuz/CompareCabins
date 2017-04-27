@@ -67,6 +67,7 @@ public class LogicLayerImplAlt {
 	public static boolean testIfDatesAvailableFillAvailabilityList( List<Availability> rentDates, int cabinId, 
 			List<Availability> cabinAvailabilitiesInRentPeriod ) throws CCException
 	{
+		System.out.println("---------------------------" + Calendar.APRIL);
 		List<Availability> cabinAvailabilities;
 		Cabin cabin = new Cabin();
 		boolean rentDatesAvailable = true;
@@ -80,10 +81,17 @@ public class LogicLayerImplAlt {
 		{
 			Calendar rentDate = rentDates.get( i ).getDate();
 			int j = 0;
+			rentDateFound = false;
+			System.out.println("cabinAvailabilities size: " + cabinAvailabilities.size() );
 			while( rentDateFound == false && j < cabinAvailabilities.size() )
 			{
-				if( rentDate.equals( cabinAvailabilities.get( j ).getDate() ) )
+				Calendar cabinDate = cabinAvailabilities.get(j).getDate();
+				Calendar a = cabinDate;
+				System.out.println("rentDate: " + rentDate.get(Calendar.MONTH) + "  " + rentDate.get(Calendar.DAY_OF_MONTH)  + "  " + rentDate.get(Calendar.YEAR)
+				+ "   cabAvail: " + a.get(Calendar.MONTH) + "  " + a.get(Calendar.DAY_OF_MONTH) + "  " + a.get(Calendar.YEAR) );
+				if( checkDatesEqual( rentDate, cabinDate )  )
 				{
+					System.out.println("testIFDatesAvail: " + i );
 					rentDateFound = true;
 					Availability temp = cabinAvailabilities.get(j);
 					temp.setCabin( cabin );
@@ -99,6 +107,31 @@ public class LogicLayerImplAlt {
 		}
 		
 		return rentDatesAvailable;
+	}
+	
+	public static float getTotalPrice( Availability start, Availability end, int cabinId ) throws CCException
+	{
+		if( start == null || end == null )
+			return -1;
+		List<Availability> availabilities = getDatesBetween( start.getDate(), end.getDate() );
+		System.out.println( "getTotalPrice: size:" + availabilities.size() );
+		Cabin model = new Cabin();
+		float totalPrice = 0;
+		model.setId( cabinId );
+		
+		LinkedList<Availability> rentDates = new LinkedList<>();
+		
+		if( testIfDatesAvailableFillAvailabilityList( availabilities, cabinId, rentDates) )
+		{
+			System.out.println("getTotalPrice: rentDates size: " + rentDates.size() );
+			for( int i = 0; i < rentDates.size(); i++)
+			{
+				totalPrice += rentDates.get( i ).getPrice();
+			}
+			return totalPrice;
+		}
+		else
+			return -1;
 	}
 	public static void rentCabin( Calendar startCal, Calendar endCal, int cabinId, User user ) throws CCException
 	{
@@ -136,18 +169,28 @@ public class LogicLayerImplAlt {
 	public static LinkedList<Availability> getDatesBetween( Calendar startCal, Calendar endCal )
 	{
 		LinkedList<Availability> availabilities = new LinkedList<>();
+		Calendar temp = Calendar.getInstance();
+		temp.setTime( startCal.getTime() );
 		
-		while( startCal.compareTo( endCal ) <= 0 )
+		while( temp.compareTo( endCal ) <= 0 )
 		{
 			Availability availability = new Availability();
 			availability.setDate( startCal );
 			
 			availabilities.add( availability );
 			
-			startCal.add( Calendar.DAY_OF_MONTH, 1);
+			temp.add( Calendar.DAY_OF_MONTH, 1);
 		}
 		
 		return availabilities;
+	}
+	public static boolean checkDatesEqual( Calendar cal1, Calendar cal2 )
+	{
+		if( cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH) )
+			if( cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH) )
+				if( cal2.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) )
+					return true;
+		return false;
 	}
 }
 

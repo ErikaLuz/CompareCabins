@@ -41,18 +41,7 @@ window.onload = function () {
 
 function searchButtonClick ( event ) {
 	console.log("searchButtonClick event entered");
-	/*
-	var hasLake = jQuery("input:checkbox[name=hasLake]").val();
-	var hasRiver= jQuery("input:checkbox[name=hasRiver]").val();
-	var hasWifi = jQuery("input:checkbox[name=hasWifi]").val();
-	var hasAirConditioning= jQuery("input:checkbox[name=hasAirConditioning]").val();
-	var hasWasherDryer= jQuery("input:checkbox[name=hasWasherDryer]").val();
-	var hasHotTub = jQuery("input:checkbox[name=hasHotTub]").val();
-	var allowsPets = jQuery("input:checkbox[name=allowPets]").val();
-	var allowsSmoking = jQuery("input:checkbox[name=allowsSmoking]").val();
-	var startDate = jQuery("#startDate").val();
-	var endDate = jQuery("#endDate").val();
-	*/
+
 	 event.preventDefault();
 	var header = $("#results h2");
 	jQuery("#results").empty().append(header);

@@ -30,13 +30,12 @@
         </div>
         <div class="panel-body">
              <div class="row">
-                <div class="col-sm-6">
+
+                <div class="col-sm-12 center-block">
                     <form action="AddCabin" method="post">
                       <img src="placeholder_600x400.svg" alt="thumbnail" style="width:500px;height:300px;padding-left:10px;display:block;margin:auto;">
-                      <center><button name="addCabin" class="btn">Add Pictures</button></center>
-                </div>
-                <div class="col-sm-6">
-                    <label for="Availability">Add cabin availability: blank for now</label><br />
+			  					<button name="upload" class="btn btn-block">Upload Photos!</button>
+
                 </div>
             </div>
             <hr>

@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import boundary.TemplateProcessor;
 
@@ -52,18 +53,21 @@ public class OwnersCabins extends HttpServlet
 	//@see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response) 
 		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 		{
-			String userCabinListing = request.getParameter("userCabinListing");
+		/*	String OwnersCabin = request.getParameter("OwnersCabin");
 			
-			if(userCabinListing != null)
-			{
+			if(OwnersCabin != null)
+			{*/
+			
+			
 				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 				SimpleHash root = new SimpleHash(db.build());
 				
+				HttpSession  session = request.getSession();
+				User user = (User) session.getAttribute("user");
+				root.put("username", user.getUsername());
+				
 				// Call cabin listing code
 				
-					String userIdString = request.getParameter("userId");
-					User user = new User();
-					user.setId(Integer.parseInt(userIdString));
 				
 				// Call logic layer to get owner's cabins	
 				
@@ -142,7 +146,7 @@ public class OwnersCabins extends HttpServlet
 					}*/
 			}
 		
-		} // end of doGet
+		//} // end of doGet
 
 	
 	//@see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

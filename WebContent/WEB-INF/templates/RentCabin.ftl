@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>${Cabin.title}</title>
+    <title>Rent ${Cabin.title}</title>
 
     <!-- Bootstrap -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
@@ -20,15 +20,15 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script src="scripts/jquery-3.2.1.js" type="text/javascript"></script>
+	<script src="scripts/jquery-ui.js" type="text/javascript"></script>
+	<script src="scripts/rentPage.js" type="text/javascript"></script>
 </head>
 
 <body>
 <#include "Header.ftl">
         <div class="container">
         	<div class="panel panel-default">
-        		<div class="panel-heading">
-			    		<h1 class="text-center">${Cabin.title}</h1>
-			 			</div>
              <div class="panel-body">
              
         <div class="row">
@@ -66,107 +66,40 @@
 		</#if>
 		
 		
-		
         </div>
         <div class="col-xs-6 col-sm-6 col-md-6">
-        <h1 class="text-center">Availability --Add Calendars--</h1>
-        </div>
-        </div>
-            
-        
-        <div class="row">
-        <div class="col-xs-6 col-sm-6 col-md-6">
-        <h1 class="text-center">About the cabin</h1>
-        </div>
-        <div class="col-xs-6 col-sm-6 col-md-6">
-        <h1 class="text-center">Features of the cabin</h1>
+        <h1 class="text-center">${Cabin.title}</h1>
+        <hr>
+        <p class="text-center">${Cabin.description}</p>
         </div>
         </div>
         <hr>
         <div class="row">
         <div class="col-xs-6 col-sm-6 col-md-6">
-            <p class="text-center">${Cabin.description}</p>
-        </div>
-        <div class="col-xs-6 col-sm-6 col-md-6">
-        <#if FeaturesCheck != "null">
-                <#list Features as f>
-                    <p class="text-center">${f.featureString}<p>
-	            </#list>
-        </#if>
-        </div>
-        </div>
-        <hr>
-        <div class="row">
-        <div class="col-xs-6 col-sm-6 col-md-6">
-        <h1 class="text-center">Occupancy</h1>
-        </div>
-        <div class="col-xs-6 col-sm-6 col-md-6">
-        <h1 class="text-center">Amenities of the cabin</h1>
-        </div>
-        </div>
-        <hr>
-        <div class="row">
-        <div class="col-xs-3 col-sm-3 col-md-3">
 
-            <p class="text-right">
-                Bedroom(s):<br/> 
-                Bathrooms:<br/> 
-                Max Occupancy:</br>
-            </p>
-
-        </div>
-        <div class="col-xs-3 col-sm-3 col-md-3">
-
-            <p class="text-left">
-                ${Cabin.bedroomCount}<br/> 
-                ${Cabin.bathCount}<br/> 
-                ${Cabin.maxOccupancy}</br>
+            <p class="text-center">
+                Street Address : ${Cabin.address}<br/> 
+                City : ${Cabin.city}<br/> 
+                State : ${Cabin.state}<br/> 
             </p>
 
         </div>
         <div class="col-xs-6 col-sm-6 col-md-6">
-        <#if AmenitiesCheck != "null">
-        
-	        	<p class="text-center">
-	        		Has Lake: ${(Amenities.hasLake)?c}<br />
-	        		Has River: ${(Amenities.hasRiver)?c}<br />
-	        		Has Pool: ${(Amenities.hasPool)?c}<br />
-	        	</p>
-	        	
-        
-        </#if>
-        
+			<form action="PayRent?cabinId=${Cabin.id}">
+				<input type="hidden" name="hiddenId" value="${Cabin.id}">
+			  Start Date:
+			  <input type="date" id="startDate" name="startDate">
+			  End Date:
+			  <input type="date" id="endDate" name="endDate">
+			  <input type="submit" class="btn" id="rentButton" value="Rent">
+			  <input type="submit" id="checkPriceButton" value="Check Price" class="btn btn-block">
+			</form>
+				<span id="price"></span>
+			
         </div>
         </div>
         <hr>
-        
-        <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-        <h1 class="text-center">Reviews</h1>
-        </div>
-        </div>
-        <hr>
-        <div class="col-xs-12 col-sm-12 col-md-12">
-        <#if ReviewsCheck != "null">
-        
-	        <div class="section">
-	        	<p>
-	        		<#list Reviews as r>
-	            
-	            		Number of Stars: ${r.numStars}<br />
-	            		Title: ${r.title}<br />
-	            		Review: ${r.description} <br />
-	            		
-	            		<br />
-	            
-	          	   </#list>
-	        	</p>
-	        	
-	        </div>
-	    	<br />
-    	
-    	</#if>
-    	</div>
+
     </div>
     </div>
     </div>

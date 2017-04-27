@@ -176,6 +176,7 @@ public class LogicLayerImpl {
 				
 				group.setAmenities(CabinManager.restoreAmenitiesFromCabin(userCabins.get(i))); 
 				
+				
 				groups.add(group);
 			}
 

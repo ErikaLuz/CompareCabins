@@ -51,7 +51,7 @@
 		<div class = "cabinListing" id="${group.getCabin().id}">
         <div class="row">
         <div class="col-xs-5 col-sm-5 col-md-5">
-			<a href="http://placehold.it"><img src="http://placehold.it/600x400" class="img-rounded img-responsive" alt="thumbnail"></a>
+			<img src="${group.cabinPicture.filePath}" class="img-rounded img-responsive" alt="thumbnail"></img>
 		</div>
         
         <div class="col-xs-7 col-sm-7 col-md-7">

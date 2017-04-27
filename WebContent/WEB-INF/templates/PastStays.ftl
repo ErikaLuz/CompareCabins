@@ -44,7 +44,11 @@
                             Day of arrival: ${StartDate}<br />
                             Day of departure: ${EndDate}<br />
 
+
                             <form action="PastStaysReview?rentRecordId=${PS.getRentRecord().id}"" method="post">
+
+
+
                             <button name="addReview" class="btn center-block">ADD REVIEW</button>
                             </form>
 
