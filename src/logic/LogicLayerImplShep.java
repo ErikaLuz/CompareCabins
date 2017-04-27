@@ -51,7 +51,7 @@ public class LogicLayerImplShep {
 			}
 			if(!available && startAvailability != null && endAvailability != null) {
 				cabins.remove(c);
-				c--;
+				//c--;
 			}
 		}
 		System.out.println(cabins.size());

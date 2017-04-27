@@ -30,6 +30,10 @@
 			 			</div>
 			 			<div class="panel-body">
 			    		   <form action="Pay">
+			    		   		<input type="hidden" name="cabinId" value="${cabinId}">
+			    		   		<input type="hidden" name="start" value="${start}">
+			     				<input type="hidden" name="end" value="${end}">
+			    		   		
                             <div class="form-group">
                                 <input type="text" name="name" id="name" class="form-control input-sm" placeholder="Name On Card">
                             </div>

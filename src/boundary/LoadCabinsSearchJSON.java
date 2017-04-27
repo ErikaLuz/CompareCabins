@@ -103,7 +103,7 @@ public class LoadCabinsSearchJSON extends HttpServlet {
         List<Cabin> cabins = null;
 		try {
 			cabins = LogicLayerImplShep.search( amenities, start, end );
-	
+			System.out.println("---------------------------" + cabins.size());
 	        primaryPhotoFilePath = new String[ cabins.size() ];
 	        
 	        for( int i = 0; i < cabins.size(); i++ )
