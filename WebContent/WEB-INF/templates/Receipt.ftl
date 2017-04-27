@@ -25,31 +25,8 @@
         <div class="row centered-form">
         <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
         	<div class="panel panel-default">
-        		<div class="panel-heading">
-			    		<h3 class="panel-title text-center">Please make a payment</h3>
-			 			</div>
 			 			<div class="panel-body">
-			    		   <form action="Pay">
-                            <div class="form-group">
-                                <input type="text" name="name" id="name" class="form-control input-sm" placeholder="Name On Card">
-                            </div>
-                            <div class="form-group">
-                                <input type="text" name="card" id="card" class="form-control input-sm" placeholder="Card Number">
-                            </div>
-			    			<div class="form-group">
-			    				<input type="text" name="address" id="address" class="form-control input-sm" placeholder="Billing Address">
-			    			</div>
-                            <div class="form-group">
-			    				<input type="text" name="cvc" id="cvc" class="form-control input-sm" placeholder="CVC">
-			    			</div>
-                            <div class="form-group">
-			    				<input type="email" name="month" id="month" class="form-control input-sm" placeholder="MM">
-			    			</div>
-                            <div class="form-group">
-			    				<input type="text" name="year" id="year" class="form-control input-sm" placeholder="YYYY">
-			    			</div>
-			    			<input type="submit" value="Pay" class="btn btn-block">
-			    		</form>
+			    		   <h3 class="center-block text-center">You have successfully rented a cabin!</h3>
 			    	</div>
 	    		</div>
     		</div>
