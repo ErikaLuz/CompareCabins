@@ -67,8 +67,16 @@ public class LoadCabinsSearchJSON extends HttpServlet {
 		String startDateString = request.getParameter("startAvailability");
 		String endDateString = request.getParameter("endAvailability");
 		
-		Availability start = parseDateString( startDateString );
-		Availability end = parseDateString( endDateString );
+		Availability start;
+		if(startDateString.length() > 0)
+			start = parseDateString( startDateString );
+		else
+			start = null;
+		Availability end;
+		if(endDateString.length() > 0)
+			end = parseDateString( endDateString );
+		else
+			end = null;
 		
 		Amenities amenities = new Amenities();
 		if(hasLake != null)

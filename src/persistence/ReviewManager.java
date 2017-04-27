@@ -76,11 +76,14 @@ public class ReviewManager {
 			     	 }
 				}				
 		     }else { 
+		    	 DbAccessImpl.disconnect(con);
 		    	 throw new CCException("ReviewManager.store: failed to save a review");
 			 }
 		}catch(SQLException e){
+			DbAccessImpl.disconnect(con);
 			throw new CCException("ReviewManager.store: failed to save a review: " + e );
 		}
+		DbAccessImpl.disconnect(con);
 	} //end of store
 	
 	public static List<Review> restore (Review modelReview) throws CCException
@@ -150,13 +153,16 @@ public class ReviewManager {
 					reviews.add( review );
 				}
 				
+				DbAccessImpl.disconnect(con);
 				return reviews;
 				
 			} else {
+				DbAccessImpl.disconnect(con);
 				return null;
 			}
 		}
-		catch( SQLException e ) {      
+		catch( SQLException e ) {  
+			DbAccessImpl.disconnect(con);
 			throw new CCException("ReviewManager.restore: Could not restore persistent Review objects: " + e );
 		}		
 	} //end of restore
@@ -197,11 +203,14 @@ public class ReviewManager {
 				rentRecord.setCabin( null );
 				rentRecord.setUser( null );
 				
+				DbAccessImpl.disconnect(con);
 				return rentRecord;
 			} else { // no matches found for the query
+				DbAccessImpl.disconnect(con);
 				return null;
 			}
 		} catch( SQLException e ) {
+			DbAccessImpl.disconnect(con);
 			throw new CCException("ReviewManager.restoreRentRecordFromReview: could not restore persistent RentRecord object: " + e );
 		}
 		
@@ -222,9 +231,13 @@ public class ReviewManager {
 			ps.setInt(1,  review.getId());
 			rowsModified = ps.executeUpdate();
 			
-			if(rowsModified != 1)
+			if(rowsModified != 1) {
+				DbAccessImpl.disconnect(con);
+			
 				throw new CCException("ReviewManager.delete: failed to delete review");
+			}
 		}catch(SQLException e) {
+			DbAccessImpl.disconnect(con);
 			throw new CCException("ReviewManager.delte: failed to delete review: " + e);
 		}
 		
