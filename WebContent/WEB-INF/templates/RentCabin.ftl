@@ -86,12 +86,13 @@
         </div>
         <div class="col-xs-6 col-sm-6 col-md-6">
 			<form action="PayRent?cabinId=${Cabin.id}">
+				<input type="hidden" name="hiddenId" value="${Cabin.id}">
 			  Start Date:
 			  <input type="date" id="startDate" name="startDate">
 			  End Date:
 			  <input type="date" id="endDate" name="endDate">
-			  <input type="submit" class="btn" id="rentButton" value="Rent"></input>
-			  <button name="checkPrice" id="checkPrice" class="btn btn-block">Check Price!</button>
+			  <input type="submit" class="btn" id="rentButton" value="Rent">
+			  <input type="submit" id="checkPriceButton" value="Check Price" class="btn btn-block">
 			</form>
 				<span id="price"></span>
 			

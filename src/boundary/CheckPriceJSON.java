@@ -48,10 +48,10 @@ public class CheckPriceJSON extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
         PrintWriter toClient = response.getWriter();
         
-        int cabinId = Integer.parseInt( request.getParameter("cabinId") );
+        int cabinId = Integer.parseInt( request.getParameter("hiddenId") );
         
-		String startDateString = request.getParameter("startAvailability");
-		String endDateString = request.getParameter("endAvailability");
+		String startDateString = request.getParameter("startDate");
+		String endDateString = request.getParameter("endDate");
 		
 		Availability start;
 		if(startDateString.length() > 0)
@@ -69,6 +69,7 @@ public class CheckPriceJSON extends HttpServlet {
 
 		try {
 			totalPrice = LogicLayerImplAlt.getTotalPrice( start, end, cabinId );
+			System.out.println("CheckPriceJson: " + totalPrice);
 			if( totalPrice < 0)
 				available = false;
 			else
@@ -104,6 +105,7 @@ public class CheckPriceJSON extends HttpServlet {
 		
 		int yearInt = Integer.parseInt(year);
 		int monthInt = Integer.parseInt(month);
+		monthInt--;
 		int dayInt = Integer.parseInt(day);
 		
 		Calendar cal = Calendar.getInstance();

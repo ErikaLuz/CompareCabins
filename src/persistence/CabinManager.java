@@ -433,7 +433,7 @@ public class CabinManager {
 				// retrieve the values from the result set
 				int id = rs.getInt(1);
 				float price = rs.getFloat(2);
-				java.sql.Date date = rs.getDate(3);
+				java.util.Date date = rs.getDate(3);
 				
 				// convert Date to Calendar
 				Calendar cal = Calendar.getInstance();

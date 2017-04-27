@@ -6,14 +6,16 @@ window.onload = function () {
 	$("#checkPriceButton").click( checkPriceButtonClick );
 	jQuery("#startDate").datepicker();
 	jQuery("#endDate").datepicker();
+	$("#price").text("hey there");
 
 
 }
 
 function checkPriceButtonClick ( event ) {
 	
+	console.log("checkPriceButtonClick Event entered");
 	event.preventDefault();
-	jQuery.getJSON( "CheckPriceJSON" , $(this).form.serialize(), function( data ) {
+	jQuery.getJSON( "CheckPriceJSON" , $(this.form).serialize(), function( data ) {
 		
 		if(data.available) {		
 			jQuery("#price").text("Total Price: " + data.totalPrice);

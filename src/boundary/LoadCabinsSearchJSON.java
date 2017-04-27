@@ -157,6 +157,7 @@ public class LoadCabinsSearchJSON extends HttpServlet {
 		
 		int yearInt = Integer.parseInt(year);
 		int monthInt = Integer.parseInt(month);
+		monthInt--;
 		int dayInt = Integer.parseInt(day);
 		
 		Calendar cal = Calendar.getInstance();
