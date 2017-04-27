@@ -66,65 +66,85 @@
         <div class="col-xs-6 col-sm-6 col-md-6">
         <h1 class="text-center">Availability --Add Calendars--</h1>
         </div>
-        </div
-		
-        <div class="section">
-            
-      		${Cabin.description}
-        
         </div>
-        <br />
-
+            
         
+        <div class="row">
+        <div class="col-xs-6 col-sm-6 col-md-6">
+        <h1 class="text-center">About the cabin</h1>
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-6">
+        <h1 class="text-center">Features of the cabin</h1>
+        </div>
+        </div>
+        <hr>
+        <div class="row">
+        <div class="col-xs-6 col-sm-6 col-md-6">
+            <p class="text-center">${Cabin.description}</p>
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-6">
         <#if FeaturesCheck != "null">
-        
-	        <div class="section">
-	            
-	            <#list Features as f>
-	            
-	           		${f.featureString} 
-	            
+                <#list Features as f>
+                    <p class="text-center">${f.featureString}<p>
 	            </#list>
-	        
-	        </div>
-	        <br>
-        
         </#if>
-        
-        <div class="section">
+        </div>
+        </div>
+        <hr>
+        <div class="row">
+        <div class="col-xs-6 col-sm-6 col-md-6">
+        <h1 class="text-center">Occupancy</h1>
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-6">
+        <h1 class="text-center">Amenities of the cabin</h1>
+        </div>
+        </div>
+        <hr>
+        <div class="row">
+        <div class="col-xs-3 col-sm-3 col-md-3">
 
-            <p>
-                Bedroom(s): ${Cabin.bedroomCount}<br/> 
-                Bathrooms: ${Cabin.bathCount}<br/> 
-                Max Occupancy: ${Cabin.maxOccupancy}</br>
+            <p class="text-right">
+                Bedroom(s):<br/> 
+                Bathrooms:<br/> 
+                Max Occupancy:</br>
             </p>
 
         </div>
-        <br />
-        
+        <div class="col-xs-3 col-sm-3 col-md-3">
+
+            <p class="text-left">
+                ${Cabin.bedroomCount}<br/> 
+                ${Cabin.bathCount}<br/> 
+                ${Cabin.maxOccupancy}</br>
+            </p>
+
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-6">
         <#if AmenitiesCheck != "null">
         
-	        <div class="section">
-	        	
-	        	<h3>Amenities</h3><hr>
-	        	
-	        	<p>
+	        	<p class="text-center">
 	        		Has Lake: ${(Amenities.hasLake)?c}<br />
 	        		Has River: ${(Amenities.hasRiver)?c}<br />
 	        		Has Pool: ${(Amenities.hasPool)?c}<br />
 	        	</p>
 	        	
-	        </div>
-	        <br />
         
         </#if>
         
+        </div>
+        </div>
+        <hr>
+        
+        <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+        <h1 class="text-center">Reviews</h1>
+        </div>
+        </div>
+        <hr>
+        <div class="col-xs-12 col-sm-12 col-md-12">
         <#if ReviewsCheck != "null">
         
 	        <div class="section">
-	        	
-	        	<h3>Reviews</h3><hr>
-	        	
 	        	<p>
 	        		<#list Reviews as r>
 	            
@@ -141,7 +161,7 @@
 	    	<br />
     	
     	</#if>
-    	
+    	</div>
     </div>
     </div>
     </div>
