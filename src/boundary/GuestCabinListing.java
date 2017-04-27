@@ -35,7 +35,7 @@ import freemarker.template.DefaultObjectWrapperBuilder;
 import freemarker.template.SimpleHash;
 
 /**
- * Servlet implementation class CabinListing
+ * Servlet implementation class GuestCabinListing
  */
 @WebServlet("/GuestCabinListing")
 public class GuestCabinListing extends HttpServlet 

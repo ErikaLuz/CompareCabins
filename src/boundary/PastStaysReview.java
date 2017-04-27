@@ -28,7 +28,7 @@ import persistence.CabinManager;
 import persistence.RentRecordManager;
 
 /**
- * Servlet implementation class PastStays
+ * Servlet implementation class PastStaysReview
  */
 @WebServlet("/PastStaysReview")
 public class PastStaysReview extends HttpServlet 
@@ -62,7 +62,7 @@ public class PastStaysReview extends HttpServlet
 					try {
 						viewPastStays(request, response);
 					} catch (CCException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}
 				else if(addReview != null)
@@ -70,7 +70,7 @@ public class PastStaysReview extends HttpServlet
 					try {
 						goToReview(request, response);
 					} catch (CCException e) {
-						// TODO Auto-generated catch block
+					
 						e.printStackTrace();
 					}
 				}
@@ -79,7 +79,7 @@ public class PastStaysReview extends HttpServlet
 					try {
 						addReview(request,response);
 					} catch (CCException e) {
-						// TODO Auto-generated catch block
+					
 						e.printStackTrace();
 					}
 				}
@@ -92,12 +92,24 @@ public class PastStaysReview extends HttpServlet
 				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 				SimpleHash root = new SimpleHash(db.build());
 				
-				// TODO: figure out how to pass user id 
+				// Get user id 
 				
-//					User user = new User();
-//					user.setId(id);
+					User user = new User();
+					String userIdString = request.getParameter("userId");					
+					user.setId(Integer.parseInt(userIdString));
+					
+				// Call logic layer
+					
+					LogicLayerImpl.pastStays(root, user);
+					
+				// Set and process template
+			
+					String templateName = "PastStays.ftl";
+					processor.processTemplate(templateName, root, request, response);
 				
-				// DUMMY CODE - delete later 
+					
+					
+/*				// DUMMY CODE - delete later 
 				
 					// Create User 
 				
@@ -130,16 +142,9 @@ public class PastStaysReview extends HttpServlet
 						RentRecordManager.store(rr1);
 						RentRecordManager.store(rr2);
 						RentRecordManager.store(rr3);
-						
-					// Call logic layer
-						
-						LogicLayerImpl.pastStays(root, user);
-						
-					// Set and process template
-				
-						String templateName = "PastStays.ftl";
-						processor.processTemplate(templateName, root, request, response);
-						
+*/						
+					
+/*						
 					// Delete dummy code objects
 						
 						RentRecordManager.delete(rr1);
@@ -147,7 +152,7 @@ public class PastStaysReview extends HttpServlet
 						RentRecordManager.delete(rr3);
 						CabinManager.delete(cabin);
 						CabinManager.delete(cabin2);
-						UserManager.delete(user);
+						UserManager.delete(user); */
 			}
 	
 			private void goToReview(HttpServletRequest request, HttpServletResponse response) throws CCException
@@ -157,10 +162,21 @@ public class PastStaysReview extends HttpServlet
 				
 				// Somehow get the rent record id
 				
-//					RentRecord rr = new RentRecord();
-//					rr.setId(id);
+					RentRecord rr = new RentRecord();
+					String rentRecordIdString = request.getParameter("rrId");
+					rr.setId(Integer.parseInt(rentRecordIdString));
+					
+				// Call the logic layer
+					
+					LogicLayerImpl.goToReview(root, rr);
+					
+				// Set and process template
 				
-				// DUMMY CODE - delete later 
+					String templateName = "AddReview.ftl";
+					processor.processTemplate(templateName, root, request, response);
+				
+				
+/*				// DUMMY CODE - delete later 
 				
 					// Create User 
 				
@@ -193,44 +209,56 @@ public class PastStaysReview extends HttpServlet
 						RentRecordManager.store(rr1);
 						RentRecordManager.store(rr2);
 						RentRecordManager.store(rr3);
+*/				
 				
-				// Call the logic layer
-				
-					LogicLayerImpl.goToReview(root, rr1);
-					
-				// Set and process template
-				
-				String templateName = "AddReview.ftl";
-				processor.processTemplate(templateName, root, request, response);
-				
-				// Delete dummy code objects
+/*				// Delete dummy code objects
 				
 					RentRecordManager.delete(rr1);
 					RentRecordManager.delete(rr2);
 					RentRecordManager.delete(rr3);
 					CabinManager.delete(cabin);
 					CabinManager.delete(cabin2);
-					UserManager.delete(user);
-			}
+					UserManager.delete(user); */
+					
+			} // end of goToReview
 			
 			private void addReview(HttpServletRequest request, HttpServletResponse response) throws CCException
 			{
 				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 				SimpleHash root = new SimpleHash(db.build());
 				
-				int intNumStar = 0;
-				String numStar = request.getParameter("numStars");
-				if(!numStar.equals("") && numStar != null) intNumStar = Integer.parseInt(numStar);
+				// Get Review values
 				
-				String title = null;
-				if(!request.getParameter("title").equals("")) title = request.getParameter("title");
+					int intNumStar = 0;
+					String numStar = request.getParameter("numStars");
+					if(!numStar.equals("") && numStar != null) intNumStar = Integer.parseInt(numStar);
+					
+					String title = null;
+					if(!request.getParameter("title").equals("")) title = request.getParameter("title");
+					
+					String review = null;
+					if(!request.getParameter("review").equals("")) review = request.getParameter("review");
+					
+				// Create model review object
 				
-				String review = null;
-				if(!request.getParameter("review").equals("")) review = request.getParameter("review");
+					Review modelReview = new Review(intNumStar, title, review);
 				
-				Review modelReview = new Review(intNumStar, title, review);
+				// Get rent record id
 				
-				// DUMMY CODE - delete later 
+					String rrId = request.getParameter("rentRecordId");		
+					RentRecord rr = new RentRecord();
+					rr.setId(Integer.parseInt(rrId));
+				
+				// Call logic layer and pass rent record and model review
+				
+					LogicLayerImpl.addReview(root, rr, modelReview);
+				
+				// Set and process template
+				
+					String templateName = "AddReviewSuccess.ftl";
+					processor.processTemplate(templateName, root, request, response);
+				
+/*				// DUMMY CODE - delete later 
 				
 				// Create User 
 			
@@ -263,26 +291,9 @@ public class PastStaysReview extends HttpServlet
 					RentRecordManager.store(rr1);
 					RentRecordManager.store(rr2);
 					RentRecordManager.store(rr3);
+*/
 				
-				// somehow get the rent record id
-				
-//				string rrId = request.getParameter("rentRecordId");
-//				int rentRecordId = Integer.parseInt(rrId);
-				
-//				RentRecord rr = new RentRecord();
-//				rr.setId(rentRecordId);
-				
-				
-				// Call logic layer 
-				
-					LogicLayerImpl.addReview(root, rr1, modelReview);
-				
-				// Set and process template
-				
-					String templateName = "AddReviewSuccess.ftl";
-					processor.processTemplate(templateName, root, request, response);
-				
-				// Delete dummy code objects
+/*				// Delete dummy code objects
 				
 				RentRecordManager.delete(rr1);
 				RentRecordManager.delete(rr2);
@@ -290,8 +301,7 @@ public class PastStaysReview extends HttpServlet
 				CabinManager.delete(cabin);
 				CabinManager.delete(cabin2);
 				UserManager.delete(user);
-			
-					
+*/							
 			}
 		
 		//@see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

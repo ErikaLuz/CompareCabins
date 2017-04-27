@@ -65,21 +65,21 @@ public class ViewEditUserProfile extends HttpServlet
 					try {
 						viewOrEdit(request, response, "view");
 					} catch (CCException e) {
-						// TODO Auto-generated catch block
+					
 						e.printStackTrace();
 					}
 				else if (editUser != null)
 					try {
 						viewOrEdit(request, response, "edit");
 					} catch (CCException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}
 				else if (updateUser != null)
 					try {
 						update(request, response);
 					} catch (CCException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}
 				
@@ -94,8 +94,23 @@ public class ViewEditUserProfile extends HttpServlet
 				
 					if (viewOrEdit.equals("view")) root.put("viewOrEdit", "view");
 					else if (viewOrEdit.equals("edit")) root.put("viewOrEdit", "edit");
+					
+				// Get user 
+					
+					User user = new User();
+					String userId = request.getParameter("userId");
+					user.setId(Integer.parseInt(userId));
 				
-				// Create dummy user to test this method - delete code later
+					LogicLayerImpl.viewUserProfile(root, user);	
+					
+				// Set and process template
+				
+					String templateName = "UserProfile.ftl";
+					processor.processTemplate(templateName, root, request, response);
+					
+					
+				
+/*				// Create dummy user to test this method - delete code later
 				
 					User user  = new User("testUsername", "testPassword", "Erika", "Luz", "testEmail");
 					UserManager.store(user);
@@ -134,19 +149,11 @@ public class ViewEditUserProfile extends HttpServlet
 					
 						ReviewManager.store(review);
 						ReviewManager.store(review2);
-					
+*/					
 				// Call logic layer to return user and user data
 					
-					// TODO: somehow get the userid then create model user with id to pass to method
 					
-//						User user = new User();
-						
-						
-//						user.setId(id);
-						
-						LogicLayerImpl.viewUserProfile(root, user);	
-					
-				// Delete dummy values - delete code later
+/*				// Delete dummy values - delete code later
 
 						ReviewManager.delete(review);
 						ReviewManager.delete(review2);
@@ -154,11 +161,8 @@ public class ViewEditUserProfile extends HttpServlet
 						RentRecordManager.delete(rr2);
 						CabinManager.delete(cabin);
 						UserManager.delete(user);
-					
-				// Set and process template
+*/				
 				
-					String templateName = "UserProfile.ftl";
-					processor.processTemplate(templateName, root, request, response);
 			}
 			
 			private void update(HttpServletRequest request, HttpServletResponse response) throws CCException
@@ -169,7 +173,13 @@ public class ViewEditUserProfile extends HttpServlet
 				// Place updateConfirmation into root for ftl template
 				
 					root.put("viewOrEdit", "updateConfirmation");
-				
+					
+				// Create model user
+					
+					User user = new User();
+					String userId = request.getParameter("userId");
+					user.setId(Integer.parseInt(userId));
+					
 				// Retrieve new values
 					
 					String newUsername = request.getParameter("newUsername");
@@ -178,25 +188,14 @@ public class ViewEditUserProfile extends HttpServlet
 					String newLN = request.getParameter("newLN");
 					String newEmail = request.getParameter("newEmail");
 					
-				// Set values to user
+				// Set new values to model user
 					
-					// TODO: find a way to pass user id to user
-					
-//					User user = new User();
-//					user.setId()
-					
-					// DUMMY TEST CODE - create new user to edit - delete later
-					
-						User user = new User("testUsername", "testPassword", "Erika", "Luz", "testEmail");
-						
-						UserManager.store(user);
-						
 					if(!newUsername.equals("")) user.setUsername(newUsername);
 					if(!newPassword.equals("")) user.setPassword(newPassword);
 					if(!newFN.equals("")) user.setFirstName(newFN);
 					if(!newLN.equals("")) user.setLastName(newLN);
-					if(!newEmail.equals("")) user.setEmail(newEmail);	
-				
+					if(!newEmail.equals("")) user.setEmail(newEmail);
+					
 				// Call logic layer to update user
 					
 					user = LogicLayerImpl.updateUser(user);	
@@ -208,11 +207,25 @@ public class ViewEditUserProfile extends HttpServlet
 				// Set and process template
 					
 					String templateName = "UserProfile.ftl";
-					processor.processTemplate(templateName, root, request, response);
+					processor.processTemplate(templateName, root, request, response);					
+					
+					
+/*					// DUMMY TEST CODE - create new user to edit - delete later
+					
+						User user = new User("testUsername", "testPassword", "Erika", "Luz", "testEmail");
+						
+						UserManager.store(user);
+						
+					if(!newUsername.equals("")) user.setUsername(newUsername);
+					if(!newPassword.equals("")) user.setPassword(newPassword);
+					if(!newFN.equals("")) user.setFirstName(newFN);
+					if(!newLN.equals("")) user.setLastName(newLN);
+					if(!newEmail.equals("")) user.setEmail(newEmail);	
+*/				
 				
 				// Delete dummy user
 				
-					UserManager.delete(user);
+//					UserManager.delete(user);
 			}
 		
 		//@see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

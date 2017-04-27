@@ -26,9 +26,9 @@ import freemarker.template.DefaultObjectWrapperBuilder;
 import freemarker.template.SimpleHash;
 
 /**
- * Servlet implementation class CabinListing
+ * Servlet implementation class OwnersCabins
  */
-@WebServlet("/UserCabinListing")
+@WebServlet("/OwnersCabins")
 public class OwnersCabins extends HttpServlet 
 {
 	//VARIABLES
@@ -59,7 +59,27 @@ public class OwnersCabins extends HttpServlet
 				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 				SimpleHash root = new SimpleHash(db.build());
 				
-				// For testing purposes - delete later: make dummy user with dummy cabins
+				// Call cabin listing code
+				
+					String userIdString = request.getParameter("userId");
+					User user = new User();
+					user.setId(Integer.parseInt(userIdString));
+				
+				// Call logic layer to get owner's cabins	
+				
+					try{
+						LogicLayerImpl.userCabinListings(root, user);
+					}catch (CCException e)
+					{
+						e.printStackTrace();
+					}
+				
+				// Set and process template
+				
+					String templateName = "userCabinListing.ftl";
+					processor.processTemplate(templateName, root, request, response);
+				
+/*				// For testing purposes - delete later: make dummy user with dummy cabins
 				
 					User user = new User("Cabin", "Listing", "firstName", "lastName", "email");
 					
@@ -104,24 +124,9 @@ public class OwnersCabins extends HttpServlet
 					} catch (CCException e1) {
 						e1.printStackTrace();
 					}
-				
-				// Call cabin listing code
-				
-//				String cabinIdString = request.getParameter("cabinId");
-//				int cabinId = Integer.parseInt(cabinIdString);
-//				Cabin modelCabin = new Cabin();
-//				modelCabin.setId(cabinId);
-				
-				try{
-					LogicLayerImpl.userCabinListings(root, user);
-				}catch (CCException e)
-				{
-					e.printStackTrace();
-				}
-				
-				String templateName = "userCabinListing.ftl";
-				processor.processTemplate(templateName, root, request, response);
-				
+*/				
+			
+/*				
 				// Delete dummy 
 				
 					try{
@@ -134,9 +139,9 @@ public class OwnersCabins extends HttpServlet
 					}catch (CCException e)
 					{
 						e.printStackTrace();
-					}
+					}*/
 			}
-			
+		
 		} // end of doGet
 
 	

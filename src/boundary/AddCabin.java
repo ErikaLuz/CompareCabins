@@ -1,5 +1,8 @@
 package boundary;
 
+import java.util.List;
+import java.util.LinkedList;
+
 import java.io.IOException;
 
 import javax.servlet.ServletConfig;
@@ -10,23 +13,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import boundary.TemplateProcessor;
-import exception.CCException;
+
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapperBuilder;
 import freemarker.template.SimpleHash;
 
+import exception.CCException;
+
 import logic.LogicLayerImpl;
 
+import object.User;
 import object.Amenities;
 import object.Cabin;
 import object.Feature;
 
+import persistence.UserManager;
 import persistence.AmenitiesManager;
-import persistence.CabinManager;
 import persistence.FeatureManager;
 
 /**
- * Servlet implementation class Servlet
+ * Servlet implementation class AddCabin
  */
 @WebServlet("/AddCabin")
 public class AddCabin extends HttpServlet 
@@ -71,7 +77,21 @@ public class AddCabin extends HttpServlet
 					
 					// Get user
 					
-						// TODO: find a way to pass user into this servlet, they should already be logged in ?
+						User user = new User();
+						String userId  = request.getParameter("userId");
+						int intUserId = Integer.parseInt(userId);
+						user.setId(intUserId);
+						
+						List<User> users = new LinkedList<User>();
+						
+						try {
+							users = UserManager.restore(user);
+						} catch (CCException e2) {
+							
+							e2.printStackTrace();
+						}
+						
+						if(users.size() == 1)  user = users.get(0);
 					
 					// Get amenities
 						
@@ -109,8 +129,9 @@ public class AddCabin extends HttpServlet
 								
 								cabinAmenities = new Amenities(hasLake, hasRiver, hasPool, hasHotTub, hasWifi, hasAirConditioning,
 														       hasWasherDryer, allowsPets, allowsSmoking);
+							
 								
-								// For testing purposes, print out values: 
+/*								// For testing purposes, print out values: 
 							
 									System.out.println("Lake: " + hasLake);
 									System.out.println("River: " + hasRiver);
@@ -121,13 +142,14 @@ public class AddCabin extends HttpServlet
 									System.out.println("WasherDryer: " + hasWasherDryer);
 									System.out.println("Pets: " + allowsPets);
 									System.out.println("Smoking: " + allowsSmoking);
-									
+*/
+								
 								// Store the amenities in database
 								
 									try {
 										AmenitiesManager.store(cabinAmenities);
 									} catch (CCException e1) {
-										// TODO Auto-generated catch block
+										
 										e1.printStackTrace();
 									}
 									
@@ -139,48 +161,52 @@ public class AddCabin extends HttpServlet
 						
 				    // Create model cabin object
 							
-							// Get cabin parameters
+						// Get cabin parameters
 								
-								String address = "No Address"; 
-								if(!request.getParameter("address").equals("")) address = request.getParameter("address");
+							String address = "No Address"; 
+							if(!request.getParameter("address").equals("")) address = request.getParameter("address");
+							
+							String city = "No City";
+							if(!request.getParameter("city").equals("")) city = request.getParameter("city");		
+							
+							String state = "No State";
+							if(!request.getParameter("state").equals("")) state = request.getParameter("state");
+							
+							String description = "No Description";
+							if(!request.getParameter("description").equals("")) description = request.getParameter("description");
+							
+							String title = "No Title";
+							if(!request.getParameter("title").equals("")) title = request.getParameter("title");
+							
+							int bedCount = 0;
+							String bed = request.getParameter("bedCount");
+							if(!bed.equals("")) bedCount = Integer.parseInt(bed);
+							
+							int bathCount = 0;
+							String bath = request.getParameter("bathCount");
+							if(!bath.equals("")) bathCount = Integer.parseInt(bath);
+							
+							int maxOcc = 0;
+							String max = request.getParameter("maxOcc");
+							if(!max.equals("")) maxOcc = Integer.parseInt(max);
+					
+							Cabin modelCabin = new Cabin(address, city, state, description, title, bedCount, bathCount, maxOcc);
+							if(checkBoxAmenities != null) 	modelCabin.setAmenities(cabinAmenities);
 								
-								String city = "No City";
-								if(!request.getParameter("city").equals("")) city = request.getParameter("city");		
+						// Set User
 								
-								String state = "No State";
-								if(!request.getParameter("state").equals("")) state = request.getParameter("state");
-								
-								String description = "No Description";
-								if(!request.getParameter("description").equals("")) description = request.getParameter("description");
-								
-								String title = "No Title";
-								if(!request.getParameter("title").equals("")) title = request.getParameter("title");
-								
-								int bedCount = 0;
-								String bed = request.getParameter("bedCount");
-								if(!bed.equals("")) bedCount = Integer.parseInt(bed);
-								
-								int bathCount = 0;
-								String bath = request.getParameter("bathCount");
-								if(!bath.equals("")) bathCount = Integer.parseInt(bath);
-								
-								int maxOcc = 0;
-								String max = request.getParameter("maxOcc");
-								if(!max.equals("")) maxOcc = Integer.parseInt(max);
-						
-								Cabin modelCabin = new Cabin(address, city, state, description, title, bedCount, bathCount, maxOcc);
-								if(checkBoxAmenities != null) 	modelCabin.setAmenities(cabinAmenities);
+							modelCabin.setUser(user);
 					 
-						   // Store cabin in database
+					// Call logic layer and store cabin in database
+						 
+							 try {
+								LogicLayerImpl.addCabin(modelCabin);
+							} catch (CCException e) {
+								
+								e.printStackTrace();
+							}
 							 
-								 try {
-									LogicLayerImpl.addCabin(modelCabin);
-								} catch (CCException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-								 
-								 root.put("Cabin", modelCabin);
+							 root.put("Cabin", modelCabin);
 								 
 					// Get cabin feature  TODO: get multiple cabin features using javascript
 								 
@@ -204,18 +230,7 @@ public class AddCabin extends HttpServlet
 						}
 						else root.put("FeaturesCheck", "null");
 						
-						
-						 
-					// For testing purposes: delete cabin and amenities and features -- delete this code later
-					
-						try {
-							FeatureManager.delete(cabinFeature);
-							CabinManager.delete(modelCabin);
-							AmenitiesManager.delete(cabinAmenities);
-						} catch (CCException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
+					// TODO: Delete or change template later ? will just go to cabin listing?
 						
 						String templateName = "AddCabinSuccess.ftl";
 						processor.processTemplate(templateName, root, request, response);

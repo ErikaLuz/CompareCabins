@@ -2,7 +2,7 @@ package boundary;
 
 import java.io.IOException;
 
-import java.util.Calendar;
+//import java.util.Calendar;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -16,18 +16,19 @@ import boundary.TemplateProcessor;
 import logic.LogicLayerImpl;
 
 import object.Cabin;
-import object.User;
-import object.Review;
 
-import persistence.AmenitiesManager;
-import persistence.CabinManager;
-import persistence.UserManager;
-import persistence.FeatureManager;
-import persistence.RentRecordManager;
-import persistence.ReviewManager;
-import object.Feature;
-import object.RentRecord;
-import object.Amenities;
+//import object.User;
+//import object.Review;
+//import object.Feature;
+//import object.RentRecord;
+//import object.Amenities;
+
+//import persistence.UserManager;
+//import persistence.ReviewManager;
+//import persistence.FeatureManager;
+//import persistence.RentRecordManager;
+//import persistence.AmenitiesManager;
+//import persistence.CabinManager;
 
 import exception.CCException;
 import freemarker.template.Configuration;
@@ -68,7 +69,7 @@ public class CabinListing extends HttpServlet
 				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 				SimpleHash root = new SimpleHash(db.build());
 				
-				// For testing purposes - delete later
+/*				// For testing purposes - delete later
 				
 					User user = new User("Cabin", "Listing", "firstName", "lastName", "email");
 					
@@ -133,25 +134,30 @@ public class CabinListing extends HttpServlet
 					} catch (CCException e1) {
 						e1.printStackTrace();
 					}		
+*/				
+				// Create model cabin with cabinId 
 				
-				// Call cabin listing code
+					String cabinIdString = request.getParameter("cabinId");
+					int cabinId = Integer.parseInt(cabinIdString);
+					Cabin modelCabin = new Cabin();
+					modelCabin.setId(cabinId);
 				
-//				String cabinIdString = request.getParameter("cabinId");
-//				int cabinId = Integer.parseInt(cabinIdString);
-//				Cabin modelCabin = new Cabin();
-//				modelCabin.setId(cabinId);
+					
+				// Call logic layer and call cabin listing code
+					
+					try{
+						LogicLayerImpl.cabinListing(root, modelCabin);
+					}catch (CCException e)
+					{
+						e.printStackTrace();
+					}
+					
+				// Set and process templates
 				
-				try{
-					LogicLayerImpl.cabinListing(root, cabin);
-				}catch (CCException e)
-				{
-					e.printStackTrace();
-				}
+					String templateName = "GuestCabinListing.ftl";
+					processor.processTemplate(templateName, root, request, response);
 				
-				String templateName = "GuestCabinListing.ftl";
-				processor.processTemplate(templateName, root, request, response);
-				
-				// Delete dummy objects
+/*				// Delete dummy objects
 				
 					try {
 						ReviewManager.delete(review1);
@@ -164,7 +170,7 @@ public class CabinListing extends HttpServlet
 						UserManager.delete(user);
 					} catch (CCException e1) {
 						e1.printStackTrace();
-					}
+					} */
 			}
 			
 		} // end of doGet
