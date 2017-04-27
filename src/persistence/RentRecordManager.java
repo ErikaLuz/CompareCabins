@@ -302,16 +302,25 @@ public class RentRecordManager {
 	
 	public static void delete(RentRecord rentRecord) throws CCException
 	{
-		String query = "DELETE FROM rent_record WHERE id = ?";
+		String deleteReview = "Delete FROM review WHERE id = ?";
+		String deleteRentRecord = "DELETE FROM rent_record WHERE id = ?";
+		
 		PreparedStatement ps;
 		Connection con = DbAccessImpl.connect();
 		int rowsModified;
+		
+		// Delete rent record review
+		
+		Review review = restoreReviewFromRentRecord(rentRecord);
+		ReviewManager.delete(review);
+		
+		// Delete rent records
 		
 		if(rentRecord.getId() < 0) //object no in database
 			return;
 		
 		try {
-			ps = con.prepareStatement(query);
+			ps = con.prepareStatement(deleteRentRecord);
 			ps.setInt(1,  rentRecord.getId());
 			rowsModified = ps.executeUpdate();
 			

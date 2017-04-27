@@ -18,7 +18,7 @@ import object.Availability;
 import object.RentRecord;
 import object.Review;
 import object.Group;
-
+import persistence.AmenitiesManager;
 import persistence.CabinManager;
 import persistence.RentRecordManager;
 import persistence.ReviewManager;
@@ -269,6 +269,95 @@ public class LogicLayerImpl {
 		return user;
 			
 	} // end of updateUser
+	
+	public static void updateCabin(Cabin modelCabin, Amenities modelAmenities) throws CCException
+	{
+		if(modelAmenities != null) 
+		{
+			// Restore amenities from database
+			
+				Amenities amenities = CabinManager.restoreAmenitiesFromCabin(modelCabin);
+				
+			// Compare model amenities to database amenities and change to new values if needed
+				
+				if(modelAmenities.isHasLake() != amenities.isHasLake())
+					amenities.setHasLake(modelAmenities.isHasLake());
+				
+				if(modelAmenities.isHasRiver() != amenities.isHasRiver())
+					amenities.setHasRiver(modelAmenities.isHasRiver());
+				
+				if(modelAmenities.isHasPool() != amenities.isHasPool())
+					amenities.setHasPool(modelAmenities.isHasPool());
+				
+				if(modelAmenities.isHasHotTub() != amenities.isHasHotTub())
+					amenities.setHasHotTub(modelAmenities.isHasHotTub());
+				
+				if(modelAmenities.isHasWifi() != amenities.isHasWifi())
+					amenities.setHasWifi(modelAmenities.isHasWifi());
+				
+				if(modelAmenities.isHasAirConditioning() != amenities.isHasAirConditioning())
+					amenities.setHasAirConditioning(modelAmenities.isHasAirConditioning());
+				
+				if(modelAmenities.isHasWasherDryer() != amenities.isHasWasherDryer())
+					amenities.setHasWasherDryer(modelAmenities.isHasWasherDryer());
+				
+				if(modelAmenities.isAllowsPets() != amenities.isAllowsPets())
+					amenities.setAllowsPets(modelAmenities.isAllowsPets());
+				
+				if(modelAmenities.isAllowsSmoking() != amenities.isAllowsSmoking())
+					amenities.setAllowsSmoking(modelAmenities.isAllowsSmoking());
+				
+			// Update amenities in database
+				
+				AmenitiesManager.store(amenities);
+				
+		} // end of amenities if statement
+				
+		// Restore cabin from database
+		
+			List<Cabin> cabins = CabinManager.restore(modelCabin);
+			Cabin cabin = new Cabin();
+			
+			if(cabins.size() != 1) System.out.println("ERROR: wrong cabin(s) found");
+			else cabin = cabins.get(0);
+			
+		// Compare model cabin to database cabin and change to new values if needed
+			
+			if(!modelCabin.getAddress().equals(cabin.getAddress()) && modelCabin.getAddress() != null)
+				cabin.setAddress(modelCabin.getAddress());
+			
+			if(!modelCabin.getCity().equals(cabin.getCity()) && modelCabin.getCity() != null)
+				cabin.setCity(modelCabin.getCity());
+			
+			if(!modelCabin.getState().equals(cabin.getState()) && modelCabin.getState() != null)
+				cabin.setState(modelCabin.getState());
+			
+			if(!modelCabin.getDescription().equals(cabin.getDescription()) && modelCabin.getDescription() != null)
+				cabin.setDescription(modelCabin.getDescription());
+			
+			if(!modelCabin.getTitle().equals(cabin.getTitle()) && modelCabin.getTitle() != null)
+				cabin.setTitle(modelCabin.getTitle());
+			
+			if(modelCabin.getBedroomCount() != cabin.getBedroomCount() && modelCabin.getBedroomCount() > -1)
+				cabin.setBedroomCount(modelCabin.getBedroomCount());
+			
+			if(modelCabin.getBathCount() != cabin.getBathCount() && modelCabin.getBathCount() > -1)
+				cabin.setBathCount(modelCabin.getBathCount());
+			
+			if(modelCabin.getMaxOccupancy() != cabin.getMaxOccupancy() && modelCabin.getMaxOccupancy() > -1)
+				cabin.setMaxOccupancy(modelCabin.getMaxOccupancy());	
+			
+		// Update cabin in database
+			
+			CabinManager.store(cabin);
+	}
+	
+	public static void deleteCabin(Cabin cabin) throws CCException
+	{
+		// Delete cabin from database
+		
+			CabinManager.delete(cabin);
+	}
 	
 	public static void pastStays(SimpleHash root, User user) throws CCException
 	{
