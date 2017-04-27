@@ -185,18 +185,18 @@
 	        		<#list Reviews as r>
 	            		<div class="row">
         				<div class="col-xs-4 col-sm-4 col-md-4">
-        				<h3 class="text-right">Title: ${r.title}</h3><br />
+        				<h3 class="text-left">${r.title}</h3><br />
 	            		</div>
 	            		<div class="col-xs-4 col-sm-4 col-md-4">
 	            		<h3 class="text-center">Review</h3>
 	            		</div>
 	            		<div class="col-xs-4 col-sm-4 col-md-4">
-	            		<h3 class="text-left">Number of Stars: ${r.numStars}</h3><br />
+	            		<h3 class="text-right">Number of Stars: ${r.numStars}</h3><br />
 	            		</div>
 	            		</div>
 	            		<div class="row">
 	            		<div class="col-xs-12 col-sm-12 col-md-12">
-	            		<h4 class="text-center">Review: ${r.description}</h4> <br />
+	            		<h4 class="text-center">${r.description}</h4> <br />
 	            		</div>
 	            		</div>
 	            		<hr>

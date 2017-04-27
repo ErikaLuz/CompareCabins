@@ -14,13 +14,15 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
-    <script src="scripts/rentPage.js" type="text/javascript"></script>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script src="scripts/jquery-3.2.1.js" type="text/javascript"></script>
+	<script src="scripts/jquery-ui.js" type="text/javascript"></script>
+	<script src="scripts/rentPage.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -83,7 +85,7 @@
 
         </div>
         <div class="col-xs-6 col-sm-6 col-md-6">
-			<form>
+			<form action="PayRent?cabinId=${Cabin.id}">
 			  Start Date:
 			  <input type="date" id="startDate" name="startDate">
 			  End Date:
