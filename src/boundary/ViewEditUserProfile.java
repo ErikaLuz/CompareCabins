@@ -171,16 +171,12 @@ public class ViewEditUserProfile extends HttpServlet
 			{
 				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 				SimpleHash root = new SimpleHash(db.build());
-				
+				HttpSession session = request.getSession();
+				User user= (User) session.getAttribute( "user");
+		        root.put("username", user.getUsername());
 				// Place updateConfirmation into root for ftl template
 				
 					root.put("viewOrEdit", "updateConfirmation");
-					
-				// Create model user
-					
-					User user = new User();
-					String userId = request.getParameter("userId");
-					user.setId(Integer.parseInt(userId));
 					
 				// Retrieve new values
 					

@@ -95,14 +95,8 @@ public class PastStaysReview extends HttpServlet
 				
 				// Session Tracking
 				HttpSession session = request.getSession();
-				User userTracking = (User) session.getAttribute( "user");
-		        root.put("username", userTracking.getUsername());
-				
-				// Get user id 
-				
-					User user = new User();
-					String userIdString = request.getParameter("userId");					
-					user.setId(Integer.parseInt(userIdString));
+				User user = (User) session.getAttribute( "user");
+		        root.put("username", user.getUsername());
 					
 				// Call logic layer
 					
@@ -166,10 +160,16 @@ public class PastStaysReview extends HttpServlet
 				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 				SimpleHash root = new SimpleHash(db.build());
 				
+				// Session Tracking
+				HttpSession session = request.getSession();
+				User user = (User) session.getAttribute( "user");
+		        root.put("username", user.getUsername());
+				
+				
 				// Somehow get the rent record id
 				
 					RentRecord rr = new RentRecord();
-					String rentRecordIdString = request.getParameter("rrId");
+					String rentRecordIdString = request.getParameter("RentRecord.id");
 					rr.setId(Integer.parseInt(rentRecordIdString));
 					
 				// Call the logic layer
@@ -233,6 +233,11 @@ public class PastStaysReview extends HttpServlet
 				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 				SimpleHash root = new SimpleHash(db.build());
 				
+				// Session Tracking
+				HttpSession session = request.getSession();
+				User user = (User) session.getAttribute( "user");
+		        root.put("username", user.getUsername());
+				
 				// Get Review values
 				
 					int intNumStar = 0;
@@ -251,7 +256,7 @@ public class PastStaysReview extends HttpServlet
 				
 				// Get rent record id
 				
-					String rrId = request.getParameter("rentRecordId");		
+					String rrId = request.getParameter("RentRecord.id");		
 					RentRecord rr = new RentRecord();
 					rr.setId(Integer.parseInt(rrId));
 				

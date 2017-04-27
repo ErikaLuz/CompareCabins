@@ -82,13 +82,9 @@ public class AddCabin extends HttpServlet
 					SimpleHash root = new SimpleHash(db.build());
 					// Session Tracking
 					HttpSession session = request.getSession();
-					User userTracking = (User) session.getAttribute( "user");
-			        root.put("username", userTracking.getUsername());
-					
-					// Get user
-					
-						User user = (User)session.getAttribute("user");
-					
+					User user = (User) session.getAttribute( "user");
+			        root.put("username", user.getUsername());
+
 					// Get amenities
 						
 						// Variables

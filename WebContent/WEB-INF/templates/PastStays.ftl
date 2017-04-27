@@ -32,7 +32,7 @@
 	
 	<#list PastStays as PS>
 	
-		<div class = "container">
+		<div class = "container" id="${RentRecord.id}">
 		
 			<img src="placeholder_600x400.svg" alt="thumbnail" style="width:410px;height:200px;display:block;margin:auto;float:left;vertical-align:middle">
 		
