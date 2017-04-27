@@ -68,7 +68,7 @@ public class AddCabin extends HttpServlet
 					SimpleHash root = new SimpleHash(db.build());
 					// Session Tracking
 					HttpSession session = request.getSession();
-					User user = (User) session.getAttribute( "username");
+					User user = (User) session.getAttribute( "user");
 			        root.put("username", user.getUsername());
 					
 					String templateName = "AddCabin.ftl";
