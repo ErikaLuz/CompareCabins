@@ -26,7 +26,6 @@ import object.Review;
 import persistence.UserManager;
 import persistence.CabinManager;
 import persistence.RentRecordManager;
-import persistence.ReviewManager;
 
 /**
  * Servlet implementation class PastStays
@@ -57,7 +56,7 @@ public class PastStaysReview extends HttpServlet
 			{
 				String pastStays = request.getParameter("pastStays");
 				String addReview = request.getParameter("addReview");
-				String editReview = request.getParameter("editReview");
+				String submitReview = request.getParameter("submitReview");
 				
 				if(pastStays != null)
 					try {
@@ -68,7 +67,21 @@ public class PastStaysReview extends HttpServlet
 					}
 				else if(addReview != null)
 				{
-					
+					try {
+						goToReview(request, response);
+					} catch (CCException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				else if(submitReview != null)
+				{
+					try {
+						addReview(request,response);
+					} catch (CCException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				
 				
@@ -112,7 +125,7 @@ public class PastStaysReview extends HttpServlet
 						rr2.setCabin(cabin);
 						RentRecord rr3 = new RentRecord(z, date, date);
 						rr3.setUser(user);
-						rr3.setCabin(cabin);
+						rr3.setCabin(cabin2);
 						
 						RentRecordManager.store(rr1);
 						RentRecordManager.store(rr2);
@@ -126,8 +139,160 @@ public class PastStaysReview extends HttpServlet
 				
 						String templateName = "PastStays.ftl";
 						processor.processTemplate(templateName, root, request, response);
+						
+					// Delete dummy code objects
+						
+						RentRecordManager.delete(rr1);
+						RentRecordManager.delete(rr2);
+						RentRecordManager.delete(rr3);
+						CabinManager.delete(cabin);
+						CabinManager.delete(cabin2);
+						UserManager.delete(user);
 			}
 	
+			private void goToReview(HttpServletRequest request, HttpServletResponse response) throws CCException
+			{
+				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
+				SimpleHash root = new SimpleHash(db.build());
+				
+				// Somehow get the rent record id
+				
+//					RentRecord rr = new RentRecord();
+//					rr.setId(id);
+				
+				// DUMMY CODE - delete later 
+				
+					// Create User 
+				
+						User user = new User("testUser", "testPass", "First", "Last", "Email");
+						UserManager.store(user);
+						
+					// Create Cabin
+						
+						Cabin cabin = new Cabin("Address", "City", "State", "Description", "Title", 3 ,4, 6);
+						Cabin cabin2 = new Cabin("Lumpkin", "Athens", "Georgia", "a nice cabin", "Nice Stay", 5, 7, 9);
+						
+						CabinManager.store(cabin);
+						CabinManager.store(cabin2);
+						
+					// Create Rent Records
+						
+						float z = 2;
+						Calendar date = Calendar.getInstance();
+						
+						RentRecord rr1 = new RentRecord(z, date, date);
+						rr1.setUser(user);
+						rr1.setCabin(cabin);
+						RentRecord rr2 = new RentRecord(z, date, date);
+						rr2.setUser(user);
+						rr2.setCabin(cabin);
+						RentRecord rr3 = new RentRecord(z, date, date);
+						rr3.setUser(user);
+						rr3.setCabin(cabin);
+						
+						RentRecordManager.store(rr1);
+						RentRecordManager.store(rr2);
+						RentRecordManager.store(rr3);
+				
+				// Call the logic layer
+				
+					LogicLayerImpl.goToReview(root, rr1);
+					
+				// Set and process template
+				
+				String templateName = "AddReview.ftl";
+				processor.processTemplate(templateName, root, request, response);
+				
+				// Delete dummy code objects
+				
+					RentRecordManager.delete(rr1);
+					RentRecordManager.delete(rr2);
+					RentRecordManager.delete(rr3);
+					CabinManager.delete(cabin);
+					CabinManager.delete(cabin2);
+					UserManager.delete(user);
+			}
+			
+			private void addReview(HttpServletRequest request, HttpServletResponse response) throws CCException
+			{
+				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
+				SimpleHash root = new SimpleHash(db.build());
+				
+				int intNumStar = 0;
+				String numStar = request.getParameter("numStars");
+				if(!numStar.equals("") && numStar != null) intNumStar = Integer.parseInt(numStar);
+				
+				String title = null;
+				if(!request.getParameter("title").equals("")) title = request.getParameter("title");
+				
+				String review = null;
+				if(!request.getParameter("review").equals("")) review = request.getParameter("review");
+				
+				Review modelReview = new Review(intNumStar, title, review);
+				
+				// DUMMY CODE - delete later 
+				
+				// Create User 
+			
+					User user = new User("testUser", "testPass", "First", "Last", "Email");
+					UserManager.store(user);
+					
+				// Create Cabin
+					
+					Cabin cabin = new Cabin("Address", "City", "State", "Description", "Title", 3 ,4, 6);
+					Cabin cabin2 = new Cabin("Lumpkin", "Athens", "Georgia", "a nice cabin", "Nice Stay", 5, 7, 9);
+					
+					CabinManager.store(cabin);
+					CabinManager.store(cabin2);
+					
+				// Create Rent Records
+					
+					float z = 2;
+					Calendar date = Calendar.getInstance();
+					
+					RentRecord rr1 = new RentRecord(z, date, date);
+					rr1.setUser(user);
+					rr1.setCabin(cabin);
+					RentRecord rr2 = new RentRecord(z, date, date);
+					rr2.setUser(user);
+					rr2.setCabin(cabin);
+					RentRecord rr3 = new RentRecord(z, date, date);
+					rr3.setUser(user);
+					rr3.setCabin(cabin);
+					
+					RentRecordManager.store(rr1);
+					RentRecordManager.store(rr2);
+					RentRecordManager.store(rr3);
+				
+				// somehow get the rent record id
+				
+//				string rrId = request.getParameter("rentRecordId");
+//				int rentRecordId = Integer.parseInt(rrId);
+				
+//				RentRecord rr = new RentRecord();
+//				rr.setId(rentRecordId);
+				
+				
+				// Call logic layer 
+				
+					LogicLayerImpl.addReview(root, rr1, modelReview);
+				
+				// Set and process template
+				
+					String templateName = "AddReviewSuccess.ftl";
+					processor.processTemplate(templateName, root, request, response);
+				
+				// Delete dummy code objects
+				
+				RentRecordManager.delete(rr1);
+				RentRecordManager.delete(rr2);
+				RentRecordManager.delete(rr3);
+				CabinManager.delete(cabin);
+				CabinManager.delete(cabin2);
+				UserManager.delete(user);
+			
+					
+			}
 		
 		//@see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 			protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 

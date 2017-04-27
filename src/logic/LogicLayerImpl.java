@@ -1,5 +1,6 @@
 package logic;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.LinkedList;
@@ -20,6 +21,7 @@ import object.Group;
 
 import persistence.CabinManager;
 import persistence.RentRecordManager;
+import persistence.ReviewManager;
 import persistence.UserManager;
 
 public class LogicLayerImpl {
@@ -293,6 +295,17 @@ public class LogicLayerImpl {
 				Group group = new Group();
 				group.setRentRecord(rr.get(i));
 				
+				Calendar start = rr.get(i).getStartDate();
+				Calendar end = rr.get(i).getEndDate();
+			
+				SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY");
+				
+				String startDate = sdf.format(start.getTime()); 
+				String endDate = sdf.format(end.getTime()); 
+				
+				root.put("StartDate", startDate);
+				root.put("EndDate", endDate);
+				
 				Cabin cabin = RentRecordManager.restoreCabinFromRentRecord(rr.get(i));
 				group.setCabin(cabin);
 				
@@ -316,9 +329,71 @@ public class LogicLayerImpl {
  		
 	}
 	
-	public static void addReview(SimpleHash root, User user) throws CCException
+	public static void goToReview(SimpleHash root, RentRecord modelRR) throws CCException
 	{
+		// Retrieve rent record from database and place in root
 		
+			List<RentRecord> rrs = RentRecordManager.restore(modelRR);
+			RentRecord rr = new RentRecord();
+			
+			if(rrs.size() != 1) System.out.println("ERROR: wrong rent record(s) found");
+			else rr = rrs.get(0);
+			root.put("RentRecord", rr);
+			
+			Calendar start = rr.getStartDate();
+			Calendar end = rr.getEndDate();
+		
+			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY");
+			
+			String startDate = sdf.format(start.getTime()); 
+			String endDate = sdf.format(end.getTime()); 
+			
+			root.put("StartDate", startDate);
+			root.put("EndDate", endDate);
+			
+		// Retrieve Cabin from RentRecord
+			
+			Cabin cabin = RentRecordManager.restoreCabinFromRentRecord(rr);
+			
+		// Get cabin info - places info in root
+			
+			cabinListing(root, cabin);
+	}
+	
+	public static void addReview(SimpleHash root, RentRecord modelRentRecord, Review modelReview) throws CCException
+	{
+		// Retrieve review's rent record from database
+		
+			List<RentRecord> rr = RentRecordManager.restore(modelRentRecord);
+			RentRecord rentRecord  = new RentRecord();
+			
+			if(rr.size() != 1) System.out.println("ERROR: wrong rent record(s) found");
+			else rentRecord = rr.get(0);
+			
+			// Format start and end date
+			
+				Calendar start = rentRecord.getStartDate();
+				Calendar end = rentRecord.getEndDate();
+			
+				SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY");
+				
+				String startDate = sdf.format(start.getTime()); 
+				String endDate = sdf.format(end.getTime()); 
+			
+		// Assign rent record found to modelReview
+			
+			modelReview.setRentRecord(rentRecord);
+		
+		// Store review into database
+		
+			ReviewManager.store(modelReview);
+			
+		// Store rent record and review into SimpleHash
+			
+			root.put("RentRecord", rentRecord);
+			root.put("StartDate", startDate);
+			root.put("EndDate", endDate);
+			root.put("Review", modelReview);
 	}
 	
 }

@@ -20,6 +20,11 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    
+    <link href="css/ownersCabins.css" rel="stylesheet"/>
+	<script src="scripts/jquery-3.2.1.js" type="text/javascript"></script>
+	<script src="scripts/ownersCabins.js" type="text/javascript"></script>
+	
 </head>
 
 <body>
@@ -59,7 +64,7 @@
 
 	<#list Groups as group>
 	
-		<div class = "cabinListing">
+		<div class = "cabinListing" id="${group.getCabin().id}">
         <div class="row">
         <div class="col-xs-5 col-sm-5 col-md-5">
 			<a href="http://placehold.it"><img src="http://placehold.it/600x400" class="img-rounded img-responsive" alt="thumbnail"></a>

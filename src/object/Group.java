@@ -27,6 +27,11 @@ public class Group {
 		private List<RentRecord> rentRecordList;
 		private List<Review> reviewList;
 		private List<User> userList;
+		
+		// Date Strings
+		
+		private String startDate;
+		private String endDate;
 	
 	// CONSTRUCTOR	
 		
@@ -49,6 +54,9 @@ public class Group {
 			rentRecordList = null;
 			reviewList = null;
 			userList = null;
+			
+			startDate = null;
+			endDate = null;
 		}
 	
 	// OBJECT GETTER AND SETTERS
@@ -245,5 +253,31 @@ public class Group {
 			public void setUserList(List<User> userList)
 			{
 				this.userList = userList;
-			}	
+			}
+			
+	// DATE GETTER AND SETTERS
+			
+		// Start Date getter and setter
+			
+			public String getStartDate()
+			{
+				return startDate;
+			}
+			
+			public void setStartDate(String startDate)
+			{
+				this.startDate = startDate;
+			}
+			
+		// End Date getter and setter
+			
+			public String getEndDate()
+			{
+				return endDate;
+			}
+			
+			public void setEndDate(String endDate)
+			{
+				this.endDate = endDate;
+			}
 }

@@ -1,0 +1,5 @@
+@CHARSET "UTF-8";
+
+div .mouseOver {
+	box-shadow: 18px 18px 16px rgb( 66, 206, 244 );
+}

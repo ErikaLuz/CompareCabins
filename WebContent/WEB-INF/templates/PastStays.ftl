@@ -28,9 +28,7 @@
 
 <body>
 
-	
-	
-		<center><h1>${User.username} Past Stays</h1></center>
+	<center><h1>${User.username} Past Stays</h1></center>
 	
 	<#list PastStays as PS>
 	
@@ -42,13 +40,12 @@
 			<hr>
 			
 			<p>
-				Description: ${PS.getCabin().title}<br />
-				Start Date: ${PS.getRentRecord().startDate}<br />
-				End Date: ${PS.getRentRecord().endDate}<br />
+				Description: ${PS.getCabin().description}<br />
+				Start Date: ${StartDate}<br />
+				End Date: ${EndDate}<br />
 				
 				<form action="PastStaysReview" method="post">
-           	    <button name="PastStaysReview" class="btn">ADD REVIEW</button>
-           	    <button name="PastStaysReview" class="btn">EDIT REVIEW</button>
+           	    <button name="addReview" class="btn">ADD REVIEW</button>
                 </form>
 				
 			</p>

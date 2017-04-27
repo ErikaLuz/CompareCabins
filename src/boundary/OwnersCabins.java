@@ -29,7 +29,7 @@ import freemarker.template.SimpleHash;
  * Servlet implementation class CabinListing
  */
 @WebServlet("/UserCabinListing")
-public class UserCabinListing extends HttpServlet 
+public class OwnersCabins extends HttpServlet 
 {
 	//VARIABLES
 		private static final long serialVersionUID = 1L;	
@@ -37,7 +37,7 @@ public class UserCabinListing extends HttpServlet
 		private TemplateProcessor processor;
 		
     //@see HttpServlet#HttpServlet() 
-		public UserCabinListing() 
+		public OwnersCabins() 
 		{
 			super();
 		} //end of constructor
