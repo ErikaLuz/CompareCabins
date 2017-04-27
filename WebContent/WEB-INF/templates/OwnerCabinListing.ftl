@@ -69,8 +69,10 @@
 		
         </div>
         <div class="col-xs-6 col-sm-6 col-md-6">
-        <h1 class="text-center">Availability --Add Calendars--</h1>
-        </div>
+		<form action="EditCabin?cabinId=${Cabin.id}" method="post">
+			  					<button name="prepareEdit" class="btn btn-block">Edit Cabin</button>
+		      				</form>
+                </div>
         </div>
             
         

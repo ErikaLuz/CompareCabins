@@ -29,6 +29,7 @@
 </head>
   <body>
     <#include "Header.ftl">
+
 	<form action="Search" method="get">
 		<div>
 			<input type="checkbox" name="hasLake" />Lake<br> <input
@@ -49,6 +50,7 @@
 
 	<div id="results"  class="center-block">
 		<h2 class="text-center">Cabins</h2>
+
 	</div>
 
 </body>

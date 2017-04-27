@@ -30,14 +30,11 @@
         </div>
         <div class="panel-body">
              <div class="row">
+
                 <div class="col-sm-12 center-block">
+
                     <form action="AddCabin" method="post">
-                      <img src="placeholder_600x400.svg" alt="thumbnail" style="width:500px;height:300px;padding-left:10px;display:block;margin:auto;">
-			  					<button name="upload" class="btn btn-block">Upload Photos!</button>
-                </div>
-            </div>
-            <hr>
-  	        <br>
+
             <div class="container-fluid bg-3 text-center">    
                 <div class="row">
                     <div class="col-sm-4">

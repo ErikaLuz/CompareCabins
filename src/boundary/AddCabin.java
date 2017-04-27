@@ -80,6 +80,7 @@ public class AddCabin extends HttpServlet
 				{
 					DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 					SimpleHash root = new SimpleHash(db.build());
+					
 					// Session Tracking
 					HttpSession session = request.getSession();
 					User user = (User) session.getAttribute( "user");
