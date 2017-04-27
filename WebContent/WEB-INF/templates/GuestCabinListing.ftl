@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>${Cabin.title}</title>
+    <title>${Group.getCabin().title}</title>
 
     <!-- Bootstrap -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
@@ -29,10 +29,10 @@
         		<div class="panel-heading">
         			<div class="row">
         				<div class="col-xs-6 col-sm-6 col-md-6">
-			    			<h1 class="text-left">${Cabin.title}</h1>
+			    			<h1 class="text-left">${Group.getCabin().title}</h1>
 			    		</div>
 			    		<div class="col-xs-6 col-sm-6 col-md-6">
-			    			<form action="RentCabin?cabinId=${Cabin.id}" method="post">
+			    			<form action="RentCabin?cabinId=${Group.getCabin().id}" method="post">
 			  					<button name="RentCabin" class="btn btn-block">Rent!</button>
 		      				</form>
 			    		</div>
@@ -49,9 +49,9 @@
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
       <div class="item active">
-      <img src="${PriorityPicture.filePath}" class="img-rounded img-responsive" alt="thumbnail">
+      <img src="${Group.getCabinPicture().filePath}" class="img-rounded img-responsive" alt="thumbnail">
       </div>
-				<#list CabinPictures as cp>
+				<#list Group.cabinPictureList as cp>
 				<div class="item">
 				<img src="${cp.filePath}" class="img-rounded img-responsive" alt="thumbnail">
 				</div>
@@ -91,11 +91,11 @@
         <hr>
         <div class="row">
         <div class="col-xs-6 col-sm-6 col-md-6">
-            <p class="text-center">${Cabin.description}</p>
+            <p class="text-center">${Group.getCabin().description}</p>
         </div>
         <div class="col-xs-6 col-sm-6 col-md-6">
         <#if FeaturesCheck != "null">
-                <#list Features as f>
+                <#list Group.featureList as f>
                     <p class="text-center">${f.featureString}<p>
 	            </#list>
         </#if>
@@ -124,9 +124,9 @@
         <div class="col-xs-3 col-sm-3 col-md-3">
 
             <p class="text-left">
-                ${Cabin.bedroomCount}<br/> 
-                ${Cabin.bathCount}<br/> 
-                ${Cabin.maxOccupancy}</br>
+                ${Group.getCabin().bedroomCount}<br/> 
+                ${Group.getCabin().bathCount}<br/> 
+                ${Group.getCabin().maxOccupancy}</br>
             </p>
 
         </div>
@@ -134,31 +134,31 @@
         <#if AmenitiesCheck != "null">
         
 	        	<p class="text-center">
-	        		<#if Amenities.hasLake == true>
+	        		<#if Group.getAmenities().hasLake == true>
 	        		<strong>Lake :</strong> Yes!
 	        		</#if>
-	        		<#if Amenities.hasRiver == true>
+	        		<#if Group.getAmenities().hasRiver == true>
 	        		<strong>River :</strong> Yes!
 	        		</#if>
-	        		<#if Amenities.hasPool == true>
+	        		<#if Group.getAmenities().hasPool == true>
 	        		<strong>Pool :</strong> Yes!
 	        		</#if>
-	        		<#if Amenities.hasHotTub == true>
+	        		<#if Group.getAmenities().hasHotTub == true>
 	        		<strong>Hot Tub :</strong> Yes!
 	        		</#if>
-	        		<#if Amenities.hasWifi == true>
+	        		<#if Group.getAmenities().hasWifi == true>
 	        		<strong>WiFi :</strong> Yes!
 	        		</#if>
-	        		<#if Amenities.hasAirConditioning == true>
+	        		<#if Group.getAmenities().hasAirConditioning == true>
 	        		<strong>Air Conditiong :</strong> Yes!
 	        		</#if>
-	        		<#if Amenities.hasWasherDryer == true>
+	        		<#if Group.getAmenities().hasWasherDryer == true>
 	        		<strong>Washer Dryer :</strong> Yes!
 	        		</#if>
-	        		<#if Amenities.allowsPets == true>
+	        		<#if Group.getAmenities().allowsPets == true>
 	        		<strong>Do we allow pets? :</strong> Yes!
 	        		</#if>
-	        		<#if Amenities.allowsSmoking == true>
+	        		<#if Group.getAmenities().allowsSmoking == true>
 	        		<strong>Do we allow smoking? :</strong> Yes!
 	        		</#if>
 	        	</p>   
@@ -179,7 +179,7 @@
         
 	        <div class="section">
 	        	
-	        		<#list Reviews as r>
+	        		<#list Group.reviewList as r>
 	            		<div class="row">
         				<div class="col-xs-4 col-sm-4 col-md-4">
         				<h3 class="text-left">${r.title}</h3><br />

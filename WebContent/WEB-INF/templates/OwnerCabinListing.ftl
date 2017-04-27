@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>${Cabin.title}</title>
+    <title>${Group.getCabin().title}</title>
 
     <!-- Bootstrap -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
@@ -27,7 +27,7 @@
         <div class="container">
         	<div class="panel panel-default">
         		<div class="panel-heading">
-			    		<h1 class="text-center">${Cabin.title}</h1>
+			    		<h1 class="text-center">${Group.getCabin().title}</h1>
 			 			</div>
              <div class="panel-body">
              
@@ -40,9 +40,9 @@
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
       <div class="item active">
-      <img src="${PriorityPicture.filePath}" class="img-rounded img-responsive" alt="thumbnail">
+      <img src="${Group.getCabinPicture().filePath}" class="img-rounded img-responsive" alt="thumbnail">
       </div>
-				<#list CabinPictures as cp>
+				<#list Group.cabinPictureList as cp>
 				<div class="item">
 				<img src="${cp.filePath}" class="img-rounded img-responsive" alt="thumbnail">
 				</div>
@@ -69,7 +69,7 @@
 		
         </div>
         <div class="col-xs-6 col-sm-6 col-md-6">
-		<form action="EditCabin?cabinId=${Cabin.id}" method="post">
+		<form action="EditCabin?cabinId=${Group.getCabin().id}" method="post">
 			  					<button name="prepareEdit" class="btn btn-block">Edit Cabin</button>
 		      				</form>
                 </div>
@@ -87,11 +87,11 @@
         <hr>
         <div class="row">
         <div class="col-xs-6 col-sm-6 col-md-6">
-            <p class="text-center">${Cabin.description}</p>
+            <p class="text-center">${Group.getCabin().description}</p>
         </div>
         <div class="col-xs-6 col-sm-6 col-md-6">
         <#if FeaturesCheck != "null">
-                <#list Features as f>
+                <#list Group.featureList as f>
                     <p class="text-center">${f.featureString}<p>
 	            </#list>
         </#if>
@@ -120,9 +120,9 @@
         <div class="col-xs-3 col-sm-3 col-md-3">
 
             <p class="text-left">
-                ${Cabin.bedroomCount}<br/> 
-                ${Cabin.bathCount}<br/> 
-                ${Cabin.maxOccupancy}</br>
+                ${Group.getCabin().bedroomCount}<br/> 
+                ${Group.getCabin().bathCount}<br/> 
+                ${Group.getCabin().maxOccupancy}</br>
             </p>
 
         </div>
@@ -130,9 +130,9 @@
         <#if AmenitiesCheck != "null">
         
 	        	<p class="text-center">
-	        		Has Lake: ${(Amenities.hasLake)?c}<br />
-	        		Has River: ${(Amenities.hasRiver)?c}<br />
-	        		Has Pool: ${(Amenities.hasPool)?c}<br />
+	        		Has Lake: ${(Group.getAmenities().hasLake)?c}<br />
+	        		Has River: ${(Group.getAmenities().hasRiver)?c}<br />
+	        		Has Pool: ${(Group.getAmenities().hasPool)?c}<br />
 	        	</p>
 	        	
         
@@ -153,7 +153,7 @@
         
 	        <div class="section">
 	        	<p>
-	        		<#list Reviews as r>
+	        		<#list Group.reviewList as r>
 	            
 	            		Number of Stars: ${r.numStars}<br />
 	            		Title: ${r.title}<br />

@@ -18,6 +18,7 @@ import logic.LogicLayerImpl;
 
 import object.Cabin;
 import object.User;
+import object.Group;
 
 import exception.CCException;
 import freemarker.template.Configuration;
@@ -51,30 +52,64 @@ public class RentCabin extends HttpServlet
 	//@see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response) 
 		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 		{
-			DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
-			SimpleHash root = new SimpleHash(db.build());
+			// Create DefaultObjectWrapperBuilder and SimplHash
+			
+				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
+				SimpleHash root = new SimpleHash(db.build());
 			
 			// Session Tracking
-			HttpSession session = request.getSession();
-			if(session.getAttribute("user") != null) {
-			User user = (User) session.getAttribute( "user");
-	        root.put("username", user.getUsername());
-			}
-	        
-	        // Get CabinId	
-	        String cabinIdString = request.getParameter("cabinId");
+			
+				HttpSession session = request.getSession();
+				if(session.getAttribute("user") != null) {
+				User user = (User) session.getAttribute( "user");
+		        root.put("username", user.getUsername());
+				}
+				
+			// Create Group Object 
+				
+				Group group = new Group();
 				
 			// Create model cabin and set id 
 				
 				Cabin modelCabin = new Cabin();
-				modelCabin.setId(Integer.parseInt(cabinIdString));
+				modelCabin.setId(Integer.parseInt(request.getParameter("cabinId")));
 				
 				try{
-					LogicLayerImpl.cabinListing(root, modelCabin);
+					group = LogicLayerImpl.cabinListing( modelCabin );
 				}catch (CCException e)
 				{
 					e.printStackTrace();
 				}
+				
+			// If statements for Hash
+				
+				if(group.getUser() != null) root.put("Usercheck", "notNull");
+				else root.put("UserCheck", "null");
+				
+				if(group.getAmenities() != null) root.put("AmenitiesCheck", "notNull");
+				else root.put("AmenitiesCheck", "null");
+			
+				if(group.getCabinPictureList() != null)
+				{
+					root.put("CPCheck", "notNull");
+					
+					if(group.getCabinPicture() != null) root.put("PriorityCheck", "notNull"); 
+					else root.put("PriorityCheck", "null");
+				}
+				else root.put("CPCheck", "null");
+				
+				if(group.getFeatureList() != null) root.put("FeaturesCheck", "notNull");
+				else root.put("FeaturesCheck", "null");
+				
+				if(group.getAvailabilityList() != null)	root.put("AvailabilitiesCheck", "notNull");
+				else root.put("AvailabilitiesCheck", "null");
+				
+				if(group.getReviewList() != null) root.put("ReviewsCheck", "notNull");
+				else root.put("ReviewsCheck", "null");
+			
+			// Place group into root
+				
+				root.put("Group", group);
 			
 			// Set and process template
 		

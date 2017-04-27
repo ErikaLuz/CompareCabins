@@ -46,7 +46,7 @@
 			<div class="form-group text-center">
 				<form action="PastStaysReview?rentRecordId=${Group.getRentRecord().id}" method="post">
 			
-				Number of Stars: <input type="number" class="form-control" name="numStars" placeholder="enter number of stars" /><br />
+				Number of Stars: <input type="text" class="form-control" name="numStars" placeholder="enter number of stars" /><br />
 				Title: <input type="text" class="form-control" name="title" placeholder="enter a title for your review" /><br />
 				Review: <textarea class="form-control" id="review" name="review" placeholder="enter your review" rows="8"></textarea><br /><br />
 				
