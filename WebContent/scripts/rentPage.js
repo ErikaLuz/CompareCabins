@@ -3,7 +3,7 @@
  */
 
 window.onload = function () {
-	$("#checkPriceButton").click( checkPriceButton );
+	$("#checkPriceButton").click( checkPriceButtonClick );
 	jQuery("#startDate").datepicker();
 	jQuery("#endDate").datepicker();
 
