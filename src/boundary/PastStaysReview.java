@@ -165,11 +165,10 @@ public class PastStaysReview extends HttpServlet
 				User user = (User) session.getAttribute( "user");
 		        root.put("username", user.getUsername());
 				
-				
 				// Somehow get the rent record id
 				
 					RentRecord rr = new RentRecord();
-					String rentRecordIdString = request.getParameter("RentRecord.id");
+					String rentRecordIdString = request.getParameter("id");
 					rr.setId(Integer.parseInt(rentRecordIdString));
 					
 				// Call the logic layer
