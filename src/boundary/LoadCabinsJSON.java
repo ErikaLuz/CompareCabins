@@ -2,7 +2,7 @@ package boundary;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Calendar;
+
 import java.util.List;
 
 import javax.json.Json;
@@ -20,9 +20,7 @@ import object.Cabin;
 import object.CabinPicture;
 import persistence.CabinManager;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+
 
 /**
  * Servlet implementation class LoadCabinsJSON

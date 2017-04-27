@@ -89,6 +89,8 @@ public class LogicLayerImpl {
 					{
 						if(cabinPictures.get(i).getPriority() == 1) priority = cabinPictures.get(i);
 					}
+					
+					List<CabinPicture> cabinPicturesNoPriority = getCabinPicturesWithoutPriority(modelCabin);
 				
 				// Place info in SimpleHash for ftl
 				
@@ -110,7 +112,7 @@ public class LogicLayerImpl {
 				
 					if(cabinPictures.size() > 0)
 					{
-						root.put("CabinPictures", cabinPictures);
+						root.put("CabinPictures", cabinPicturesNoPriority);
 						root.put("CPCheck", "notNull");
 						
 						if(priority.getFilePath() != null) 
@@ -536,6 +538,20 @@ public class LogicLayerImpl {
 			root.put("StartDate", startDate);
 			root.put("EndDate", endDate);
 			root.put("Review", modelReview);
+	}
+	public static List<CabinPicture> getCabinPicturesWithoutPriority( Cabin cabin) throws CCException {
+		List<CabinPicture> cabinPictures = CabinManager.restoreCabinPicturesFromCabin(cabin);
+		
+		for( int i = 0; i < cabinPictures.size(); i++)
+		{
+			if( cabinPictures.get(i).getPriority() == 1 )
+			{
+				cabinPictures.remove(i);
+				break;
+			}
+		}
+		
+		return cabinPictures;
 	}
 	
 }

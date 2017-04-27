@@ -68,8 +68,10 @@ public class GuestCabinListing extends HttpServlet
 			
 			// Session Tracking
 			HttpSession session = request.getSession();
+			if(session.getAttribute("user") != null) {
 			User user = (User) session.getAttribute( "user");
 	        root.put("username", user.getUsername());
+			}
 	        
 	        // Get CabinId	
 	        String cabinIdString = request.getParameter("cabinId");
