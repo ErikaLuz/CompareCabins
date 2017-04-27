@@ -29,7 +29,12 @@
 			 <h1 class="panel-title text-center">Add a cabin</h1>
         </div>
         <div class="panel-body">
+             <div class="row">
+
+                <div class="col-sm-12 center-block">
+
                     <form action="AddCabin" method="post">
+
             <div class="container-fluid bg-3 text-center">    
                 <div class="row">
                     <div class="col-sm-4">

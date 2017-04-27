@@ -1,6 +1,7 @@
 <nav class="navbar navbar-default">
   	<div class="container-fluid">
         <div class="navbar-header">
+
         <form action="LoadHomePage" method="post">
             <button name="LoadHomePage" class="btn">Compare Cabins</button>
             </form>
@@ -58,6 +59,7 @@
                 <li><form action="LoadLoginPage" method="post">
                         <button name="LoadLoginPage" class="btn">Log in</button>
                 </form></li>
+
             </ul>
         </#if>
     </div>
