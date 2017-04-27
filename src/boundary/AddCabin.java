@@ -86,21 +86,7 @@ public class AddCabin extends HttpServlet
 					
 					// Get user
 					
-						User user = new User();
-						String userId  = request.getParameter("userId");
-						int intUserId = Integer.parseInt(userId);
-						user.setId(intUserId);
-						
-						List<User> users = new LinkedList<User>();
-						
-						try {
-							users = UserManager.restore(user);
-						} catch (CCException e2) {
-							
-							e2.printStackTrace();
-						}
-						
-						if(users.size() == 1)  user = users.get(0);
+						User user = (User)session.getAttribute("user");
 					
 					// Get amenities
 						

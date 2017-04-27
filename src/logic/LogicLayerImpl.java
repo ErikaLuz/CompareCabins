@@ -270,6 +270,41 @@ public class LogicLayerImpl {
 			
 	} // end of updateUser
 	
+	public static void prepareEditCabin(SimpleHash root, Cabin modelCabin) throws CCException
+	{
+		// Create group object 
+		
+			Group group = new Group();
+		
+		// Retrieve cabin from the database + add to group
+		
+			List<Cabin> cabins = CabinManager.restore(modelCabin);
+			Cabin cabin = new Cabin();
+			
+			if(cabins.size() != 1) System.out.println("ERROR: wrong cabin(s) found");
+			else cabin = cabins.get(0);
+			
+//			group.setC
+			
+		// Retrieve cabin amenities from database + add to group
+			
+//			Amenities amenity = CabinManager.restoreAmenitiesFromCabin(cabin);
+			
+		// Retrieve cabin pictures from database + add to group
+			
+			List<CabinPicture> cp = CabinManager.restoreCabinPicturesFromCabin(cabin);
+			
+		// Retrieve cabin priority picture + add to group
+			
+			CabinPicture priorityPicture = new CabinPicture();
+			
+			for(int i = 0; i < cp.size(); i++)
+			{
+//				if(cp.get(i).getPriority() == 1) 
+			}
+			
+	} // end of prepareEditCabin
+	
 	public static void updateCabin(Cabin modelCabin, Amenities modelAmenities) throws CCException
 	{
 		if(modelAmenities != null) 

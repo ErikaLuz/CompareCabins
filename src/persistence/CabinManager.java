@@ -485,7 +485,8 @@ public class CabinManager {
 	}
 	
 	public static void delete( Cabin cabin ) throws CCException
-    {
+    {	
+		String deleteAmenities = "DELETE FROM amenities WHERE id = ?";
         String deleteCabin = "DELETE FROM cabin WHERE id = ?"; 
         String deleteAvailabiliy = "DELETE FROM availability WHERE id = ?";
         String deleteCabinPicture = "DELETE from cabin_picture WHERE id = ?";
@@ -586,7 +587,23 @@ public class CabinManager {
                 throw new CCException("CabinManager.delete: failed to delete a cabin" );
         }
         catch( SQLException e ) {
-            throw new CCException( "CabinManager.delete: failed to delete a cabin: " + e );        
+            throw new CCException( "CabinManager.delete: failed to delete a cabin: " + e );   
+        }
+        
+        // Deleting cabin amenities
+        
+        Amenities amenity = restoreAmenitiesFromCabin(cabin);
+        
+        try {
+        	ps = con.prepareStatement(deleteAmenities);
+        	ps.setInt(1, amenity.getId());
+        	rowsModified = ps.executeUpdate();
+        	
+        	if( rowsModified != 1)
+        		throw new CCException("CabinManager.delete: failed to delete cabin's amenities");
+        }
+        catch( SQLException e ) {
+            throw new CCException( "CabinManager.delete: failed to delete cabin's amenities" + e );   
         }
     }
 }
