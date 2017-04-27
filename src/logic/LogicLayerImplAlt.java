@@ -100,6 +100,27 @@ public class LogicLayerImplAlt {
 		
 		return rentDatesAvailable;
 	}
+	
+	public static float getTotalPrice( Availability start, Availability end, int cabinId ) throws CCException
+	{
+		List<Availability> availabilities = getDatesBetween( start.getDate(), end.getDate() );
+		Cabin model = new Cabin();
+		float totalPrice = 0;
+		model.setId( cabinId );
+		
+		LinkedList<Availability> rentDates = new LinkedList<>();
+		
+		if( testIfDatesAvailableFillAvailabilityList( availabilities, cabinId, rentDates) )
+		{
+			for( int i = 0; i < rentDates.size(); i++)
+			{
+				totalPrice += rentDates.get( i ).getPrice();
+			}
+			return totalPrice;
+		}
+		else
+			return -1;
+	}
 	public static void rentCabin( Calendar startCal, Calendar endCal, int cabinId, User user ) throws CCException
 	{
 		List<Availability> rentDates = getDatesBetween( startCal, endCal );
