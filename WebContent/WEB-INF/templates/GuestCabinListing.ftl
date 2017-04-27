@@ -41,7 +41,7 @@
              <div class="panel-body">
              
         <div class="row">
-        <div class="col-xs-6 col-sm-6 col-md-6">
+        <div class="col-xs-12 col-sm-12 col-md-12 center-block text-center">
              
              
         <#if CPCheck != "null">
@@ -76,9 +76,6 @@
 		
 		
 		
-        </div>
-        <div class="col-xs-6 col-sm-6 col-md-6">
-        <h1 class="text-center">Availability --Add Calendars--</h1>
         </div>
         </div>
             
@@ -188,7 +185,6 @@
         				<h3 class="text-left">${r.title}</h3><br />
 	            		</div>
 	            		<div class="col-xs-4 col-sm-4 col-md-4">
-	            		<h3 class="text-center">Review</h3>
 	            		</div>
 	            		<div class="col-xs-4 col-sm-4 col-md-4">
 	            		<h3 class="text-right">Number of Stars: ${r.numStars}</h3><br />
