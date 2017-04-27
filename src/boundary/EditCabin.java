@@ -145,10 +145,8 @@ public class EditCabin extends HttpServlet
 				// Somehow get the cabin picture id
 				
 					CabinPicture cp = new CabinPicture();
-//					int cpId = Integer.parseInt(request.getParameter("cpId"));
-//					cp.setId(cpId);
-	
-					cp.setId(3);
+					int cpId = Integer.parseInt(request.getParameter("cpId"));
+					cp.setId(cpId);
 					
 				// Retrieve cabin picture from database 
 					
@@ -161,6 +159,8 @@ public class EditCabin extends HttpServlet
 					root.put("add", "picture");
 					String templateName = "AddFeatureSuccess.ftl";
 					processor.processTemplate(templateName, root, request, response);
+					
+				// Delete Picture
 					
 					CabinPictureManager.delete(cp);
 			
@@ -179,11 +179,8 @@ public class EditCabin extends HttpServlet
 				// get cabin id from ftl file and restore
 				
 					Cabin cabin = new Cabin();
-//					String cabinId = request.getParameter("cabinId");
-//					int cabinIdint = Integer.parseInt(cabinId);
-//					cabin.setId(cabinIdint);
+					cabin.setId(Integer.parseInt(request.getParameter("cabinId")));
 					
-					cabin.setId(6);
 					List<Cabin> cabins = CabinManager.restore(cabin);
 					
 					if(cabins.size() != 1) System.out.println("ERROR: wrong cabin(s) found");
@@ -262,12 +259,9 @@ public class EditCabin extends HttpServlet
 					
 				// Get Cabin id 
 					
-//					String cabinIdString = request.getParameter("cabinId");
-//					int cabinId = Integer.parseInt(cabinIdString);
 					Cabin modelCabin = new Cabin();
-//					modelCabin.setId(cabinId);
-					modelCabin.setId(5);
-
+					modelCabin.setId(Integer.parseInt(request.getParameter("cabinId")));
+			
 				// Restore original cabin from database
 					
 					Cabin cabin = new Cabin();
@@ -322,9 +316,7 @@ public class EditCabin extends HttpServlet
 					    modelCabin.setTitle(title);
 					    modelCabin.setBedroomCount(bedCount);
 					    modelCabin.setBathCount(bathCount);
-					    modelCabin.setMaxOccupancy(maxOcc);
-			
-				//TODO: PASS CABIN ID	
+					    modelCabin.setMaxOccupancy(maxOcc);	
 				
 				// Get original amenities from database
 					    
@@ -399,9 +391,7 @@ public class EditCabin extends HttpServlet
 				// Get cabin
 				
 					Cabin cabin = new Cabin();
-					cabin.setId(6);
-//					String cabinIdString = request.getParameter("cabinId");
-//					cabin.setId(Integer.parseInt(request.getParameter("cabinId")));
+					cabin.setId(Integer.parseInt(request.getParameter("cabinId")));
 				
 				// Create modelFeature
 				
@@ -437,10 +427,10 @@ public class EditCabin extends HttpServlet
 					
 				// Get feature id
 					
-//					String featureIdString = request.getParameter("featureId");
-//					feature.setId(Integer.parseInt(featureIdString));
+					String featureIdString = request.getParameter("featureId");
+					modelFeature.setId(Integer.parseInt(featureIdString));
 	
-					modelFeature.setId(5);
+					
 				// Retrieve feature from the database
 					
 					List<Feature> features = FeatureManager.restore(modelFeature);
@@ -468,9 +458,7 @@ public class EditCabin extends HttpServlet
 				SimpleHash root = new SimpleHash(db.build());
 				
 				Feature modelFeature = new Feature();
-//				String featureId = request.getParameter("featureId");
-//				int featureIdInt  = Integer.parseInt(featureId);
-//				modelFeature.setId(featureIdInt);
+				modelFeature.setId(Integer.parseInt(request.getParameter("featureId")));
 				
 				modelFeature.setId(5);
 				
@@ -495,8 +483,7 @@ public class EditCabin extends HttpServlet
 				SimpleHash root = new SimpleHash(db.build());
 				
 				Feature modelFeature = new Feature();
-//				String featureId = request.getParameter("featureId");
-//				modelFeature.setId(Integer.parseInt(featureId));
+				modelFeature.setId(Integer.parseInt(request.getParameter("featureId")));
 				
 				modelFeature.setId(5);
 				
