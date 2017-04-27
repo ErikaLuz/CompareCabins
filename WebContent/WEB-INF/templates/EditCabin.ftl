@@ -1,36 +1,36 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    
-    <meta charset="UTF-8">
-	<title>Compare Cabins</title>
-	
-	<style>
-    
-	    .container
-	    {
-	    	padding-left: 5px;
-	    	padding-right: 10px;
-	    	border-style: solid;
-	    	margin-left: .5cm;
-	    	margin-right: .5cm;
-	    }
-	    
-	    h1 
-	    {
-	    	font-size: 50px;
-	    }
-    
-    </style>
-    
-</head>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Payment Page</title>
+
+    <!-- Bootstrap -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
 
 <body>
+    <#include "Header.ftl">
+    <div class="container">
+        <div class="row centered-form">
 
+        	<div class="panel panel-default">
+        		<div class="panel-heading">
 	<h1>Edit Cabin: ${Group.getCabin().title}</h1>
 	<hr>
-	
+	<div class="panel-body">
 	<form action="EditCabin" method="post">
 	
 	<h2>Delete Pictures:</h2>
@@ -84,7 +84,11 @@
 	<input type="text" name="newFeature" value="" /><button name="addFeature" class="btn">Add Feature</button><br/>
 	 
 	</form>
-	
+	</div>
+    </div>
+    </div>
+    </div>
+    </div>
 	
 	
 	
