@@ -29,6 +29,8 @@
 <body>
 <#include "Header.ftl">
 
+			<div id="${RentRecord.id}"}></div>
+
 			<h2>Insert Cabin Listing code minus calendar here</h2>
 			<br />
 			<hr>

@@ -270,7 +270,7 @@ public class LogicLayerImpl {
 			
 	} // end of updateUser
 	
-	public static void prepareEditCabin(SimpleHash root, Cabin modelCabin) throws CCException
+	public static Group prepareEditCabin( Cabin modelCabin ) throws CCException
 	{
 		// Create group object 
 		
@@ -313,6 +313,13 @@ public class LogicLayerImpl {
 			group.setFeatureList(feature);
 			
 		// Retrieve cabin availabilities + add to group
+			
+			List<Availability> availability = CabinManager.restoreAvailabilitiesFromCabin(cabin);
+			group.setAvailabilityList(availability);
+			
+		// Return group
+			
+			return group;
 			
 	} // end of prepareEditCabin
 	

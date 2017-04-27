@@ -590,20 +590,5 @@ public class CabinManager {
             throw new CCException( "CabinManager.delete: failed to delete a cabin: " + e );   
         }
         
-        // Deleting cabin amenities
-        
-        Amenities amenity = restoreAmenitiesFromCabin(cabin);
-        
-        try {
-        	ps = con.prepareStatement(deleteAmenities);
-        	ps.setInt(1, amenity.getId());
-        	rowsModified = ps.executeUpdate();
-        	
-        	if( rowsModified != 1)
-        		throw new CCException("CabinManager.delete: failed to delete cabin's amenities");
-        }
-        catch( SQLException e ) {
-            throw new CCException( "CabinManager.delete: failed to delete cabin's amenities" + e );   
-        }
     }
 }

@@ -14,9 +14,16 @@ import exception.CCException;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapperBuilder;
 import freemarker.template.SimpleHash;
+
 import logic.LogicLayerImpl;
 
+import object.Group;
 import object.Cabin;
+import object.Feature;
+import persistence.CabinManager;
+import persistence.FeatureManager;
+import object.Amenities;
+import persistence.AmenitiesManager;
 
 /**
  * Servlet implementation class EditCabin
@@ -72,17 +79,47 @@ public class EditCabin extends HttpServlet
 				
 				// Get cabin 
 				
-					Cabin modelCabin = new Cabin();
-					modelCabin.setId(Integer.parseInt(request.getParameter("cabinId")));
+//					Cabin modelCabin = new Cabin();
+//					modelCabin.setId(Integer.parseInt(request.getParameter("cabinId")));
 				
+				// Create group
+				
+					Group group = new Group();
+	
+				// Dummy code - delete later
+				
+					Amenities amenities = new Amenities(true, true, true, false, false, false, true, true, true);
+					AmenitiesManager.store(amenities);
+				
+					Cabin modelCabin = new Cabin("Address", "City", "State", "descrip", "title", 2, 4, 6);
+					modelCabin.setAmenities(amenities);
+					CabinManager.store(modelCabin);
+					
+					Feature feature1 = new Feature("this is a great cabin");
+					feature1.setCabin(modelCabin);
+					
+					Feature feature2 = new Feature("awesome cabin");
+					feature1.setCabin(modelCabin);
+					
+					FeatureManager.store(feature1);
+					FeatureManager.store(feature2);
+					
 				// Call logic layer to prepare cabin editing
 				
 					try {
-						LogicLayerImpl.prepareEditCabin(root, modelCabin);
+						group = LogicLayerImpl.prepareEditCabin( modelCabin );
 					} catch (CCException e) {
 						
 						e.printStackTrace();
 					}
+					
+				// Place group into root
+					
+					root.put("Group", group);
+					
+				// dummy delete code
+					
+					CabinManager.delete(modelCabin);
 					
 				// Set and process template
 				
@@ -94,6 +131,8 @@ public class EditCabin extends HttpServlet
 			{
 				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 				SimpleHash root = new SimpleHash(db.build());
+				
+				
 				
 				String templateName = "EditCabin.ftl";
 				processor.processTemplate(templateName, root, request, response);
