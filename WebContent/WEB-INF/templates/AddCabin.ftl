@@ -30,71 +30,68 @@
         </div>
         <div class="panel-body">
              <div class="row">
-
-                <div class="col-sm-12 center-block">
-
-                    <form action="AddCabin" method="post">
-
-            <div class="container-fluid bg-3 text-center">    
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label for="description">Choose a title for your cabin</label>
-	                        <input type="text" class="form-control" name="title" placeholder="Name your cabin" />
-                        </div>
-                    </div>
-                    <div class="col-sm-4"> 
-                        <div class="form-group">
-                            <label for="description">Describe your cabin</label>
-                            <textarea class="form-control" id="description" name="description" rows="8"></textarea>
-                        </div>
-                    </div>
-                    <div class="col-sm-4"> 
-                        <div class="form-group">
-                            <label for="location">Add your cabin's location</label><br />
-                            Address: <input type="text" class="form-control" name="address" placeholder="ex: 123 Broad Street" /><br />
-                            City: <input type="text" class="form-control" name="city" placeholder="ex: Athens" /><br />
-                            State: <input type="text" class="form-control" name="state" placeholder="ex: Georgia" /><br />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br />
-            <br />
-            <div class="container-fluid bg-3 text-center">    
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label for="more info">Add more info about your cabin</label><br />
- 	                          Bedroom Count: <input type="number" class="form-control" name="bedCount" placeholder="enter number of bedrooms" /><br />
- 	                          Bathroom Count: <input type="number" class="form-control" name="bathCount" placeholder="enter number of bathrooms" /><br />
- 	                          Maximum Occupancy:<input type="number" class="form-control"  name="maxOcc" placeholder="enter maximum occupancy" /><br />
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label for="features">Tell us some features</label><br />
- 	                          <input type="text" class="form-control" name="features" placeholder="Examples: Rated #1 Cabin in town, 50-inch TV in living room, Amazing view of the sunset" /><br />
-                        </div>
-                    </div>
-                    <div class="col-sm-4"> 
-                        <label for="amenities">Tell us the cabin's amenities</label><br />
-                            Lake?<input type = "checkbox" name="amenities" value="hasLake">
-                            River?<input type = "checkbox" name="amenities" value="hasRiver">
-                            Pool?<input type = "checkbox" name="amenities" value="hasPool"><br />
-                            Hot Tub?<input type = "checkbox" name="amenities" value="hasHotTub">
-                            WiFi?<input type = "checkbox" name="amenities" value="hasWifi">
-                            Air Conditioning?<input type = "checkbox" name="amenities" value="hasAirConditioning"><br />
-                            Washer & Dryer?<input type = "checkbox" name="amenities" value="hasWasherDryer">
-                            Allow Pets?<input type = "checkbox" name="amenities" value="allowsPets">
-                            Allow Smoking?<input type = "checkbox" name="amenities" value="allowsSmoking"><br />
-                    </div>
-                </div>
-            </div>
-            <hr>
-            <div class="text-center"> 
-                <button name="addCabin" class="btn center-block">Add Cabin</button>
-            </div>
+                <div class="col-sm-12 center-block"></div>
+                <form action="AddCabin" method="post">
+					<div class="container-fluid bg-3 text-center">    
+		                <div class="row">
+		                    <div class="col-sm-4">
+		                        <div class="form-group">
+		                            <label for="description">Choose a title for your cabin</label>
+			                        <input type="text" class="form-control" name="title" placeholder="Name your cabin" />
+		                        </div>
+		                    </div>
+		                    <div class="col-sm-4"> 
+		                        <div class="form-group">
+		                            <label for="description">Describe your cabin</label>
+		                            <textarea class="form-control" id="description" name="description" rows="8"></textarea>
+		                        </div>
+		                    </div>
+                    		<div class="col-sm-4"> 
+                        		<div class="form-group">
+                            	<label for="location">Add your cabin's location</label><br />
+                            	Address: <input type="text" class="form-control" name="address" placeholder="ex: 123 Broad Street" /><br />
+                            	City: <input type="text" class="form-control" name="city" placeholder="ex: Athens" /><br />
+                            	State: <input type="text" class="form-control" name="state" placeholder="ex: Georgia" /><br />
+                        	</div>
+                    	</div>
+                	</div>
+            	</div>
+	            <br />
+	            <br />
+	            <div class="container-fluid bg-3 text-center">    
+	                <div class="row">
+	                    <div class="col-sm-4">
+	                        <div class="form-group">
+	                            <label for="more info">Add more info about your cabin</label><br />
+	 	                          Bedroom Count: <input type="number" class="form-control" name="bedCount" placeholder="enter number of bedrooms" /><br />
+	 	                          Bathroom Count: <input type="number" class="form-control" name="bathCount" placeholder="enter number of bathrooms" /><br />
+	 	                          Maximum Occupancy:<input type="number" class="form-control"  name="maxOcc" placeholder="enter maximum occupancy" /><br />
+	                        </div>
+	                    </div>
+	                    <div class="col-sm-4">
+	                        <div class="form-group">
+	                            <label for="features">Tell us some features</label><br />
+	 	                          <input type="text" class="form-control" name="features" placeholder="Examples: Rated #1 Cabin in town, 50-inch TV in living room, Amazing view of the sunset" /><br />
+	                        </div>
+	                    </div>
+	                    <div class="col-sm-4"> 
+	                        <label for="amenities">Tell us the cabin's amenities</label><br />
+	                            Lake?<input type = "checkbox" name="amenities" value="hasLake">
+	                            River?<input type = "checkbox" name="amenities" value="hasRiver">
+	                            Pool?<input type = "checkbox" name="amenities" value="hasPool"><br />
+	                            Hot Tub?<input type = "checkbox" name="amenities" value="hasHotTub">
+	                            WiFi?<input type = "checkbox" name="amenities" value="hasWifi">
+	                            Air Conditioning?<input type = "checkbox" name="amenities" value="hasAirConditioning"><br />
+	                            Washer & Dryer?<input type = "checkbox" name="amenities" value="hasWasherDryer">
+	                            Allow Pets?<input type = "checkbox" name="amenities" value="allowsPets">
+	                            Allow Smoking?<input type = "checkbox" name="amenities" value="allowsSmoking"><br />
+	                    </div>
+	                </div>
+	            </div>
+	            <hr>
+            	<div class="text-center"> 
+                	<button name="addCabin" class="btn center-block">Add Cabin</button>
+            	</div>
             </form>
         </div>
     </div>

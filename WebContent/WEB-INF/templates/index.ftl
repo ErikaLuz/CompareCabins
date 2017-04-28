@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -27,31 +27,70 @@
 <script src="scripts/loadTest.js" type="text/javascript"></script>
 
 </head>
-  <body>
-    <#include "Header.ftl">
+<body>
+	<#include "Header.ftl">
+	<div class="container">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<img src="cabinPictures/cabinBanner.jpeg"class="img-rounded img-responsive center-block">
+				</div>
+				<div class="control-group text-center">
+					<form action="Search" method="get">
+						<div class="row">
+							<div class="col-sm-4 controls span2">
+								<label class="checkbox"> <input type="checkbox"
+									name="hasLake" />Lake
+								</label> <label class="checkbox"> <input type="checkbox"
+									name="hasRiver" />River
+								</label> <label class="checkbox"> <input type="checkbox"
+									name="hasPool" />Pool
+								</label>
+							</div>
+							<div class="col-sm-4 controls span2">
+								<label class="checkbox"> <input type="checkbox"
+									name="hasHotTub" />Hot tub
+								</label> <label class="checkbox"> <input type="checkbox"
+									name="hasWifi" />WiFi
+								</label> <label class="checkbox"> <input type="checkbox"
+									name="hasAirConditioning" />Air Conditioning
+								</label>
+							</div>
+							<div class="col-sm-4 controls span2">
+								<label class="checkbox"> <input type="checkbox"
+									name="hasWasherDryer" />Washer Dryer
+								</label> <label class="checkbox"> <input type="checkbox"
+									name="allowsPets" />Allows Pets
+								</label> <label class="checkbox"> <input type="checkbox"
+									name="allowsSmoking" />Allows Smoking<br>
+								</label>
+							</div>
+						</div>
 
-	<form action="Search" method="get">
-		<div>
-			<input type="checkbox" name="hasLake" />Lake<br> <input
-				type="checkbox" name="hasRiver" />River<br> <input
-				type="checkbox" name="hasPool" />Pool<br> <input
-				type="checkbox" name="hasHotTub" />Hot tub<br> <input
-				type="checkbox" name="hasWifi" />WiFi<br> <input
-				type="checkbox" name="hasAirConditioning" />Air Conditioning<br>
-			<input type="checkbox" name="hasWasherDryer" />Washer Dryer<br>
-			<input type="checkbox" name="allowsPets" />Allows Pets<br> <input
-				type="checkbox" name="allowsSmoking" />Allows Smoking<br> <input
-				type="date" name="startAvailability" />Start Date(2000-01-01
-			format)<br> <input type="date" name="endAvailability" />End
-			Date(2000-01-01 format)<br> <input id="searchButton"
-				type="submit" value="Submit">
+						<hr>
+						<div class="row">
+							<div class="col-sm-6">
+								<input type="date" class="form-control" name="startAvailability" />Start
+								Date<br>
+							</div>
+							<div class="col-sm-6">
+								<input type="date" class="form-control" name="endAvailability" />End
+								Date<br>
+							</div>
+						</div>
+						<input id="searchButton" class="btn btn-block" type="submit"
+							value="Search Cabins">
+					</form>
+				</div>
+
+
+
+				<div id="results" class="center-block text-center">
+					<h2 class="text-center">Cabins</h2>
+
+				</div>
+			</div>
 		</div>
-	</form>
-
-	<div id="results"  class="center-block">
-		<h2 class="text-center">Cabins</h2>
-
 	</div>
-
 </body>
 </html>

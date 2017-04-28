@@ -81,7 +81,7 @@ public class GuestCabinListing extends HttpServlet
 					e.printStackTrace();
 				}
 				
-			// If statements for Hash
+				// If statements for Hash
 				
 				if(group.getUser() != null) root.put("Usercheck", "notNull");
 				else root.put("UserCheck", "null");
@@ -89,7 +89,7 @@ public class GuestCabinListing extends HttpServlet
 				if(group.getAmenities() != null) root.put("AmenitiesCheck", "notNull");
 				else root.put("AmenitiesCheck", "null");
 			
-				if(group.getCabinPictureList() != null)
+				if(group.getCabinPictureList() != null && group.getCabinPictureList().size() != 0)
 				{
 					root.put("CPCheck", "notNull");
 					
@@ -98,13 +98,13 @@ public class GuestCabinListing extends HttpServlet
 				}
 				else root.put("CPCheck", "null");
 				
-				if(group.getFeatureList() != null) root.put("FeaturesCheck", "notNull");
+				if(group.getFeatureList() != null && group.getFeatureList().size() != 0) root.put("FeaturesCheck", "notNull");
 				else root.put("FeaturesCheck", "null");
 				
-				if(group.getAvailabilityList() != null)	root.put("AvailabilitiesCheck", "notNull");
+				if(group.getAvailabilityList() != null && group.getAvailabilityList().size() != 0) root.put("AvailabilitiesCheck", "notNull");
 				else root.put("AvailabilitiesCheck", "null");
 				
-				if(group.getReviewList() != null) root.put("ReviewsCheck", "notNull");
+				if(group.getReviewList() != null && group.getReviewList().size() != 0) root.put("ReviewsCheck", "notNull");
 				else root.put("ReviewsCheck", "null");
 			
 			// Place group into root

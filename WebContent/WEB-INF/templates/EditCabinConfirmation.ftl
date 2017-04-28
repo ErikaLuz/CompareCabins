@@ -27,7 +27,7 @@
 	
 		<h1>Edit this feature:</h1>
 		${Feature.featureString}<br/>
-		<form action="EditCabin" method="post">
+		<form action="EditCabin?featureId=${Feature.id}" method="post">
 		<input type="text" name="editFeatureString" value="${Feature.featureString}" /><br />
 		<button name="submitEditedFeature" class="btn">Submit</button><br/>
 		</form>
@@ -48,7 +48,7 @@
 	
 		<h1> This photo was deleted </h1>
 		
-		<img src="${CP.filePath}" alt="cabin" style="width:300px;height:300px;">
+<!--		<img src="${CP.filePath}" alt="cabin" style="width:300px;height:300px;"> -->
 	
 	</#if>
         

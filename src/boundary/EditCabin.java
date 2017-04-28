@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import boundary.TemplateProcessor;
 import exception.CCException;
@@ -23,8 +24,11 @@ import logic.LogicLayerImpl;
 
 import object.CabinPicture;
 import persistence.CabinPictureManager;
+
+import object.CabinPicture;
 import object.Availability;
 import object.Group;
+import object.User;
 import object.Cabin;
 import object.Feature;
 import persistence.CabinManager;
@@ -99,41 +103,38 @@ public class EditCabin extends HttpServlet
 					try {
 						addFeature(request, response);
 					} catch (CCException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}
 				else if(editFeature != null)
 					try {
 						editFeature(request, response);
 					} catch (CCException e) {
-						// TODO Auto-generated catch block
+				
 						e.printStackTrace();
 					}
 				else if(submitEditFeature != null)
 					try {
 						submitEditedFeature(request, response);
 					} catch (CCException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}
 				else if(addAvailability != null)
 					try {
 						addAvailability(request, response);
 					} catch (CCException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}
 				else if(deletePhoto != null)
 					try {
 						deletePhoto(request, response);
 					} catch (CCException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}
-				
-				
-				
-				
+							
 			} // end of doGet
 			
 			private void deletePhoto(HttpServletRequest request, HttpServletResponse response) throws CCException
@@ -142,7 +143,13 @@ public class EditCabin extends HttpServlet
 				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 				SimpleHash root = new SimpleHash(db.build());
 				
-				// Somehow get the cabin picture id
+				// Session Tracking
+				
+					HttpSession session = request.getSession();
+					User user = (User) session.getAttribute( "user");
+			        root.put("username", user.getUsername());
+				
+				// Retrieve cabin picture id
 				
 					CabinPicture cp = new CabinPicture();
 					int cpId = Integer.parseInt(request.getParameter("cpId"));
@@ -156,20 +163,59 @@ public class EditCabin extends HttpServlet
 					else cp = cps.get(0);
 					root.put("CP", cp);	
 					
-					root.put("add", "picture");
-					String templateName = "EditCabinConfirmation.ftl";
-					processor.processTemplate(templateName, root, request, response);
+				// Retrieve cabin from cabin picture + all of cabin's pictures
 					
-				// Delete Picture
+					Cabin cabin = CabinPictureManager.restoreCabinFromCabinPicture(cp);
+					List<CabinPicture> cps2 = CabinManager.restoreCabinPicturesFromCabin(cabin);
 					
-					CabinPictureManager.delete(cp);
-			
-			}
+				// Delete photo various cases
+					
+					if(cps2.size() == 1)
+					{
+						// Delete picture and set default picture to cabin 
+						CabinPictureManager.delete(cp);
+						
+						CabinPicture defaultPicture = new CabinPicture();
+						defaultPicture.setCabin(cabin);
+						defaultPicture.setFilePath("http://placehold.it/600x400");
+						defaultPicture.setPriority(1);
+						
+						CabinPictureManager.store(defaultPicture);
+						
+					}
+					else if(cp.getPriority() == 1 && cps2.size() > 1)
+					{
+						// Delete picture and make another picture the priority picture
+						
+							CabinPictureManager.delete(cp);
+						
+						// Retrieve cabin pictures again and assign next picture priority
+						
+							List<CabinPicture> cps3 = CabinManager.restoreCabinPicturesFromCabin(cabin);
+							cps3.get(0).setPriority(1);
+						
+					}
+					else CabinPictureManager.delete(cp);
+					
+					// Set and process template
+					
+						root.put("add", "picture");
+						String templateName = "EditCabinConfirmation.ftl";
+						processor.processTemplate(templateName, root, request, response);
+					
+			} // end of deletePhoto
 			
 			private void addAvailability(HttpServletRequest request, HttpServletResponse response) throws CCException
 			{
+				
 				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 				SimpleHash root = new SimpleHash(db.build());
+				
+				// Session Tracking
+				
+				HttpSession session = request.getSession();
+				User user = (User) session.getAttribute( "user");
+		        root.put("username", user.getUsername());
 				
 				// create model availability
 				
@@ -217,13 +263,20 @@ public class EditCabin extends HttpServlet
 				root.put("add", "availability");
 				String templateName = "EditCabinConfirmation.ftl";
 				processor.processTemplate(templateName, root, request, response);
-			}
+				
+			} // end of addAvailability
 
 			
 			private void prepareEdit(HttpServletRequest request, HttpServletResponse response) throws CCException
 			{
 				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 				SimpleHash root = new SimpleHash(db.build());
+				
+				// Session Tracking
+				
+				HttpSession session = request.getSession();
+				User user = (User) session.getAttribute( "user");
+		        root.put("username", user.getUsername());
 				
 				// Get cabin 
 				
@@ -244,14 +297,21 @@ public class EditCabin extends HttpServlet
 					
 				// Set and process template
 				
-				String templateName = "EditCabin.ftl";
-				processor.processTemplate(templateName, root, request, response);
-			}
+					String templateName = "EditCabin.ftl";
+					processor.processTemplate(templateName, root, request, response);
+					
+			} // end of prepareEdit
 			
 			private void submitEdit(HttpServletRequest request, HttpServletResponse response) throws CCException
 			{
 				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 				SimpleHash root = new SimpleHash(db.build());	
+				
+				// Session Tracking
+				
+				HttpSession session = request.getSession();
+				User user = (User) session.getAttribute( "user");
+		        root.put("username", user.getUsername());
 				
 				// Create Group
 				
@@ -376,17 +436,22 @@ public class EditCabin extends HttpServlet
 					
 				// Set and process template
 					
-					String templateName = "EditCabinSuccess.ftl";
+					String templateName = "EditCabin.ftl";
 					processor.processTemplate(templateName, root, request, response);
 					
-			}
+			} // end of submitEdit
 			
 			private void addFeature(HttpServletRequest request, HttpServletResponse response) throws CCException
 			{
-				System.out.println("Enter add feature");
 				
 				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 				SimpleHash root = new SimpleHash(db.build());
+				
+				// Session Tracking
+				
+				HttpSession session = request.getSession();
+				User user = (User) session.getAttribute( "user");
+		        root.put("username", user.getUsername());
 				
 				// Get cabin
 				
@@ -414,12 +479,18 @@ public class EditCabin extends HttpServlet
 					String templateName = "EditCabinConfirmation.ftl";
 					processor.processTemplate(templateName, root, request, response);
 				
-			}
+			} // end of addFeature
 			
 			private void deleteFeature(HttpServletRequest request, HttpServletResponse response) throws CCException
 			{	
 				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 				SimpleHash root = new SimpleHash(db.build());
+				
+				// Session Tracking
+				
+				HttpSession session = request.getSession();
+				User user = (User) session.getAttribute( "user");
+		        root.put("username", user.getUsername());
 				
 				// Create modelFeature
 					
@@ -429,8 +500,7 @@ public class EditCabin extends HttpServlet
 					
 					String featureIdString = request.getParameter("featureId");
 					modelFeature.setId(Integer.parseInt(featureIdString));
-	
-					
+			
 				// Retrieve feature from the database
 					
 					List<Feature> features = FeatureManager.restore(modelFeature);
@@ -448,7 +518,8 @@ public class EditCabin extends HttpServlet
 					root.put("add", "delete");
 					String templateName = "EditCabinConfirmation.ftl";
 					processor.processTemplate(templateName, root, request, response);
-			}
+					
+			} // end of deleteFeature
 			
 			private void editFeature(HttpServletRequest request, HttpServletResponse response) throws CCException
 			{
@@ -457,10 +528,14 @@ public class EditCabin extends HttpServlet
 				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 				SimpleHash root = new SimpleHash(db.build());
 				
+				// Session Tracking
+				
+				HttpSession session = request.getSession();
+				User user = (User) session.getAttribute( "user");
+		        root.put("username", user.getUsername());
+				
 				Feature modelFeature = new Feature();
 				modelFeature.setId(Integer.parseInt(request.getParameter("featureId")));
-				
-				modelFeature.setId(5);
 				
 				List<Feature> features = FeatureManager.restore(modelFeature);
 				Feature feature = new Feature();
@@ -473,14 +548,21 @@ public class EditCabin extends HttpServlet
 				root.put("add", "edit");
 				String templateName = "EditCabinConfirmation.ftl";
 				processor.processTemplate(templateName, root, request, response);
-			}
+				
+			} // end of editFeature
 	
 			private void submitEditedFeature(HttpServletRequest request, HttpServletResponse response) throws CCException
 			{
-				System.out.println("enter submit edit feature");
+				
 				
 				DefaultObjectWrapperBuilder db = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_25);
 				SimpleHash root = new SimpleHash(db.build());
+				
+				// Session Tracking
+				
+				HttpSession session = request.getSession();
+				User user = (User) session.getAttribute( "user");
+		        root.put("username", user.getUsername());
 				
 				Feature modelFeature = new Feature();
 				modelFeature.setId(Integer.parseInt(request.getParameter("featureId")));

@@ -45,34 +45,41 @@
              
              
         <#if CPCheck != "null">
-        <div id="myCarousel" class="carousel slide" data-ride="carousel">
-    <!-- Wrapper for slides -->
-    <div class="carousel-inner">
-      <div class="item active">
-      <img src="${Group.getCabinPicture().filePath}" class="img-rounded img-responsive" alt="thumbnail">
-      </div>
-				<#list Group.cabinPictureList as cp>
-				<div class="item">
-				<img src="${cp.filePath}" class="img-rounded img-responsive" alt="thumbnail">
-				</div>
-	            </#list>
-    </div>
+            
+            <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+            <div class="item active">
+                <img src="${Group.getCabinPicture().filePath}" class="img-rounded img-responsive" alt="thumbnail">
+            </div>
+                
+            <#list Group.cabinPictureList as cp>
+                
+                <div class="item">
+                <img src="${cp.filePath}" class="img-rounded img-responsive" alt="thumbnail">
+                </div>
+                
+            </#list>
+                
+            </div>
 
-    <!-- Left and right controls -->
-    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-      <span class="glyphicon glyphicon-chevron-left"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a class="right carousel-control" href="#myCarousel" data-slide="next">
-      <span class="glyphicon glyphicon-chevron-right"></span>
-      <span class="sr-only">Next</span>
-    </a>
-</div>
-		
-		<#else>
-			<img src="http://placehold.it/600x400" class="img-rounded img-responsive" alt="thumbnail">
-		
-		</#if>
+            <!-- Left and right controls -->
+            <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+            <span class="sr-only">Previous</span>
+            </a>
+                
+            <a class="right carousel-control" href="#myCarousel" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+            <span class="sr-only">Next</span>
+            </a>
+            </div>
+
+        <#else>
+            
+            <img src="http://placehold.it/600x400" class="img-rounded img-responsive" alt="thumbnail">
+
+        </#if>
 		
 		
 		
