@@ -48,7 +48,7 @@
 	
 		<h1> This photo was deleted </h1>
 		
-		<img src="${CP.filePath}" alt="cabin" style="width:300px;height:300px;">
+<!--		<img src="${CP.filePath}" alt="cabin" style="width:300px;height:300px;"> -->
 	
 	</#if>
         
