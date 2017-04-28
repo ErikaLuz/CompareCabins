@@ -89,7 +89,7 @@ public class LoadCabinsJSON extends HttpServlet {
             	cabinArray.add( Json.createObjectBuilder()
             			.add("title", cabin.getTitle() )
             			.add("description", cabin.getDescription() )
-            			.add("primaryPhotoPath", primaryPhotoFilePath[i] ) 
+            			.add("primaryPhotoPath", "" ) 
             			.add("cabinId", cabin.getId() ) ); 
         	}
         }
