@@ -147,6 +147,9 @@ public class LogicLayerImpl {
 						if(cps.get(j).getPriority() == 1) group.setCabinPicture(cps.get(j));
 					}
 				
+				if(cps.size() == 0 || cps == null) group.setHasCabinPictures(false);
+				else group.setHasCabinPictures(true);
+				
 				group.setAmenities(CabinManager.restoreAmenitiesFromCabin(userCabins.get(i))); 
 				
 				

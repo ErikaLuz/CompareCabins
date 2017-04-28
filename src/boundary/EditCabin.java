@@ -244,8 +244,8 @@ public class EditCabin extends HttpServlet
 					
 				// Set and process template
 				
-				String templateName = "EditCabin.ftl";
-				processor.processTemplate(templateName, root, request, response);
+					String templateName = "EditCabin.ftl";
+					processor.processTemplate(templateName, root, request, response);
 			}
 			
 			private void submitEdit(HttpServletRequest request, HttpServletResponse response) throws CCException
@@ -429,8 +429,7 @@ public class EditCabin extends HttpServlet
 					
 					String featureIdString = request.getParameter("featureId");
 					modelFeature.setId(Integer.parseInt(featureIdString));
-	
-					
+			
 				// Retrieve feature from the database
 					
 					List<Feature> features = FeatureManager.restore(modelFeature);
@@ -459,8 +458,6 @@ public class EditCabin extends HttpServlet
 				
 				Feature modelFeature = new Feature();
 				modelFeature.setId(Integer.parseInt(request.getParameter("featureId")));
-				
-				modelFeature.setId(5);
 				
 				List<Feature> features = FeatureManager.restore(modelFeature);
 				Feature feature = new Feature();

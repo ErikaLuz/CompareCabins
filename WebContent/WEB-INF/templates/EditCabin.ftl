@@ -114,6 +114,11 @@
         </form>
         
 	</#list>
+
+		<form action="EditCabin?cabinId=${Group.getCabin().id}" method="post">
+        <input type="text" name="newFeature" value="" /><button name="addFeature" class="btn">Add Feature</button><br/>
+		</form>
+        
 	
 	</div>
     </div>

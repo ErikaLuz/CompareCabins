@@ -32,6 +32,10 @@ public class Group {
 		
 		private String startDate;
 		private String endDate;
+		
+		// CabinPicture check
+		
+		boolean hasCabinPictures;
 	
 	// CONSTRUCTOR	
 		
@@ -57,6 +61,8 @@ public class Group {
 			
 			startDate = null;
 			endDate = null;
+			
+			hasCabinPictures = false;
 		}
 	
 	// OBJECT GETTER AND SETTERS
@@ -279,5 +285,19 @@ public class Group {
 			public void setEndDate(String endDate)
 			{
 				this.endDate = endDate;
+			}
+			
+	// CP CHECK GETTER AND SETTER
+			
+		// CabinPicture getter and setter
+			
+			public boolean isHasCabinPictures()
+			{
+				return hasCabinPictures;
+			}
+			
+			public void setHasCabinPictures(boolean hasCabinPictures)
+			{
+				this.hasCabinPictures = hasCabinPictures;
 			}
 }
