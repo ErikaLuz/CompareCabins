@@ -106,12 +106,13 @@
             Feature: ${FL.featureString}
             <button name="editFeature" class="btn">Edit Feature</button>
             <button name="deleteFeature" class="btn">Delete Feature</button><br/>
-            
+        </form>    
 	</#list>
 	
+		<form action="EditCabin?cabinId=${Group.getCabin().id}" method="post">
         <input type="text" name="newFeature" value="" /><button name="addFeature" class="btn">Add Feature</button><br/>
-	
-        </form>
+		</form>
+        
 	
 	</div>
     </div>

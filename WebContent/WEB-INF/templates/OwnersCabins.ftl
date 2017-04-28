@@ -53,6 +53,7 @@
             <img src="${g.cabinPicture.filePath}" class="img-rounded img-responsive" alt="thumbnail"></img>
         </div>
 
+
         <div class="col-xs-7 col-sm-7 col-md-7">
             
             <h2 class="text-center">${g.getCabin().title}</h2>
