@@ -79,11 +79,19 @@ public class LoadCabinsJSON extends HttpServlet {
         for(int i = 0; i < cabins.size(); i++)
         {
         	Cabin cabin = cabins.get( i );
+        	if( primaryPhotoFilePath[i] != null){
         	cabinArray.add( Json.createObjectBuilder()
         			.add("title", cabin.getTitle() )
         			.add("description", cabin.getDescription() )
         			.add("primaryPhotoPath", primaryPhotoFilePath[i] ) 
         			.add("cabinId", cabin.getId() ) );  
+        	} else {
+            	cabinArray.add( Json.createObjectBuilder()
+            			.add("title", cabin.getTitle() )
+            			.add("description", cabin.getDescription() )
+            			.add("primaryPhotoPath", primaryPhotoFilePath[i] ) 
+            			.add("cabinId", cabin.getId() ) ); 
+        	}
         }
         builder.add("cabins", cabinArray );
         JsonObject json = builder.build();
