@@ -27,11 +27,6 @@
 <div class="container">
         	<div class="panel panel-default">
              <div class="panel-body">
-
-			<h2>Insert Cabin Listing code minus calendar here</h2>
-			<br />
-			<hr>
-			<br />
 			
 			<h2 class="text-center">Info about your stay:</h2>
 			<p class="text-center">

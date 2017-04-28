@@ -40,6 +40,8 @@
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
       <div class="item active">
+      
+  
       <img src="${Group.getCabinPicture().filePath}" class="img-rounded img-responsive" alt="thumbnail">
       </div>
 				<#list Group.cabinPictureList as cp>
