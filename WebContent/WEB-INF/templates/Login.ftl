@@ -23,6 +23,9 @@
 </head>
 <body>
 	<#include "Header.ftl">
+	<#if failure>
+		<p color="red" >Failed to login! Wrong username or password</p>
+	</#if>
 	<div class="container">
 		<div class="row centered-form">
 			<div

@@ -82,12 +82,26 @@ public class Login extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        Map<String, Object> root = new HashMap<String, Object>();
+        
+        if( user == null )
+        {
+        	root.put("failure", true );
+            try {
+                resultTemplate.process( root, toClient );
+            } 
+            catch (TemplateException e) {
+                throw new ServletException( "Error while processing FreeMarker template", e);
+            }
+        } else {
+        	root.put("failure", false);
+        }
+        
         
         // set user to session
         session.setAttribute( "user", user );
 
         // create the data model
-        Map<String, Object> root = new HashMap<String, Object>();
         root.put("username", user.getUsername());
         // connect template with data model
         try {
